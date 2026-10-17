@@ -1,7 +1,7 @@
 """Build the ShopBot Index static site from data/latest.json + data/channels.json -> ./dist
 Usage: python3 scripts/build.py"""
 import json, os, re, html, glob, shutil, collections
-ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data'); DIST=os.path.join(ROOT,'dist')
+ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.environ.get('SBI_DATA_DIR') or os.path.join(ROOT,'data'); DIST=os.environ.get('SBI_DIST_DIR') or os.path.join(ROOT,'dist')  # env overrides for dry-run previews
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 NAME='ShopBot Index'
 CONTACT='hello@shopbotindex.com'
@@ -218,6 +218,63 @@ if CHG:
 else:
     body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
 page('changes.html',f'What changed | {NAME}',body+signup())
+# ---- agent-readiness signals (phase 2 of the crawl) ----
+HAS_SIG=any((r.get('signals') or {}).get('checked') for r in RET)
+TOKFAM={'ChatGPT-User':'OpenAI, user-requested','Claude-User':'Anthropic, user-requested','Perplexity-User':'Perplexity, user-requested','Google-Agent':'Google, user-requested',
+ 'OAI-SearchBot':'OpenAI search','Claude-SearchBot':'Anthropic search','PerplexityBot':'Perplexity search','GPTBot':'OpenAI training','ClaudeBot':'Anthropic training','Google-Extended':'Google Gemini training/grounding'}
+RSTATE={'blocked':'asks it to stay out of the whole site','mostly_blocked':'disallows the whole site except some paths','restricted':'disallows some paths','allowed':'explicitly allows it'}
+def sigpill(cls,lbl): return f'<span class="pill {cls}">{E(lbl)}</span>'
+def readiness(r):
+    sg=r.get('signals') or {}; st=r['status']
+    if not sg.get('checked'):
+        why='We started checking these signals after this crawl.' if not HAS_SIG else "We couldn't check these signals this week: none of this store's websites answered our crawler, or our weekly time budget ran out before we reached it."
+        return f'<h2 id="readiness">Agent-readiness signals</h2><p class="muted">{why} <a href="../methodology.html#signals">What we check</a>.</p>'
+    rows=[]
+    capl=[capn(c) for c in r['capabilities']]
+    if st=='ucp':
+        t='Publishes a UCP profile at <code>/.well-known/ucp</code>'
+        if capl: t+=f' declaring {len(capl)} capabilit{"y" if len(capl)==1 else "ies"}'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')
+        ucpt=(('yes','Found'),t+'.')
+    elif st=='no_ucp': ucpt=(('no','Not found'),'No UCP profile found at <code>/.well-known/ucp</code>.')
+    else: ucpt=(('warn',"Couldn't check"),"Couldn't check: our request for the profile was refused or failed.")
+    extra=(' Also publishes an Agentic Commerce Protocol (ACP) discovery document at <code>/.well-known/acp.json</code>.' if sg.get('acp') else '')+(' Also publishes an AI catalog at <code>/.well-known/ai-catalog.json</code>.' if sg.get('ai_catalog') else '')
+    rows.append(('Agent checkout profile (UCP)',ucpt[0],ucpt[1]+extra))
+    m=sg.get('mcp',{}); ms=m.get('state','not_checked'); tl=m.get('tools',[])
+    if ms=='answered': mrow=(('yes','Answered'),f'The MCP endpoint named in its UCP profile answered our read-only tools list request with {len(tl)} tool{"s" if len(tl)!=1 else ""}: '+', '.join(f'<code>{E(t)}</code>' for t in tl)+'. We never call the tools.')
+    elif ms=='no_tools': mrow=(('no','No tools list'),"Its UCP profile names an MCP endpoint, but it didn't return a tools list to our request.")
+    elif st=='ucp' and ms=='none_declared': mrow=(('no','None declared'),'Its UCP profile declares no MCP endpoint.')
+    elif st=='no_ucp': mrow=(('no','None found'),'No UCP profile, so no MCP endpoint to check. We only look for one in a UCP profile.')
+    else: mrow=(('warn','Not checked'),'Not checked this week.')
+    rows.append(('Agent tools (MCP endpoint)',)+mrow)
+    rb=sg.get('robots',{})
+    if not rb.get('present'): rows.append(('AI-agent rules in robots.txt',('warn','Not checked'),"We couldn't read a robots.txt for this site."))
+    else:
+        sp=rb.get('specific',{})
+        if sp:
+            by=collections.defaultdict(list)
+            for t,v in sp.items(): by[v].append(t)
+            order=['blocked','mostly_blocked','restricted','allowed']
+            txt=' '.join('robots.txt '+RSTATE[v]+' for '+', '.join(f'<code>{E(t)}</code> <small>({E(TOKFAM.get(t,""))})</small>' for t in ts)+'.' for v,ts in sorted(by.items(),key=lambda kv:order.index(kv[0])))
+            state=('warn','Names AI agents') if any(v in ('blocked','mostly_blocked') for v in sp.values()) else ('no','Names AI agents')
+        else: txt='Its robots.txt has no rules that name AI agents.'; state=('no','No AI-specific rules')
+        if rb.get('wildcard') in ('blocked','mostly_blocked'): txt+=' Its general rule (<code>User-agent: *</code>) '+RSTATE[rb['wildcard']].replace(' it',' them')+' for all crawlers.'
+        if rb.get('content_signal'): txt+=' Content signals: '+'; '.join(f'<code>{E(c)}</code>' for c in rb['content_signal'])+'.'
+        txt+=" <small class=\"muted\">robots.txt states the site's wishes. OpenAI, Perplexity and Google say agents acting on a user's request may not follow it; Anthropic says Claude-User does.</small>"
+        rows.append(('AI-agent rules in robots.txt',state,txt))
+    g=[x for x,k in (('<code>/llms.txt</code>','llms_txt'),('<code>/agents.md</code>','agents_md')) if sg.get(k)]
+    gs=sg.get('guide_state','found' if g else 'not_found')
+    rows.append(('Guidance for AI assistants',('yes','Found') if g else ('no','Not found') if gs=='not_found' else ('warn','Not checked'),('Publishes '+' and '.join(g)+'.') if g else 'No <code>/llms.txt</code> or <code>/agents.md</code> found.' if gs=='not_found' else "Not checked: our requests for these files were refused or failed."))
+    pr=sg.get('product',{}); ps=pr.get('state','not_checked')
+    pt={'full':'A product page we checked has schema.org Product markup with price, currency and availability.','partial':'A product page we checked has schema.org Product markup, but not all of price, currency and availability.',
+        'none':'We found no schema.org Product markup on the page we checked.'}.get(ps,"Not checked: we couldn't reach a product page.")
+    if pr.get('url') and ps in ('full','partial','none'): pt+=f' <small>(<a href="{E(pr["url"])}" rel="nofollow noopener" target="_blank">page checked</a>)</small>'
+    rows.append(('Product data',{'full':('yes','Found'),'partial':('warn','Partial'),'none':('no','Not found')}.get(ps,('warn','Not checked')),pt))
+    tr=''.join(f'<tr><td><b>{E(a)}</b></td><td>{sigpill(*b)}</td><td>{c}</td></tr>' for a,b,c in rows)
+    ac=sg.get('access',{}); note=''
+    if ac.get('state')=='refused':
+        note='<p class="muted"><b>Note:</b> this site\'s bot protection refused our identified crawler'+(' with a challenge page' if ac.get('challenge') else '')+", so some of these signals couldn't be checked. That says nothing about whether shoppers or AI agents can use the site.</p>"
+    intro=f'Public signals we checked on {DAY}, besides the UCP profile. They show what the store publishes for AI agents; none of them says whether a particular AI agent can or can\'t buy here.'
+    return f'<h2 id="readiness">Agent-readiness signals</h2><p>{intro} <a href="../methodology.html#signals">What each signal means</a>.</p><div class="tw nomax"><table><tr><th>Signal</th><th>Result</th><th>Details</th></tr>{tr}</table></div>{note}'
 # ---- store pages ----
 def store_desc(r):
     d=primary(r); nm=r['name']; who=nm if nm.lower()==d else f'{nm} ({d})' if d else nm
@@ -234,7 +291,7 @@ for r in RET:
           +('<h3>Payment handlers</h3><ul>'+''.join(f'<li>{E(phn(x))} <small><code>{E(x)}</code></small></li>' for x in r['payment_handlers'])+'</ul>' if r['payment_handlers'] else '')
           +(f'<p>Platform: {E(" / ".join(r["platforms"]))}</p>' if r['platforms'] else '')) if st=='ucp' else ''
     meaning={'ucp':'AI shopping agents that use the Universal Commerce Protocol can read this store\'s profile to see what it supports'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')+'. It doesn\'t guarantee that a given assistant buys from it; that depends on the assistant.',
-             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. That only means we found no UCP signal. AI agents may still be able to shop here, for example through a normal web browser or another protocol such as the Agentic Commerce Protocol (ACP), which we don\'t check.',
+             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. That only means we found no UCP signal. AI agents may still be able to shop here, for example through a normal web browser, or through channels we can\'t see from outside, such as product feeds shared privately with AI assistants.',
              'couldnt_check':'Every website we tried refused our request, timed out or disallowed it in robots.txt. We never try to get around that, so we don\'t know whether it publishes a profile. It is excluded from adoption rates.'}[st]
     badge=(f'<h2>Badge for this store</h2><p>{E(r["name"])} can show that it publishes a UCP profile. Paste this HTML on the site; it links back to this page.</p><p><img src="../badge/{u}.svg" alt="UCP profile found · ShopBot Index" height="20"></p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">{E(snippet(r))}</textarea><p class="muted"><a href="../badge.html">About the badge</a>. If a later crawl stops finding the profile, the badge turns into a neutral grey "view listing" link.</p>') if st=='ucp' else ''
     jsonld=json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":NAME,"item":SITE+"/"},{"@type":"ListItem","position":2,"name":"All stores","item":SITE+"/stores.html"},{"@type":"ListItem","position":3,"name":r['name'],"item":f"{SITE}/store/{u}.html"}]},ensure_ascii=False).replace('</','<\\/')
@@ -244,6 +301,7 @@ for r in RET:
 <div class="box"><b>What this means.</b> {meaning}</div>
 <h2>Websites checked ({len(ss)})</h2><p>We fetched <code>/.well-known/ucp</code> on each site on {DAY}.</p><div class="tw nomax"><table><tr><th>Website</th><th>Result</th><th class="hide-sm">HTTP</th></tr>{sites}</table></div>
 {caps}
+{readiness(r)}
 <h2>About this store in the index</h2><ul><li>Segment: <a href="../segments/{r["segment"]}.html">{E(SEG[r["segment"]])}</a></li><li>Category: <a href="../categories/{slug(r["category"])}.html">{E(r["category"])}</a></li>{f'<li>Country: {E(r["country"])}</li>' if r["country"] else ''}<li>Last checked: {DAY} (re-checked every week)</li></ul>
 {badge}
 <p>Run this store and think the result is wrong, or want it removed? Email {MAILTO} with the domain; we re-check it in the next weekly crawl and never change a result by hand. <a href="../methodology.html">How we measure</a>.</p>
@@ -259,15 +317,37 @@ json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,sep
 os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
 for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
 # ---- methodology ----
+SIGMETH=f'''<h2 id="signals">1b. Agent-readiness signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score.</p>
+<div class="tw nomax"><table><tr><th>Signal</th><th>How we check</th><th>What it means</th><th>What it doesn't mean</th></tr>
+<tr><td><b>Agent checkout profile (UCP)</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the official machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
+<tr><td><b>Agent tools (MCP endpoint)</b></td><td>If the UCP profile names an MCP endpoint, we send one read-only JSON-RPC <code>tools/list</code> request, identifying ourselves with our <a href="ucp/agent-profile.json">agent profile</a>. We never call a tool.</td><td>The endpoint is live and lists tools (for example catalog search, cart, checkout) right now.</td><td>That a purchase completes without the buyer; checkouts may hand the buyer back to the store's own checkout page.</td></tr>
+<tr><td><b>AI-agent rules in robots.txt</b></td><td>Groups in <code>/robots.txt</code> that name <code>ChatGPT-User</code>, <code>Claude-User</code>, <code>Perplexity-User</code>, <code>Google-Agent</code>, <code>OAI-SearchBot</code>, <code>Claude-SearchBot</code>, <code>PerplexityBot</code>, <code>GPTBot</code>, <code>ClaudeBot</code> or <code>Google-Extended</code>, plus <code>Content-Signal</code> lines. Tokens from <a href="https://developers.openai.com/api/docs/bots">OpenAI</a>, <a href="https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler">Anthropic</a>, <a href="https://docs.perplexity.ai/docs/resources/perplexity-crawlers">Perplexity</a> and <a href="https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers">Google</a>.</td><td>The site's stated wishes for each kind of AI agent: user-requested, search or training.</td><td>A technical block or permission. OpenAI, Perplexity and Google say their user-requested agents may not follow robots.txt; Anthropic says its bots do.</td></tr>
+<tr><td><b>Guidance for AI assistants</b></td><td><code>/llms.txt</code> and <code>/agents.md</code> (Markdown files, not web pages)</td><td>The site publishes instructions for AI assistants. On Shopify these are generated by the platform.</td><td>That assistants read them; <a href="https://llmstxt.org/">llms.txt</a> is a community proposal, not a formal standard.</td></tr>
+<tr><td><b>Product data</b></td><td>One page that looks like a product page, found via a link on the home page or, failing that, at most two sitemap files. We look for <a href="https://schema.org/Product">schema.org Product</a> markup with an Offer that has price, currency and availability.</td><td>Product facts are machine-readable on the page.</td><td>Anything about checkout. "Not checked" means we couldn't reach a product page, often because of bot protection or pages built by scripts.</td></tr></table></div>
+<p>We also record, without a public column until a store first publishes one, two newer discovery files: the <a href="https://github.com/agentic-commerce-protocol/agentic-commerce-protocol">Agentic Commerce Protocol</a> discovery document at <code>/.well-known/acp.json</code> and the MCP <a href="https://modelcontextprotocol.io/seps/2127-mcp-server-cards">AI catalog</a> at <code>/.well-known/ai-catalog.json</code>.</p>
+<p>When a site's bot protection refuses our identified crawler, its store page says so in a neutral note. That only describes how the site treated our crawler, not whether shoppers or AI agents can use it.</p>
+<h3 id="cant-see">What we can't see from outside</h3><p>A lot of agent shopping runs through channels that leave no public trace on a store's website. We never count these as "no":</p><ul>
+<li><b>ChatGPT product feeds:</b> merchants share catalogs with OpenAI privately through the Agentic Commerce Protocol (<a href="https://openai.com/index/powering-product-discovery-in-chatgpt/">OpenAI, March 2026</a>).</li>
+<li><b>Shopify Catalog and agentic storefronts:</b> Shopify syndicates eligible stores to AI channels, managed in each store's admin (<a href="https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts">Shopify Help Center</a>).</li>
+<li><b>Microsoft Copilot Checkout</b> enrolment (<a href="https://about.ads.microsoft.com/en/blog/post/january-2026/conversations-that-convert-copilot-checkout-and-brand-agents">Microsoft Advertising</a>).</li>
+<li><b>Card-network agent programs:</b> Visa Intelligent Commerce and its <a href="https://developer.visa.com/capabilities/trusted-agent-protocol/trusted-agent-protocol-specifications/">Trusted Agent Protocol</a>, and Mastercard Agent Pay (<a href="https://blog.cloudflare.com/secure-agentic-commerce/">Cloudflare</a>).</li>
+<li><b>Web Bot Auth:</b> whether a store verifies signed AI agents (<a href="https://developers.cloudflare.com/bots/reference/bot-verification/web-bot-auth/">Cloudflare docs</a>).</li></ul>'''
+CRAWLMETH=f'''<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(D["user_agent"])}</code></li>
+<li>What we read on each website, and nothing else: <code>/robots.txt</code>, <code>/.well-known/ucp</code>, <code>/.well-known/acp.json</code>, <code>/.well-known/ai-catalog.json</code>, <code>/llms.txt</code>, <code>/agents.md</code>, the home page, at most two sitemap files (only when the home page links no product), and one product page. When the UCP profile names an MCP endpoint, we also send it one read-only <code>tools/list</code> request. That's at most about ten requests per website per week.</li>
+<li>robots.txt is read first and respected for every one of those URLs. If <code>/.well-known/ucp</code> is disallowed for us, we skip the website entirely.</li>
+<li>At most 12 websites at a time and one request at a time per website, with a pause between requests (1 second for the extra signals), 10 to 12 second timeouts, HTTPS only. If a listed host is unreachable we try the same domain with or without <code>www.</code>. The extra signals run within a fixed weekly time budget; websites we don't reach in time show as "not checked".</li>
+<li>Site owners: to have your site excluded, disallow <code>/</code> (or just the paths above) for <code>ShopBotIndexBot</code> in robots.txt, or email {MAILTO}.</li></ul>'''
+
 SC=collections.Counter(s.get('status','error') for s in SITES)
 meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produced. Crawl date: {DAY}.</p>
-<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the official machine-readable signal that it supports AI shopping agents, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP signal. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some stores use other protocols, such as OpenAI and Stripe's Agentic Commerce Protocol (ACP), which this index doesn't check.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>We measure one public signal. We don't test purchases, and we don't rank how well a store works with any assistant.</li></ul></div>
-<h2>1. What we look for</h2><p>The UCP specification says platforms discover a business by fetching its business profile from <code>/.well-known/ucp</code> (<a href="{E(D["spec"])}">UCP specification overview</a>). The profile is JSON with a <code>ucp</code> object: protocol version, services, capabilities and payment handlers. We fetch that path on each website, plus <code>/robots.txt</code>, and nothing else.</p>
+<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the official machine-readable signal that it supports AI shopping agents, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP signal. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some agent shopping runs through channels we <a href="#cant-see">can't see from outside</a>, such as product feeds shared privately with AI assistants.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>UCP is our headline measure. We also list other public agent-readiness signals per store (<a href="#signals">section 1b</a>), but we don't test purchases, and we don't score or rank how well a store works with any assistant.</li></ul></div>
+<h2>1. What we look for</h2><p>The UCP specification says platforms discover a business by fetching its business profile from <code>/.well-known/ucp</code> (<a href="{E(D["spec"])}">UCP specification overview</a>). The profile is JSON with a <code>ucp</code> object: protocol version, services, capabilities and payment handlers. We fetch that path on each website after reading <code>/robots.txt</code>. This is our headline measure. The other things we read are listed in <a href="#signals">section 1b</a> and <a href="#crawler">section 5</a>.</p>
+{SIGMETH}
 <h2>2. Who we track: three segments, side by side</h2><ul>{"".join(f"<li><b>{SEG[k]}</b> ({sum(1 for r in RET if r['segment']==k)}): {SEGDESC[k]}</li>" for k in SEG)}</ul>
 <p>Sources: Wikipedia list pages (largest retail companies, department stores by country, supermarket chains, hypermarkets, online marketplaces) resolved to Wikidata for official websites; Wikidata queries for retail chains and e-commerce companies; and public GitHub lists of Shopify stores (<a href="https://github.com/ihof/shopify">ihof/shopify</a>, <a href="https://github.com/dipinarora9/Shopify-Domains-Scraper">dipinarora9/Shopify-Domains-Scraper</a>, first 900 of <a href="https://github.com/TeamDukaan/performance">TeamDukaan/performance</a>). This is not a random sample of all stores; shares are shares of our list.</p>
 <h2>3. One retailer, many country sites</h2><p>When a retailer's Wikidata entry lists several official websites (for example one per country), we check up to 8 of them and show them as children of one retailer. A retailer counts as publishing UCP if at least one of its sites does.</p>
 <h2>4. "Couldn't check" is not "no"</h2><p>Many large retailers use bot protection that refuses automated requests. We never try to get around it. A retailer is <b>couldn't check</b> when every one of its sites refused us (401/403/429), timed out, failed TLS/DNS, or disallowed the path in robots.txt. These are shown separately and <b>excluded</b> from adoption rates. A retailer is <b>no UCP profile</b> only when at least one of its sites answered and had no profile.</p>
-<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(D["user_agent"])}</code></li><li>robots.txt is read first and respected.</li><li>At most 12 websites at a time, one request at a time per site, a pause between requests, 10-second timeouts, HTTPS only. If a listed host is unreachable we try the same domain with or without <code>www.</code>.</li><li>Site owners: to have your site excluded, disallow <code>/.well-known/ucp</code> for <code>ShopBotIndexBot</code> in robots.txt, or email {MAILTO}.</li></ul>
+{CRAWLMETH}
 <h2>6. Site-level results this crawl ({nsites} websites)</h2><ul>{"".join(f"<li>{E(SITEST.get(k,k))}: {v}</li>" for k,v in SC.most_common())}</ul>
 <h2>7. Platform</h2><p>"Shopify" means the profile's endpoints or extensions reference Shopify. Anything else is shown as another platform. We can only identify a platform for stores that publish a profile.</p>
 <h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).</p>
@@ -284,8 +364,13 @@ page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short
 <h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list. To have your data deleted, or for any question, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
 <h2>Analytics</h2><p>This site uses no cookies and no analytics or tracking scripts.</p>
 <h2>Affiliate links</h2><p>Shopify trial links on this site are affiliate links run through Impact; when you click one, Shopify and Impact may set their own cookies to attribute a trial. '''+E(AFF_DISC)+'''</p>
-<h2>Our crawler</h2><p>ShopBot Index reads only <code>/robots.txt</code> and <code>/.well-known/ucp</code> on the stores it tracks, respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
+<h2>Our crawler</h2><p>ShopBot Index reads a short, fixed list of public files and pages on the stores it tracks (robots.txt, the UCP profile, a few agent-related files, the home page and one product page; full list in the methodology), respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
 <p>Questions about your data: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
+os.makedirs(os.path.join(DIST,'ucp'),exist_ok=True)
+_V='2026-08-25'; _cap=lambda: [{'version':_V}]
+json.dump({'ucp':{'version':_V,'services':{'dev.ucp.shopping':[{'version':_V,'spec':f'https://ucp.dev/{_V}/specification/overview','transport':'mcp','schema':f'https://ucp.dev/{_V}/services/shopping/mcp.openrpc.json'}]},
+  'capabilities':{c:_cap() for c in ('dev.ucp.shopping.checkout','dev.ucp.shopping.cart','dev.ucp.shopping.order','dev.ucp.shopping.catalog.search','dev.ucp.shopping.catalog.lookup')},'payment_handlers':{}}},
+  open(os.path.join(DIST,'ucp','agent-profile.json'),'w'),indent=1)
 open(os.path.join(DIST,'CNAME'),'w').write(SITE.split('://',1)[1]+'\n')
 open(os.path.join(DIST,'favicon.svg'),'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f172a"/><path d="M14 20h6l5 22h20l5-16H23" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="50" r="4" fill="#22c55e"/><circle cx="43" cy="50" r="4" fill="#22c55e"/></svg>')
 OG=os.path.join(ROOT,'assets','og.png')
