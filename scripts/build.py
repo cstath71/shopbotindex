@@ -43,7 +43,7 @@ def hero(body):
     m=re.search(r'<h1>.*?</h1>\s*<p class="lede">.*?</p>',body,re.S)
     if not m: return body
     art='<img class="hero-art" src="robot-hero.png" width="210" height="210" alt="ShopBot Index robot pushing a shopping cart">'
-    return body[:m.start()]+f'<section class="hero"><div class="hero-t">{m.group(0)}</div>{art}</section>'+body[m.end():]
+    return body[:m.start()]+f'<section class="hero">{art}<div class="hero-t">{m.group(0)}</div></section>'+body[m.end():]
 def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     pre='../'*path.count('/')
     if path=='index.html': body=hero(body)
