@@ -39,6 +39,17 @@ first "add existing contact to segment" (keeps an existing contact's global unsu
 (`synced_to_resend_at is null`) the same way as Fusion Updates (`/workspace/newsletter/sync_subscribers.md`, with `sbi_subscribers` and the segment id above).
 The API key copy lives outside the repo in `/home/box/.private/resend-shopbotindex.json` (never commit it).
 
+**Welcome email (automatic, ON since 17 Oct 2026, approved by Gus).** For a newly created, subscribed Resend contact, `sbi-subscribe` (version 4)
+fires the Resend event `sbi.subscribed` (event id `01a14a26-d8e9-731a-8294-9bbcc8918e43`), which starts the enabled automation
+**ShopBot Index welcome** (`01a14a27-01ed-712d-a1fb-36acf50d211a`): send template **ShopBot Index welcome** (`2e6535a3-17f5-448d-8f12-6e4b2e29492a`,
+alias `sbi-welcome`, published) from `ShopBot Index <hello@shopbotindex.com>`, reply-to `hello@shopbotindex.com`, subject "Welcome to ShopBot Index".
+Gated by Vault secret `sbi_welcome_enabled` = `'true'`, exposed as `welcome_enabled` by `sbi_resend_config()`
+(`supabase/migrations/20261017_sbi_welcome_flag.sql`, still service_role only). Never fired for existing contacts (e.g. already on another list),
+re-subscribes or reserved test domains (example.com/.net/.org, *.test, *.example, *.invalid, *.localhost); existing subscribers were not backfilled.
+Off: `delete from vault.secrets where name='sbi_welcome_enabled';` On: `select vault.create_secret('true','sbi_welcome_enabled','Send ShopBot Index welcome from sbi-subscribe');`
+Content: `newsletter/welcome/build_welcome.py` builds `welcome.html` / `welcome.txt`; after editing, rerun it, `update-template` (html + text) and `publish-template`.
+Test with Resend's sandbox address `delivered+<tag>@resend.dev` (not excluded, so it runs the whole path), then delete the contact, the `sbi_subscribers` row and the `sbi_signup_attempts` entry.
+
 ## Shopify affiliate (Impact)
 - Approved 17 Oct 2026. Impact account id **7989432**, Shopify campaign **13624**.
 - Tracking link (Shopify free trial): `https://shopify.pxf.io/c/7989432/1061744/13624`, set in `config/site.json` (`shopify_affiliate_url`, `affiliate_disclosure`), so every rebuild (`scripts/weekly.sh`) keeps it.

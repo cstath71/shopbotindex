@@ -1,0 +1,24 @@
+Welcome to ShopBot Index
+
+Thanks for subscribing to ShopBot Index.
+
+Every Monday the index checks each tracked store for a UCP business profile, the /.well-known/ucp file that AI shopping agents look for. After each crawl you'll get one short, free email: which stores started supporting AI shopping agents, which stopped, and what else changed that week.
+
+Until the next issue, here's where to look:
+
+- The index: https://shopbotindex.com/
+  Which stores publish a UCP profile, across Shopify stores, big retailers and other stores.
+
+- What changed: https://shopbotindex.com/changes.html
+  Joined, left and other changes compared with the previous crawl.
+
+- Methodology: https://shopbotindex.com/methodology.html
+  Exactly how each store is checked and how the numbers are produced.
+
+Questions, or a store you'd like checked? Just reply to this email. It goes to hello@shopbotindex.com.
+
+Gus
+ShopBot Index
+
+---
+You're getting this because you subscribed at shopbotindex.com. Unsubscribe: {{{RESEND_UNSUBSCRIBE_URL}}} · Privacy: https://shopbotindex.com/privacy.html
