@@ -1,0 +1,21 @@
+{
+ "note": "Only what official company sources state. Each row is an announcement or help-centre statement on the date shown; it is not an independent test of current availability.",
+ "checked_on": "2026-10-17",
+ "channels": [
+  {"assistant": "Google Search / AI Mode", "feature": "Agentic checkout (Google buys on the merchant's site with Google Pay after the shopper confirms)", "how": "Completes on the merchant's site", "region": "US",
+   "retailers_named": ["Wayfair", "Chewy", "Quince", "select Shopify merchants"], "date": "2025-11-13",
+   "source_title": "Google Shopping launches agentic checkout and more AI shopping tools (Google blog)", "source_url": "https://blog.google/products-and-platforms/products/shopping/agentic-checkout-holiday-ai-shopping/"},
+  {"assistant": "Perplexity", "feature": "Instant Buy, checkout in chat powered by PayPal", "how": "In chat; retailer stays merchant of record", "region": "US",
+   "retailers_named": ["Abercrombie & Fitch", "Ashley Furniture", "Fabletics", "Adorama", "Newegg"], "date": "2025-11-25",
+   "source_title": "PayPal and Perplexity Launch Instant Buy Ahead of Black Friday (PayPal newsroom)", "source_url": "https://newsroom.paypal-corp.com/2025-11-PayPal-and-Perplexity-Launch-Instant-Buy"},
+  {"assistant": "Microsoft Copilot", "feature": "Copilot Checkout, purchase inside Copilot without redirect", "how": "In chat; merchant stays merchant of record", "region": "US (Copilot.com at launch)",
+   "retailers_named": ["Urban Outfitters", "Anthropologie", "Ashley Furniture", "Etsy sellers", "Shopify merchants (auto-enrolled after an opt-out window)"], "date": "2026-01-08",
+   "source_title": "Microsoft propels retail forward with agentic AI capabilities (Microsoft Source)", "source_url": "https://news.microsoft.com/source/2026/01/08/microsoft-propels-retail-forward-with-agentic-ai-capabilities-that-power-intelligent-automation-for-every-retail-function/"},
+  {"assistant": "ChatGPT", "feature": "Product discovery via Shopify Catalog; purchase completes on the store's own checkout (in-app browser or new tab)", "how": "Redirects to the store's checkout", "region": "Stores that sell to US customers",
+   "retailers_named": ["eligible Shopify stores (active by default, can opt out)"], "date": "checked 2026-10-17",
+   "source_title": "Selling on ChatGPT (Shopify Help Center)", "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts/chatgpt"},
+  {"assistant": "Google AI Mode & Gemini, Microsoft Copilot, Meta", "feature": "Direct checkout inside the AI channel for Shopify stores", "how": "In channel (Shopify-powered direct checkout)", "region": "Per channel",
+   "retailers_named": ["eligible Shopify stores"], "date": "checked 2026-10-17",
+   "source_title": "Selling on ChatGPT, 'Customer experience' section (Shopify Help Center)", "source_url": "https://help.shopify.com/en/manual/online-sales-channels/agentic-storefronts/chatgpt"}
+ ]
+}
