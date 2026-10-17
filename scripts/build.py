@@ -4,6 +4,8 @@ import json, os, re, html, glob, shutil, collections
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data'); DIST=os.path.join(ROOT,'dist')
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 NAME='ShopBot Index'
+CONTACT='hello@shopbotindex.com'
+MAILTO=f'<a href="mailto:{CONTACT}">{CONTACT}</a>'
 FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
 DEFDESC='Which online stores can AI shopping agents actually buy from? A weekly public crawl of Shopify stores, big retailers and other online stores for Universal Commerce Protocol (UCP) profiles.'
 E=lambda s: html.escape(str(s if s is not None else ''))
@@ -44,7 +46,7 @@ def page(path,title,body,desc=''):
 <meta property="og:type" content="website"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{pre}favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html">{NAME}</a>{nav}</div></header>
-<main><div class="w">{body}</div></main><footer><div class="w">{NAME} · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer></body></html>'''
+<main><div class="w">{body}</div></main><footer><div class="w">{NAME} · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer></body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
 def bars(counter,total,namef=lambda x:x,link=None,label='Stores'):
     rows=''.join(f'<tr><td>{(f"<a href=\"{link(k)}\">{E(namef(k))}</a>") if link else E(namef(k))}</td><td>{v}</td><td>{pct(v,total)}</td><td class="hide-sm" style="width:35%"><div class="bar"><i style="width:{100*v/max(total,1):.1f}%"></i></div></td></tr>' for k,v in counter.most_common())
@@ -173,23 +175,24 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produce
 <p>Sources: Wikipedia list pages (largest retail companies, department stores by country, supermarket chains, hypermarkets, online marketplaces) resolved to Wikidata for official websites; Wikidata queries for retail chains and e-commerce companies; and public GitHub lists of Shopify stores (<a href="https://github.com/ihof/shopify">ihof/shopify</a>, <a href="https://github.com/dipinarora9/Shopify-Domains-Scraper">dipinarora9/Shopify-Domains-Scraper</a>, first 900 of <a href="https://github.com/TeamDukaan/performance">TeamDukaan/performance</a>). This is not a random sample of all stores; shares are shares of our list.</p>
 <h2>3. One retailer, many country sites</h2><p>When a retailer's Wikidata entry lists several official websites (for example one per country), we check up to 8 of them and show them as children of one retailer. A retailer counts as publishing UCP if at least one of its sites does.</p>
 <h2>4. "Couldn't check" is not "no"</h2><p>Many large retailers use bot protection that refuses automated requests. We never try to get around it. A retailer is <b>couldn't check</b> when every one of its sites refused us (401/403/429), timed out, failed TLS/DNS, or disallowed the path in robots.txt. These are shown separately and <b>excluded</b> from adoption rates. A retailer is <b>no UCP profile</b> only when at least one of its sites answered and had no profile.</p>
-<h2>5. How we fetch</h2><ul><li>User-Agent: <code>{E(D["user_agent"])}</code></li><li>robots.txt is read first and respected.</li><li>At most 12 websites at a time, one request at a time per site, a pause between requests, 10-second timeouts, HTTPS only. If a listed host is unreachable we try the same domain with or without <code>www.</code>.</li></ul>
+<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(D["user_agent"])}</code></li><li>robots.txt is read first and respected.</li><li>At most 12 websites at a time, one request at a time per site, a pause between requests, 10-second timeouts, HTTPS only. If a listed host is unreachable we try the same domain with or without <code>www.</code>.</li><li>Site owners: to have your site excluded, disallow <code>/.well-known/ucp</code> for <code>ShopBotIndexBot</code> in robots.txt, or email {MAILTO}.</li></ul>
 <h2>6. Site-level results this crawl ({nsites} websites)</h2><ul>{"".join(f"<li>{E(SITEST.get(k,k))}: {v}</li>" for k,v in SC.most_common())}</ul>
 <h2>7. Platform</h2><p>"Shopify" means the profile's endpoints or extensions reference Shopify. Anything else is shown as another platform. We can only identify a platform for stores that publish a profile.</p>
 <h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).</p>
-<h2>9. AI assistants table</h2><p>Only official company announcements and help-centre pages, linked per row. We don't test those integrations.</p>'''
+<h2>9. AI assistants table</h2><p>Only official company announcements and help-centre pages, linked per row. We don't test those integrations.</p>
+<h2 id="contact">10. Add, remove or correct a store</h2><p>Run a store or retailer that should be added, removed or corrected, or think a result is wrong? Email {MAILTO} with the store's domain. We re-check it in the next weekly crawl and never change a result by hand.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)
 page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index tracks, week by week, which online stores AI shopping agents can discover and buy from through open protocols, across Shopify stores, big retailers and other online stores.</p>
 <p>It is run by Gus, an experienced enterprise software consultant, as an independent project. It is not affiliated with Google, Shopify, OpenAI, Microsoft, Perplexity, PayPal or any retailer listed.</p>
-<p>All figures come from our own public crawl or from linked official sources. Some links may become disclosed affiliate links in future; that will never change a store's result.</p>'''+signup())
+<p>All figures come from our own public crawl or from linked official sources. Some links may become disclosed affiliate links in future; that will never change a store's result.</p><p>Contact: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a> (including stores that want to be added, removed or corrected; see the <a href="methodology.html#contact">methodology</a>).</p>'''+signup())
 page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short version: we only store what's needed to send you the weekly email.</p>
 <h2>What we store when you subscribe</h2><ul><li>Your email address</li><li>When you signed up</li><li>A one-way hash of your IP address, kept only to limit spam signups (we never store the IP address itself)</li></ul>
 <h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: who joined, who left, what changed). We don't sell or share your data, and we don't add you to other lists.</p>
 <h2>Where it's kept</h2><p>Subscriber data is stored with Supabase (EU region, Frankfurt), and emails will be sent with Resend. Both act as processors for us.</p>
-<h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list.</p>
+<h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list. To have your data deleted, or for any question, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
 <h2>Analytics</h2><p>This site uses no cookies and no analytics or tracking scripts.</p>
 <h2>Our crawler</h2><p>ShopBot Index reads only <code>/robots.txt</code> and <code>/.well-known/ucp</code> on the stores it tracks, respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
-<p class="muted">Last updated: October 2026.</p>''')
+<p>Questions about your data: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
 open(os.path.join(DIST,'CNAME'),'w').write(SITE.split('://',1)[1]+'\n')
 open(os.path.join(DIST,'favicon.svg'),'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f172a"/><path d="M14 20h6l5 22h20l5-16H23" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="50" r="4" fill="#22c55e"/><circle cx="43" cy="50" r="4" fill="#22c55e"/></svg>')
 OG=os.path.join(ROOT,'assets','og.png')

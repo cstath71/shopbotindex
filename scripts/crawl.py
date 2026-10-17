@@ -4,7 +4,7 @@ small global concurrency, timeouts, honest User-Agent. Writes data/crawl-YYYY-MM
 Usage: python3 scripts/crawl.py [--limit N]"""
 import json, os, sys, collections, time, ssl, datetime, urllib.request, urllib.error, urllib.robotparser, concurrent.futures as cf, threading, re
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data')
-UA='ShopBotIndexBot/1.0 (+https://shopbotindex.com/methodology.html; reads only /robots.txt and /.well-known/ucp)'
+UA='ShopBotIndexBot/1.0 (+https://shopbotindex.com/methodology.html#crawler; hello@shopbotindex.com; reads only /robots.txt and /.well-known/ucp)'
 TIMEOUT=10; WORKERS=12; PAUSE=0.25; MAXBYTES=512*1024
 CTX=ssl.create_default_context()
 def fetch(url):
