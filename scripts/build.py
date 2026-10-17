@@ -38,12 +38,12 @@ PLATC=collections.Counter(p for r in U for p in r['platforms'])
 CATS=sorted({r['category'] for r in RET})
 CSS=open(os.path.join(ROOT,'scripts','style.css')).read()
 PAGES=[]
-def page(path,title,body,desc=''):
+def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     pre='../'*path.count('/')
-    nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('methodology.html','Methodology'),('about.html','About')])
+    nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
-<meta property="og:type" content="website"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{E(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc or DEFDESC)}"><meta name="twitter:image" content="{SITE}/{ogimg}">{head}
 <link rel="icon" href="{pre}favicon.svg" type="image/svg+xml">
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
 <meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
@@ -94,12 +94,57 @@ if P:
 elif os.path.exists(os.path.join(DATA,'changes-latest.json')):
     os.remove(os.path.join(DATA,'changes-latest.json'))  # no previous crawl: drop any stale diff
 NM={r['id']:r for r in RET}
+# ---- per-store pages: slugs, lookup JSON, check widget, badges ----
+def host(x): return (x.get('host') or x['domain']).lower()
+def bare(h): return h[4:] if h.startswith('www.') else h
+def primary(r):
+    ss=SITES_BY[r['id']]
+    if r['segment']=='shopify' and '.' in r['id']: return bare(r['id'].lower())
+    return bare(host(ss[0])) if ss else ''
+_nc=collections.Counter(slug(r['name']) or 'store' for r in RET); SLUG={}; _used=set()
+for r in sorted(RET,key=lambda r:r['id']):
+    b=slug(r['name']) or 'store'
+    if _nc[b]>1 and primary(r) and slug(primary(r))!=b: b=b+'-'+slug(primary(r))
+    x=b; i=2
+    while x in _used: x=f'{b}-{i}'; i+=1
+    _used.add(x); SLUG[r['id']]=x
+STATUS_SHORT={'ucp':'Yes: UCP profile found','no_ucp':'No UCP profile found','couldnt_check':"Couldn't check"}
+LOOK={}
+for r in RET:
+    for x in SITES_BY[r['id']]:
+        LOOK.setdefault(bare(host(x)),[SLUG[r['id']],r['name'],r['status']])
+    if primary(r): LOOK.setdefault(primary(r),[SLUG[r['id']],r['name'],r['status']])
+CHECK_JS='''<script>if(!window.sbiCheck){window.sbiCheck=function(f){const root=f.getAttribute('data-root'),out=f.parentNode.querySelector('.ck-out'),badge=f.hasAttribute('data-badge');
+let d=f.querySelector('input').value.trim().toLowerCase().replace(/^[a-z]+:\\/\\//,'').split(/[\\/?#]/)[0].split('@').pop().replace(/:\\d+$/,'').replace(/\\.$/,'');if(d.startsWith('www.'))d=d.slice(4);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+if(!d||d.indexOf('.')<0){out.innerHTML='Please enter a store domain, like example.com.';return false;}
+out.textContent='Looking up…';
+const go=L=>{let k=d,hit=null;while(k.indexOf('.')>0){if(L[k]){hit=L[k];break}k=k.slice(k.indexOf('.')+1)}
+if(!hit){const m='mailto:hello@shopbotindex.com?subject='+encodeURIComponent('Please add my store: '+d);out.innerHTML='<b>'+esc(d)+'</b> isn\\'t in the index yet. We only report stores our weekly crawl has checked, so we can\\'t say whether it publishes a UCP profile. <a href="'+m+'">Ask us to add it</a> and we\\'ll include it in a future crawl.';return}
+const st=hit[2],cls=st=='ucp'?'yes':st=='couldnt_check'?'warn':'no',lbl={ucp:'Yes: UCP profile found',no_ucp:'No UCP profile found',couldnt_check:"Couldn't check (blocked or unreachable)"}[st];
+let h='<b>'+esc(hit[1])+'</b> <span class="pill '+cls+'">'+lbl+'</span> in our latest crawl. <a href="'+root+'store/'+hit[0]+'.html">See the full result →</a>';
+if(badge){h+=st=='ucp'?'<div style="margin-top:.8rem"><img src="'+root+'badge/'+hit[0]+'.svg" alt="UCP ready · ShopBot Index" height="20"></div><p>Copy this HTML onto your site:</p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">'+esc('<a href="https://shopbotindex.com/store/'+hit[0]+'.html" title="'+hit[1]+' on ShopBot Index"><img src="https://shopbotindex.com/badge/'+hit[0]+'.svg" alt="UCP ready · ShopBot Index" height="20"></a>')+'</textarea>':'<p class="muted">The badge is only for stores where our latest crawl found a UCP profile.</p>'}
+out.innerHTML=h};
+if(window.sbiLook)go(window.sbiLook);else fetch(root+'stores.json').then(r=>r.json()).then(L=>{window.sbiLook=L;go(L)}).catch(()=>{out.textContent='Could not load the store list. Please try again.'});return false;}}</script>'''
+def checkbox(pre='',badge=False,title='Check your store'):
+    return f'''<div class="box ck"><b>{title}</b> Does your store publish a UCP profile AI shopping agents can read? Look it up in our latest crawl ({DAY}).
+<form class="ckf" data-root="{pre}"{' data-badge' if badge else ''} onsubmit="return sbiCheck(this)" style="margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.5rem"><input type="text" name="d" placeholder="yourstore.com" required maxlength="253" aria-label="Store domain" autocapitalize="off" spellcheck="false" style="padding:.5rem;border:1px solid #cdd5dd;border-radius:6px;min-width:220px;flex:1"> <button type="submit" style="padding:.5rem 1rem;border:0;border-radius:6px;background:#0f1f2e;color:#fff;font-weight:600">Check</button></form>
+<div class="ck-out" aria-live="polite" style="margin-top:.6rem"></div>{CHECK_JS}</div>'''
+def badge_svg(ok):
+    l,r=('UCP ready','ShopBot Index') if ok else ('ShopBot Index','view listing')
+    lw=round(len(l)*6.6)+12; rw=round(len(r)*6.6)+12; W=lw+rw; lc='#16a34a' if ok else '#555'; rc='#0f172a' if ok else '#9ca3af'
+    t=E(l+' · '+r)
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="20" role="img" aria-label="{t}"><title>{t}</title><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="{W}" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="{lw}" height="20" fill="{lc}"/><rect x="{lw}" width="{rw}" height="20" fill="{rc}"/><rect width="{W}" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11"><text x="{lw/2}" y="15" fill="#010101" fill-opacity=".3" textLength="{lw-12}">{E(l)}</text><text x="{lw/2}" y="14" textLength="{lw-12}">{E(l)}</text><text x="{lw+rw/2}" y="15" fill="#010101" fill-opacity=".3" textLength="{rw-12}">{E(r)}</text><text x="{lw+rw/2}" y="14" textLength="{rw-12}">{E(r)}</text></g></svg>'''
+def snippet(r):
+    u=SLUG[r['id']]
+    return f'<a href="{SITE}/store/{u}.html" title="{E(r["name"])} on ShopBot Index"><img src="{SITE}/badge/{u}.svg" alt="UCP ready · ShopBot Index" height="20"></a>'
 # ---- home ----
 nsites=len(SITES); nsites_u=sum(1 for s in SITES if s.get('status')=='ucp')
 joined_txt=(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
 home=f'''<h1>Which online stores can AI shopping agents actually buy from?</h1>
 <p class="lede">We check {len(RET)} retailers and stores ({nsites} websites) for a published <a href="https://ucp.dev/">Universal Commerce Protocol</a> (UCP) profile, the file AI agents read to learn what a store supports. Every figure comes from our own crawl on {DAY}.</p>
 {segcards()}{joined_txt}
+{checkbox()}
 <div class="stats"><div class="stat"><b>{len(U)}</b><span>retailers/stores with a UCP profile on at least one site</span></div>
 <div class="stat"><b>{PLATC.get("Shopify",0)}</b><span>of them run it on Shopify</span></div>
 <div class="stat"><b>{len(NONSHOP)}</b><span>on other platforms</span></div>
@@ -116,7 +161,7 @@ page('index.html',f'{NAME}: which online stores AI shopping agents can actually 
 # ---- stores table ----
 rows=[]
 for r in sorted(RET,key=lambda r:(r['status']!='ucp',r['name'].lower())):
-    rows.append(dict(n=r['name'],g=r['segment'],c=r['category'],s=r['status'],co=r['country'][:40] if r['segment']!='shopify' else '',
+    rows.append(dict(u=SLUG[r['id']],n=r['name'],g=r['segment'],c=r['category'],s=r['status'],co=r['country'][:40] if r['segment']!='shopify' else '',
         caps=[capn(x) for x in r['capabilities']],ph=[phn(x) for x in r['payment_handlers']],p='/'.join(r['platforms']),
         st=[dict(h=x.get('host') or x['domain'],s=x.get('status','error')) for x in SITES_BY[r['id']]]))
 stores=f'''<h1>All stores ({len(RET)})</h1><p class="lede">Every retailer and store we track, with the result of fetching <code>/.well-known/ucp</code> on each of its websites on {DAY}. Retailers with several country sites show them underneath. Click a column to sort.</p>
@@ -134,13 +179,13 @@ function render(){{const q=$('q').value.toLowerCase();
 let r=D.filter(x=>(!q||(x.n+' '+x.st.map(y=>y.h).join(' ')).toLowerCase().includes(q))&&(!$('fg').value||x.g==$('fg').value)&&(!$('fs').value||x.s==$('fs').value)&&(!$('fc').value||x.c==$('fc').value)&&(!$('fp').value||x.p.split('/').includes($('fp').value)));
 const v=x=>sk=='nc'?x.caps.length:sk=='ns'?x.st.length:sk=='s'?({{ucp:0,no_ucp:1,couldnt_check:2}})[x.s]:String(x[sk]).toLowerCase();
 r.sort((a,b)=>(v(a)>v(b)?1:v(a)<v(b)?-1:0)*sd);$('cnt').textContent=r.length+' of '+D.length+' shown';
-tb.innerHTML=r.slice(0,1500).map(x=>'<tr><td><b>'+esc(x.n)+'</b>'+(x.co?'<br><small>'+esc(x.co)+'</small>':'')+'</td><td>'+esc(SEG[x.g])+'</td><td class="hide-sm">'+esc(x.c)+'</td><td>'+pill(x.s)+'</td><td class="hide-sm">'+esc(x.p)+'</td><td>'+(x.caps.length?'<span class="pill" title="'+esc(x.caps.join(', '))+'">'+x.caps.length+' declared</span>'+(x.caps.includes('Checkout')?'<span class="pill yes">Checkout</span>':''):'')+'</td><td>'+(x.st.length==1?'<a href="https://'+esc(x.st[0].h)+'/.well-known/ucp" rel="nofollow noopener" target="_blank">'+esc(x.st[0].h)+'</a>'+(x.s=='couldnt_check'?' '+pill(x.st[0].s):''):'<details><summary>'+x.st.length+' sites</summary>'+x.st.map(y=>'<div class="child"><a href="https://'+esc(y.h)+'/.well-known/ucp" rel="nofollow noopener" target="_blank">'+esc(y.h)+'</a> '+pill(y.s)+'</div>').join('')+'</details>')+'</td></tr>').join('')}}
+tb.innerHTML=r.slice(0,1500).map(x=>'<tr><td><a href="store/'+x.u+'.html"><b>'+esc(x.n)+'</b></a>'+(x.co?'<br><small>'+esc(x.co)+'</small>':'')+'</td><td>'+esc(SEG[x.g])+'</td><td class="hide-sm">'+esc(x.c)+'</td><td>'+pill(x.s)+'</td><td class="hide-sm">'+esc(x.p)+'</td><td>'+(x.caps.length?'<span class="pill" title="'+esc(x.caps.join(', '))+'">'+x.caps.length+' declared</span>'+(x.caps.includes('Checkout')?'<span class="pill yes">Checkout</span>':''):'')+'</td><td>'+(x.st.length==1?'<a href="https://'+esc(x.st[0].h)+'/.well-known/ucp" rel="nofollow noopener" target="_blank">'+esc(x.st[0].h)+'</a>'+(x.s=='couldnt_check'?' '+pill(x.st[0].s):''):'<details><summary>'+x.st.length+' sites</summary>'+x.st.map(y=>'<div class="child"><a href="https://'+esc(y.h)+'/.well-known/ucp" rel="nofollow noopener" target="_blank">'+esc(y.h)+'</a> '+pill(y.s)+'</div>').join('')+'</details>')+'</td></tr>').join('')}}
 ['q','fg','fs','fc','fp'].forEach(i=>$(i).addEventListener('input',render));
 document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{{const k=th.dataset.k;sd=(sk==k)?-sd:1;sk=k;render()}}));render();</script>'''
 page('stores.html',f'All {len(RET)} stores checked for UCP | {NAME}',stores,'Sortable table of Shopify stores, big retailers and other online stores and whether they publish a UCP profile.')
 # ---- segment pages ----
-def rtable(rs):
-    li=''.join(f'<tr><td>{E(r["name"])}</td><td class="hide-sm">{E(r["category"])}</td><td>{"<span class=\"pill yes\">Yes</span>" if r["status"]=="ucp" else ("<span class=\"pill warn\">Couldn&#39;t check</span>" if r["status"]=="couldnt_check" else "No")}</td><td>{r["sites_with_ucp"]}/{r["sites_checked"]}</td><td class="hide-sm">{E("/".join(r["platforms"]))}</td></tr>' for r in sorted(rs,key=lambda r:({"ucp":0,"no_ucp":1,"couldnt_check":2}[r["status"]],r["name"].lower())))
+def rtable(rs,pre='../'):
+    li=''.join(f'<tr><td><a href="{pre}store/{SLUG[r["id"]]}.html">{E(r["name"])}</a></td><td class="hide-sm">{E(r["category"])}</td><td>{"<span class=\"pill yes\">Yes</span>" if r["status"]=="ucp" else ("<span class=\"pill warn\">Couldn&#39;t check</span>" if r["status"]=="couldnt_check" else "No")}</td><td>{r["sites_with_ucp"]}/{r["sites_checked"]}</td><td class="hide-sm">{E("/".join(r["platforms"]))}</td></tr>' for r in sorted(rs,key=lambda r:({"ucp":0,"no_ucp":1,"couldnt_check":2}[r["status"]],r["name"].lower())))
     return f'<div class="tw"><table><tr><th>Store</th><th class="hide-sm">Category</th><th>UCP</th><th>Sites with UCP</th><th class="hide-sm">Platform</th></tr>{li}</table></div>'
 page('segments/index.html',f'Segments | {NAME}',f'<h1>Segments</h1><p class="lede">We track three groups side by side. Rates exclude stores we couldn\'t check.</p>{segcards("../")}<ul>{"".join(f"<li><b>{SEG[k]}</b>: {SEGDESC[k]}</li>" for k in SEG)}</ul>')
 for k in SEG:
@@ -173,6 +218,46 @@ if CHG:
 else:
     body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
 page('changes.html',f'What changed | {NAME}',body+signup())
+# ---- store pages ----
+def store_desc(r):
+    d=primary(r); nm=r['name']; who=nm if nm.lower()==d else f'{nm} ({d})' if d else nm
+    if r['status']=='ucp':
+        k=len(r['capabilities']); ck=' including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else ''
+        return f"Yes. In ShopBot Index's crawl of {DAY}, {who} published a UCP profile at /.well-known/ucp declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}, so AI shopping agents can discover it."
+    if r['status']=='no_ucp': return f"Not yet. In ShopBot Index's crawl of {DAY}, {who} did not publish a UCP profile at /.well-known/ucp, the file AI shopping agents read to learn what a store supports."
+    return f"Unknown. In ShopBot Index's crawl of {DAY}, we couldn't check {who}: every request for its UCP profile was refused or failed. That is not the same as no profile."
+PILL={'ucp':'yes','no_ucp':'no','couldnt_check':'warn'}
+for r in RET:
+    u=SLUG[r['id']]; d=primary(r); ss=SITES_BY[r['id']]; st=r['status']
+    sites=''.join(f'<tr><td><a href="https://{E(host(x))}/.well-known/ucp" rel="nofollow noopener" target="_blank">{E(host(x))}</a></td><td><span class="pill {"yes" if x.get("status")=="ucp" else "warn" if x.get("status") in ("blocked","error","robots_disallow") else "no"}">{E(SITEST.get(x.get("status","error"),x.get("status")))}</span></td><td class="hide-sm">{E(x.get("http_status") or "")}</td></tr>' for x in ss)
+    caps=('<h2>What its UCP profile declares</h2><h3>Capabilities</h3><ul>'+''.join(f'<li>{E(capn(c))} <small><code>{E(c)}</code></small></li>' for c in r['capabilities'])+'</ul>'
+          +('<h3>Payment handlers</h3><ul>'+''.join(f'<li>{E(phn(x))} <small><code>{E(x)}</code></small></li>' for x in r['payment_handlers'])+'</ul>' if r['payment_handlers'] else '')
+          +(f'<p>Platform: {E(" / ".join(r["platforms"]))}</p>' if r['platforms'] else '')) if st=='ucp' else ''
+    meaning={'ucp':'AI shopping agents that support the Universal Commerce Protocol can find this store\'s profile and see what it supports'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')+'. Whether a given assistant actually buys from it depends on that assistant.',
+             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. AI shopping agents that rely on UCP can\'t discover what this store supports through the protocol.',
+             'couldnt_check':'Every website we tried refused our request, timed out or disallowed it in robots.txt. We never try to get around that, so we don\'t know whether it publishes a profile. It is excluded from adoption rates.'}[st]
+    badge=(f'<h2>Badge for this store</h2><p>{E(r["name"])} can show that it is ready for AI shopping agents. Paste this HTML on the site; it links back to this page.</p><p><img src="../badge/{u}.svg" alt="UCP ready · ShopBot Index" height="20"></p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">{E(snippet(r))}</textarea><p class="muted"><a href="../badge.html">About the badge</a>. If a later crawl stops finding the profile, the badge turns into a neutral grey "view listing" link.</p>') if st=='ucp' else ''
+    jsonld=json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":NAME,"item":SITE+"/"},{"@type":"ListItem","position":2,"name":"All stores","item":SITE+"/stores.html"},{"@type":"ListItem","position":3,"name":r['name'],"item":f"{SITE}/store/{u}.html"}]},ensure_ascii=False).replace('</','<\\/')
+    body=f'''<p class="muted"><a href="../stores.html">All stores</a> › <a href="../segments/{r["segment"]}.html">{E(SEG[r["segment"]])}</a></p>
+<h1>Does {E(r["name"])} support AI shopping agents?</h1>
+<p class="lede"><span class="pill {PILL[st]}" style="font-size:1rem">{E(STATUS_SHORT[st])}</span> {E(store_desc(r))}</p>
+<div class="box"><b>What this means.</b> {meaning}</div>
+<h2>Websites checked ({len(ss)})</h2><p>We fetched <code>/.well-known/ucp</code> on each site on {DAY}.</p><div class="tw nomax"><table><tr><th>Website</th><th>Result</th><th class="hide-sm">HTTP</th></tr>{sites}</table></div>
+{caps}
+<h2>About this store in the index</h2><ul><li>Segment: <a href="../segments/{r["segment"]}.html">{E(SEG[r["segment"]])}</a></li><li>Category: <a href="../categories/{slug(r["category"])}.html">{E(r["category"])}</a></li>{f'<li>Country: {E(r["country"])}</li>' if r["country"] else ''}<li>Last checked: {DAY} (re-checked every week)</li></ul>
+{badge}
+<p>Run this store and think the result is wrong, or want it removed? Email {MAILTO} with the domain; we re-check it in the next weekly crawl and never change a result by hand. <a href="../methodology.html">How we measure</a>.</p>
+{checkbox("../",title="Check another store")}{signup("../")}'''
+    page(f'store/{u}.html',f'{r["name"]} — does it support AI shopping agents? | {NAME}',body,store_desc(r),ogimg='og-store.png',ogtype='article',head=f'<script type="application/ld+json">{jsonld}</script>')
+# ---- check + badge pages, lookup JSON, badge SVGs ----
+page('check.html',f'Check your store: does it support AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the file AI shopping agents read to learn what a store supports. We track {len(RET)} retailers and stores.</p>
+{checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: does it publish a UCP profile AI shopping agents can read? Results from our weekly crawl of {len(RET)} retailers and stores.')
+page('badge.html',f'"UCP ready" badge for your store | {NAME}',f'''<h1>A "UCP ready" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page.</p>
+<p><img src="badge/{SLUG[U[0]["id"]] if U else ""}.svg" alt="UCP ready · ShopBot Index" height="20"> <small class="muted">(example)</small></p>
+{checkbox(badge=True,title="Get your badge")}<h2>Rules</h2><ul><li>The badge is only offered for stores where our latest crawl found a profile at <code>/.well-known/ucp</code>.</li><li>Each badge is served from shopbotindex.com and is regenerated every week. If a later crawl no longer finds the profile, it turns into a neutral grey "ShopBot Index · view listing" badge.</li><li>No tracking: the badge is a plain SVG image, with no scripts or cookies.</li></ul>{signup()}''','Stores that publish a UCP profile can embed a free "UCP ready · ShopBot Index" badge linking to their result page.')
+json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,separators=(',',':'))
+os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
+for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
 # ---- methodology ----
 SC=collections.Counter(s.get('status','error') for s in SITES)
 meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produced. Crawl date: {DAY}.</p>
@@ -204,6 +289,8 @@ open(os.path.join(DIST,'CNAME'),'w').write(SITE.split('://',1)[1]+'\n')
 open(os.path.join(DIST,'favicon.svg'),'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f172a"/><path d="M14 20h6l5 22h20l5-16H23" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="50" r="4" fill="#22c55e"/><circle cx="43" cy="50" r="4" fill="#22c55e"/></svg>')
 OG=os.path.join(ROOT,'assets','og.png')
 if os.path.exists(OG): shutil.copy(OG,os.path.join(DIST,'og.png'))
+OGS=os.path.join(ROOT,'assets','og-store.png')
+if os.path.exists(OGS): shutil.copy(OGS,os.path.join(DIST,'og-store.png'))
 open(os.path.join(DIST,'robots.txt'),'w').write(f'User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n')
 open(os.path.join(DIST,'sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{SITE}/{p.replace("index.html","")}</loc><lastmod>{DAY}</lastmod></url>\n' for p in PAGES)+'</urlset>\n')
 print('built',len(PAGES),'pages;',{k:segstats([r for r in RET if r['segment']==k]) for k in SEG},'nonshopify',len(NONSHOP),'big ucp',len(BIGU))
