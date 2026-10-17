@@ -29,9 +29,13 @@ Stdlib Python only. Site URL via `SBI_SITE` (default https://shopbotindex.com). 
 ## Newsletter signup
 Forms post to the Supabase edge function `sbi-subscribe` (project `uufmlmwgvoqhhtqgrclu`, source in `supabase/functions/sbi-subscribe/`):
 honeypot field `website`, email validation, 5 attempts per IP-hash per hour, rows in `sbi_subscribers` (RLS on, no public access).
-Resend segment: **ShopBot Index** `6aeffea0-50d8-4887-b18d-8babefbbc1fa`. The function mirrors new signups into it only if the
-`RESEND_API_KEY` and `SBI_RESEND_SEGMENT_ID` function secrets are set; otherwise sync manually like Fusion Updates
-(`/workspace/newsletter/sync_subscribers.md`, using `sbi_subscribers` and the segment id above). No sending domain yet; no emails are sent.
+Resend segment: **ShopBot Index** `6aeffea0-50d8-4887-b18d-8babefbbc1fa`. Resend sending domain: `shopbotindex.com`
+(id `4793016a-f6c9-40df-9db2-2926aa36ad4c`, EU region eu-west-1, open/click tracking off; DNS records on `send.` + `rsend.` + `resend._domainkey`, no clash with Zoho on the root).
+When the function secrets `RESEND_API_KEY` and `SBI_RESEND_SEGMENT_ID` are set, each signup is mirrored into the segment:
+first "add existing contact to segment" (keeps an existing contact's global unsubscribe status), and on 404 "create contact in segment";
+`synced_to_resend_at` is stamped on success. If the secrets are missing or Resend fails, the row stays in Supabase; sync those rows
+(`synced_to_resend_at is null`) the same way as Fusion Updates (`/workspace/newsletter/sync_subscribers.md`, with `sbi_subscribers` and the segment id above).
+The API key copy lives outside the repo in `/home/box/.private/resend-shopbotindex.json` (never commit it).
 
 ## Placeholders
 The "Selling online?" box is a labelled affiliate placeholder; no affiliate account exists.

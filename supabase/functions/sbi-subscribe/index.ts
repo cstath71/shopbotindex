@@ -54,7 +54,11 @@ Deno.serve(async (req) => {
   const seg = Deno.env.get("SBI_RESEND_SEGMENT_ID");
   if (key && seg) {
     try {
-      const r = await fetch("https://api.resend.com/contacts", { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify({ email, unsubscribed: false, segments: [{ id: seg }] }) });
+      const auth = { Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
+      // Existing contact (e.g. already on another list): add it to the segment without touching its global subscription status.
+      let r = await fetch(`https://api.resend.com/contacts/${encodeURIComponent(email)}/segments/${seg}`, { method: "POST", headers: auth });
+      // Not a contact yet: create it directly in the segment.
+      if (r.status === 404) r = await fetch("https://api.resend.com/contacts", { method: "POST", headers: auth, body: JSON.stringify({ email, unsubscribed: false, segments: [{ id: seg }] }) });
       if (r.ok) await sb.from("sbi_subscribers").update({ synced_to_resend_at: new Date().toISOString() }).eq("email", email);
     } catch { /* keep the Supabase row; sync later */ }
   }
