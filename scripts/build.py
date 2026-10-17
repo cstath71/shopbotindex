@@ -1,9 +1,11 @@
-"""Build the Agentic Shopping Index static site from data/latest.json + data/channels.json -> ./dist
+"""Build the ShopBot Index static site from data/latest.json + data/channels.json -> ./dist
 Usage: python3 scripts/build.py"""
 import json, os, re, html, glob, shutil, collections
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data'); DIST=os.path.join(ROOT,'dist')
-SITE=os.environ.get('ASI_SITE','https://agenticshoppingindex.com')  # placeholder: no domain owned yet
-NAME='Agentic Shopping Index'
+SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
+NAME='ShopBot Index'
+FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
+DEFDESC='Which online stores can AI shopping agents actually buy from? A weekly public crawl of Shopify stores, big retailers and other online stores for Universal Commerce Protocol (UCP) profiles.'
 E=lambda s: html.escape(str(s if s is not None else ''))
 D=json.load(open(os.path.join(DATA,'latest.json'))); CH=json.load(open(os.path.join(DATA,'channels.json')))
 RET=D['retailers']; SITES=D['sites']; DAY=D['crawl_date']
@@ -38,9 +40,11 @@ def page(path,title,body,desc=''):
     pre='../'*path.count('/')
     nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('methodology.html','Methodology'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)}</title><meta name="description" content="{E(desc or title)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
+<title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
+<meta property="og:type" content="website"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{pre}favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html">{NAME}</a>{nav}</div></header>
-<main><div class="w">{body}</div></main><footer><div class="w">{NAME} · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · Local prototype, not published.</div></footer></body></html>'''
+<main><div class="w">{body}</div></main><footer><div class="w">{NAME} · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer></body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
 def bars(counter,total,namef=lambda x:x,link=None,label='Stores'):
     rows=''.join(f'<tr><td>{(f"<a href=\"{link(k)}\">{E(namef(k))}</a>") if link else E(namef(k))}</td><td>{v}</td><td>{pct(v,total)}</td><td class="hide-sm" style="width:35%"><div class="bar"><i style="width:{100*v/max(total,1):.1f}%"></i></div></td></tr>' for k,v in counter.most_common())
@@ -53,8 +57,11 @@ def segcards(pre=''):
 <div class="sbar"><i class="y" style="width:{100*s["ucp"]/max(s["n"],1):.1f}%"></i><i class="n" style="width:{100*s["no"]/max(s["n"],1):.1f}%"></i><i class="c" style="width:{100*s["cc"]/max(s["n"],1):.1f}%"></i></div>
 <small>{s["n"]} tracked · {s["no"]} without · <span class="cc">{s["cc"]} couldn't check</span></small></a>'''
     return f'<div class="segs">{out}</div><p class="legend"><i class="y"></i> UCP profile <i class="n"></i> no profile <i class="c"></i> couldn\'t check (blocked or unreachable; not counted in the rate)</p>'
-SIGNUP='''<div class="cta"><b>Get the weekly index in your inbox.</b> One short email: who joined, who left, what changed.<form onsubmit="alert('Newsletter not connected yet (prototype).');return false" style="margin-top:.6rem">
-<input type="email" placeholder="you@store.com" aria-label="Email"> <button type="submit">Subscribe</button></form><small>Placeholder: not connected to any email service yet.</small></div>'''
+HONEYPOT='<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">'
+SIGNUP_JS="""<script>if(!window.sbiSub){window.sbiSub=function(f){const m=f.parentNode.querySelector('.nl-msg'),b=f.querySelector('button');b.disabled=true;m.textContent='Subscribing…';fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))}).then(r=>r.json().then(j=>[r.status,j])).then(([s,j])=>{if(j.ok){m.textContent="Thanks! You're on the list.";f.reset();}else{m.textContent=(j.error==='invalid_email'?'Please enter a valid email address.':(s===429?'Too many attempts. Please try again later.':'Something went wrong. Please try again.'));}}).catch(()=>{m.textContent='Network error. Please try again.'}).finally(()=>{b.disabled=false});return false;}}</script>"""
+def signup(pre=''):
+    return f'''<div class="cta" id="subscribe"><b>Get the weekly index in your inbox.</b> One short email: who joined, who left, what changed.<form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" style="margin-top:.6rem">
+<input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address">{HONEYPOT} <button type="submit">Subscribe</button></form><small class="nl-msg" aria-live="polite">Free. About one email a week. Unsubscribe anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
 AFF='<div class="box"><b>Selling online?</b> <span class="muted">[Affiliate placeholder: a disclosed partner link will go here. No affiliate account exists yet.]</span></div>'
 if os.path.isdir(DIST): shutil.rmtree(DIST)
 os.makedirs(DIST); open(os.path.join(DIST,'style.css'),'w').write(CSS)
@@ -82,7 +89,7 @@ NM={r['id']:r for r in RET}
 # ---- home ----
 nsites=len(SITES); nsites_u=sum(1 for s in SITES if s.get('status')=='ucp')
 joined_txt=(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
-home=f'''<h1>Which online stores can AI shopping agents buy from?</h1>
+home=f'''<h1>Which online stores can AI shopping agents actually buy from?</h1>
 <p class="lede">We check {len(RET)} retailers and stores ({nsites} websites) for a published <a href="https://ucp.dev/">Universal Commerce Protocol</a> (UCP) profile, the file AI agents read to learn what a store supports. Every figure comes from our own crawl on {DAY}.</p>
 {segcards()}{joined_txt}
 <div class="stats"><div class="stat"><b>{len(U)}</b><span>retailers/stores with a UCP profile on at least one site</span></div>
@@ -96,8 +103,8 @@ home=f'''<h1>Which online stores can AI shopping agents buy from?</h1>
 <h2>Payment handlers listed</h2>{bars(PHC,len(U),phn)}
 <h2>Which AI assistants name which retailers</h2><p>From official announcements and help pages only. <a href="assistants.html">Details →</a></p>
 <div class="tw nomax"><table><tr><th>Assistant</th><th>Retailers named</th><th>Source</th></tr>{"".join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"].split(" (")[-1].rstrip(")"))}</a>, {E(c["date"])}</td></tr>' for c in CH["channels"])}</table></div>
-{SIGNUP}{AFF}'''
-page('index.html',f'{NAME}: which stores AI agents can buy from',home,'Weekly measured index of Shopify stores, big retailers and other online stores publishing a UCP profile for AI shopping agents.')
+{signup()}{AFF}'''
+page('index.html',f'{NAME}: which online stores AI shopping agents can actually buy from',home,DEFDESC)
 # ---- stores table ----
 rows=[]
 for r in sorted(RET,key=lambda r:(r['status']!='ucp',r['name'].lower())):
@@ -154,10 +161,10 @@ if CHG:
 <h2>Joined: newly publishing UCP ({len(CHG["joined"])})</h2>{L(CHG["joined"])}<h2>Left: profile no longer found ({len(CHG["left"])})</h2>{L(CHG["left"])}
 <h2>Had a profile, now couldn't check ({len(CHG["now_unreachable"])})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"])}
 <h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else "<p class='muted'>None.</p>"}
-<h2>Newly tracked ({len(CHG["newly_tracked"])})</h2><p class="muted">Added to our list this week; not counted as joining.</p>'''
+<h2>Newly tracked ({len(CHG["newly_tracked"])})</h2><p class="muted">Added to our list this week; not counted as joining.</p>{L(CHG["newly_tracked"])}'''
 else:
     body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
-page('changes.html',f'What changed | {NAME}',body)
+page('changes.html',f'What changed | {NAME}',body+signup())
 # ---- methodology ----
 SC=collections.Counter(s.get('status','error') for s in SITES)
 meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produced. Crawl date: {DAY}.</p>
@@ -172,9 +179,21 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produce
 <h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).</p>
 <h2>9. AI assistants table</h2><p>Only official company announcements and help-centre pages, linked per row. We don't test those integrations.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)
-page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">The Agentic Shopping Index tracks, week by week, which online stores AI shopping agents can discover and buy from through open protocols, across Shopify stores, big retailers and other online stores.</p>
+page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index tracks, week by week, which online stores AI shopping agents can discover and buy from through open protocols, across Shopify stores, big retailers and other online stores.</p>
 <p>It is run by Gus, an experienced enterprise software consultant, as an independent project. It is not affiliated with Google, Shopify, OpenAI, Microsoft, Perplexity, PayPal or any retailer listed.</p>
-<p>All figures come from our own public crawl or from linked official sources. Some links may become disclosed affiliate links in future; that will never change a store's result.</p>''')
+<p>All figures come from our own public crawl or from linked official sources. Some links may become disclosed affiliate links in future; that will never change a store's result.</p>'''+signup())
+page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short version: we only store what's needed to send you the weekly email.</p>
+<h2>What we store when you subscribe</h2><ul><li>Your email address</li><li>When you signed up</li><li>A one-way hash of your IP address, kept only to limit spam signups (we never store the IP address itself)</li></ul>
+<h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: who joined, who left, what changed). We don't sell or share your data, and we don't add you to other lists.</p>
+<h2>Where it's kept</h2><p>Subscriber data is stored with Supabase (EU region, Frankfurt), and emails will be sent with Resend. Both act as processors for us.</p>
+<h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list.</p>
+<h2>Analytics</h2><p>This site uses no cookies and no analytics or tracking scripts.</p>
+<h2>Our crawler</h2><p>ShopBot Index reads only <code>/robots.txt</code> and <code>/.well-known/ucp</code> on the stores it tracks, respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
+<p class="muted">Last updated: October 2026.</p>''')
+open(os.path.join(DIST,'CNAME'),'w').write(SITE.split('://',1)[1]+'\n')
+open(os.path.join(DIST,'favicon.svg'),'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f172a"/><path d="M14 20h6l5 22h20l5-16H23" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="50" r="4" fill="#22c55e"/><circle cx="43" cy="50" r="4" fill="#22c55e"/></svg>')
+OG=os.path.join(ROOT,'assets','og.png')
+if os.path.exists(OG): shutil.copy(OG,os.path.join(DIST,'og.png'))
 open(os.path.join(DIST,'robots.txt'),'w').write(f'User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n')
 open(os.path.join(DIST,'sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{SITE}/{p.replace("index.html","")}</loc><lastmod>{DAY}</lastmod></url>\n' for p in PAGES)+'</urlset>\n')
 print('built',len(PAGES),'pages;',{k:segstats([r for r in RET if r['segment']==k]) for k in SEG},'nonshopify',len(NONSHOP),'big ucp',len(BIGU))

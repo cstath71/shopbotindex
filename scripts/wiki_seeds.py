@@ -2,7 +2,7 @@
 Writes data/seeds/wikipedia_lists.json. Usage: python3 scripts/wiki_seeds.py"""
 import json, os, time, urllib.request, urllib.parse
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); OUT=os.path.join(ROOT,'data','seeds','wikipedia_lists.json')
-UA='AgenticShoppingIndexBot/0.1 (local research prototype)'
+UA='ShopBotIndexBot/1.0 (+https://shopbotindex.com/methodology.html)'
 PAGES=['List_of_largest_retail_companies','List_of_department_stores_by_country','List_of_supermarket_chains','List_of_hypermarkets','List_of_online_marketplaces']
 EXCL={'Q5','Q6256','Q515','Q1549591','Q3624078','Q4167410','Q13406463','Q35657','Q7275','Q486972','Q1637706','Q2221906','Q11424','Q5119','Q82794','Q1093829'}
 def get(url):
