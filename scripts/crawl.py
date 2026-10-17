@@ -2,7 +2,7 @@
 'Discovery: Fetch business profile from /.well-known/ucp'). Polite: honours robots.txt, one request at a time per host,
 small global concurrency, timeouts, honest User-Agent. Writes data/crawl-YYYY-MM-DD.json and data/latest.json.
 Usage: python3 scripts/crawl.py [--limit N]"""
-import json, os, sys, time, ssl, datetime, urllib.request, urllib.error, urllib.robotparser, concurrent.futures as cf, threading, re
+import json, os, sys, collections, time, ssl, datetime, urllib.request, urllib.error, urllib.robotparser, concurrent.futures as cf, threading, re
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data')
 UA='AgenticShoppingIndexBot/0.1 (local research prototype; reads only /robots.txt and /.well-known/ucp)'
 TIMEOUT=10; WORKERS=12; PAUSE=0.25; MAXBYTES=512*1024
@@ -72,18 +72,32 @@ def crawl_one(seed):
         out['status']='blocked' if st in (401,403,429,451) else 'no_ucp'
         return out
     return out
+def aggregate(seed,sites):
+    """Retailer-level status: ucp if any site has a profile; no_ucp if at least one site answered without one;
+    couldnt_check if every site refused, timed out or was disallowed by robots.txt."""
+    st=[x.get('status') for x in sites]
+    if 'ucp' in st: status='ucp'
+    elif any(x in ('no_ucp','not_json','json_without_ucp') for x in st): status='no_ucp'
+    else: status='couldnt_check'
+    caps=sorted({c for x in sites if x.get('status')=='ucp' for c in x['ucp']['capabilities']})
+    ph=sorted({c for x in sites if x.get('status')=='ucp' for c in x['ucp']['payment_handlers']})
+    plat=sorted({x['ucp']['platform_hint'] or 'Other / not identified' for x in sites if x.get('status')=='ucp'})
+    return dict(id=seed['id'],status=status,sites_checked=len(sites),sites_with_ucp=st.count('ucp'),capabilities=caps,payment_handlers=ph,platforms=plat)
 def main():
     seeds=json.load(open(os.path.join(DATA,'seeds.json')))
     if '--limit' in sys.argv: seeds=seeds[:int(sys.argv[sys.argv.index('--limit')+1])]
-    t0=time.time(); res=[]; lock=threading.Lock()
+    jobs=[dict(domain=h,rid=s['id']) for s in seeds for h in s['sites']]
+    t0=time.time(); res=[]
     with cf.ThreadPoolExecutor(WORKERS) as ex:
-        for i,r in enumerate(ex.map(crawl_one,seeds)):
+        for i,r in enumerate(ex.map(crawl_one,jobs)):
             res.append(r)
-            if i%100==0: print(i,round(time.time()-t0),'s',flush=True)
-    by={s['domain']:s for s in seeds}
-    for r in res: r.update({k:by[r['domain']][k] for k in ('name','category','country','source','source_ref','industry')})
+            if i%250==0: print(i,'/',len(jobs),round(time.time()-t0),'s',flush=True)
+    for j,r in zip(jobs,res): r['rid']=j['rid']
+    by=collections.defaultdict(list)
+    for r in res: by[r['rid']].append(r)
+    retailers=[dict(aggregate(s,by[s['id']]),name=s['name'],segment=s['segment'],category=s['category'],country=s['country'],sources=s['sources']) for s in seeds]
     day=datetime.date.today().isoformat()
-    doc=dict(crawl_date=day,user_agent=UA,spec='https://ucp.dev/specification/overview/',path='/.well-known/ucp',seed_count=len(seeds),results=res)
+    doc=dict(crawl_date=day,user_agent=UA,spec='https://ucp.dev/specification/overview/',path='/.well-known/ucp',retailer_count=len(seeds),site_count=len(jobs),retailers=retailers,sites=res)
     for fn in (f'crawl-{day}.json','latest.json'): json.dump(doc,open(os.path.join(DATA,fn),'w'),indent=1,ensure_ascii=False)
-    import collections; print('done',round(time.time()-t0),'s',collections.Counter(r.get('status') for r in res))
+    print('done',round(time.time()-t0),'s sites:',collections.Counter(r.get('status') for r in res),'retailers:',collections.Counter((r['segment'],r['status']) for r in retailers))
 if __name__=='__main__': main()
