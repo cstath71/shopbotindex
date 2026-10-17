@@ -1,8 +1,8 @@
 {
   "from": "ShopBot Index <hello@shopbotindex.com>",
   "reply_to": "hello@shopbotindex.com",
-  "subject": "Welcome to ShopBot Index",
-  "preheader": "One short email a week: which stores started or stopped publishing a UCP profile, and what else they changed for AI shopping agents.",
+  "subject": "Welcome to ShopBot Index: what online stores tell AI shopping agents",
+  "preheader": "One short email a week: which online stores started or stopped publishing the official profile AI shopping agents read, and what else they changed for AI shopping agents.",
   "event": "sbi.subscribed",
   "template_alias": "sbi-welcome"
 }
