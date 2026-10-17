@@ -21,7 +21,7 @@ h=f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="vie
 <div style="display:none;max-height:0;overflow:hidden">{E(PRE)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f2f4f7" style="background-color:#f2f4f7"><tr><td align="center" style="padding-top:24px;padding-bottom:24px;padding-left:12px;padding-right:12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:600px;width:100%;background-color:#ffffff">
-<tr><td bgcolor="#14202b" style="background-color:#14202b;padding-top:18px;padding-bottom:18px;padding-left:28px;padding-right:28px"><p style="{F};font-size:20px;line-height:26px;font-weight:700;color:#ffffff;margin:0">ShopBot Index</p><p style="{F};font-size:13px;line-height:18px;color:#d6dee6;margin:2px 0 0 0">The weekly index of what online stores tell AI shopping agents</p></td></tr>
+<tr><td bgcolor="#14202b" style="background-color:#14202b;padding-top:18px;padding-bottom:18px;padding-left:28px;padding-right:28px"><img src="{SITE}/logo-96.png" width="40" height="40" border="0" alt="ShopBot Index logo" style="display:block;border:0;width:40px;height:40px;margin:0 0 8px 0"><p style="{F};font-size:20px;line-height:26px;font-weight:700;color:#ffffff;margin:0">ShopBot Index</p><p style="{F};font-size:13px;line-height:18px;color:#d6dee6;margin:2px 0 0 0">The weekly index of what online stores tell AI shopping agents</p></td></tr>
 <tr><td style="padding-top:28px;padding-bottom:4px;padding-left:28px;padding-right:28px">
 <h1 style="{F};font-size:24px;line-height:30px;color:#14202b;margin:0 0 12px 0">{E(SUBJECT)}</h1>
 {p(E(P1))}{p(E(P2))}{p(E(P3),';margin-bottom:4px')}</td></tr>

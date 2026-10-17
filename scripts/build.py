@@ -38,16 +38,23 @@ PLATC=collections.Counter(p for r in U for p in r['platforms'])
 CATS=sorted({r['category'] for r in RET})
 CSS=open(os.path.join(ROOT,'scripts','style.css')).read()
 PAGES=[]
+def hero(body):
+    # home hero: sky-blue banner look (X branding); wraps the first <h1> and its lede, text unchanged
+    m=re.search(r'<h1>.*?</h1>\s*<p class="lede">.*?</p>',body,re.S)
+    if not m: return body
+    art='<img class="hero-art" src="robot-hero.png" width="210" height="210" alt="ShopBot Index robot pushing a shopping cart">'
+    return body[:m.start()]+f'<section class="hero"><div class="hero-t">{m.group(0)}</div>{art}</section>'+body[m.end():]
 def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     pre='../'*path.count('/')
+    if path=='index.html': body=hero(body)
     nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
 <meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{E(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ShopBotIndex"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc or DEFDESC)}"><meta name="twitter:image" content="{SITE}/{ogimg}">{head}
-<link rel="icon" href="{pre}favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{pre}favicon.ico" sizes="any"><link rel="icon" href="{pre}favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="{pre}apple-touch-icon.png">
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
 <meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
-<link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html">{NAME}</a>{nav}</div></header>
+<link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html"><img src="{pre}logo-32.png" srcset="{pre}logo-64.png 2x, {pre}logo-96.png 3x" width="32" height="32" alt="">{NAME}</a>{nav}</div></header>
 <main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer></body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
 def bars(counter,total,namef=lambda x:x,link=None,label='Stores'):
@@ -73,6 +80,7 @@ def aff():
     return f'''<div class="box"><b>Selling online?</b> In our latest crawl, {s["ucp"]} of the {s["checked"]} Shopify stores we could check publish a UCP profile ({s["rate"]}). <a href="{E(AFF_URL)}" rel="sponsored noopener" target="_blank">Start a Shopify free trial →</a><br><small class="muted">Affiliate link: {E(AFF_DISC)} It never changes a store's result.</small></div>'''
 if os.path.isdir(DIST): shutil.rmtree(DIST)
 os.makedirs(DIST); open(os.path.join(DIST,'style.css'),'w').write(CSS)
+for _f in glob.glob(os.path.join(ROOT,'assets','brand','*')): shutil.copy(_f,DIST)  # logo, favicons, hero art (X branding)
 # ---- changes (weekly diff) ----
 def prev_crawl():
     fs=sorted(f for f in glob.glob(os.path.join(DATA,'crawl-*.json')) if not f.endswith(f'crawl-{DAY}.json'))
