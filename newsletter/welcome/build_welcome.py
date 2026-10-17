@@ -5,13 +5,13 @@ E=html.escape
 SITE='https://shopbotindex.com'
 FROM='ShopBot Index <hello@shopbotindex.com>'; REPLY_TO='hello@shopbotindex.com'
 SUBJECT='Welcome to ShopBot Index'
-PRE="One short email a week: which stores started or stopped publishing a UCP profile for AI shopping agents, and what changed."
+PRE="One short email a week: which stores started or stopped publishing a UCP profile, and what else they changed for AI shopping agents."
 P1="Thanks for subscribing to ShopBot Index."
-P2="Every Monday the index checks each tracked store for a UCP business profile, the /.well-known/ucp file that is the official machine-readable signal a store supports AI shopping agents. After each crawl you'll get one short, free email: which stores started publishing a UCP profile, which stopped, and what else changed that week."
+P2="Every Monday the index checks each tracked store for a UCP profile, the /.well-known/ucp file that is the official machine-readable profile AI shopping agents read, plus four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, which changed what they tell AI agents, and what else moved that week."
 P3="Until the next issue, here's where to look:"
-LINKS=[("The index",SITE+"/","Which stores publish a UCP profile, across Shopify stores, big retailers and other stores."),
-       ("What changed",SITE+"/changes.html","Joined, left and other changes compared with the previous crawl."),
-       ("Methodology",SITE+"/methodology.html","Exactly how each store is checked and how the numbers are produced.")]
+LINKS=[("The index",SITE+"/","What Shopify stores, big retailers and other stores tell AI shopping agents, starting with UCP profiles."),
+       ("What changed",SITE+"/changes.html","Joined, left, new AI rules and other changes compared with the previous crawl."),
+       ("Methodology",SITE+"/methodology.html","Exactly what we check, what it means, and what we can't see from outside.")]
 P4="Questions, or a store you'd like checked? Just reply to this email. It goes to hello@shopbotindex.com."
 a=lambda u,t,c='#1f5fa8': f'<a href="{E(u)}" style="color:{c};text-decoration:underline">{t}</a>'
 F='font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif'
@@ -21,7 +21,7 @@ h=f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="vie
 <div style="display:none;max-height:0;overflow:hidden">{E(PRE)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f2f4f7" style="background-color:#f2f4f7"><tr><td align="center" style="padding-top:24px;padding-bottom:24px;padding-left:12px;padding-right:12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:600px;width:100%;background-color:#ffffff">
-<tr><td bgcolor="#14202b" style="background-color:#14202b;padding-top:18px;padding-bottom:18px;padding-left:28px;padding-right:28px"><p style="{F};font-size:20px;line-height:26px;font-weight:700;color:#ffffff;margin:0">ShopBot Index</p><p style="{F};font-size:13px;line-height:18px;color:#d6dee6;margin:2px 0 0 0">Which online stores publish a UCP profile for AI shopping agents</p></td></tr>
+<tr><td bgcolor="#14202b" style="background-color:#14202b;padding-top:18px;padding-bottom:18px;padding-left:28px;padding-right:28px"><p style="{F};font-size:20px;line-height:26px;font-weight:700;color:#ffffff;margin:0">ShopBot Index</p><p style="{F};font-size:13px;line-height:18px;color:#d6dee6;margin:2px 0 0 0">The weekly index of what online stores tell AI shopping agents</p></td></tr>
 <tr><td style="padding-top:28px;padding-bottom:4px;padding-left:28px;padding-right:28px">
 <h1 style="{F};font-size:24px;line-height:30px;color:#14202b;margin:0 0 12px 0">{E(SUBJECT)}</h1>
 {p(E(P1))}{p(E(P2))}{p(E(P3),';margin-bottom:4px')}</td></tr>
