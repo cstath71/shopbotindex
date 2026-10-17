@@ -6,7 +6,7 @@ SITE='https://shopbotindex.com'
 FROM='ShopBot Index <hello@shopbotindex.com>'; REPLY_TO='hello@shopbotindex.com'
 SUBJECT='Welcome to ShopBot Index: what online stores tell AI shopping agents'
 H1='Welcome to ShopBot Index'
-PRE="One short email a week: which online stores started or stopped publishing the official profile AI shopping agents read, and what else they changed for AI shopping agents."
+PRE="One short email a week: which online stores started or stopped publishing the official profile AI shopping agents read, and what else they changed for AI agents."
 P1="Thanks for subscribing to ShopBot Index."
 P2="ShopBot Index is the weekly index of what online stores tell AI shopping agents. Every Monday it checks each tracked store for a UCP profile, the /.well-known/ucp file that is the official machine-readable profile AI shopping agents read. It also records four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, which changed what they tell AI agents, and what else moved that week."
 P3="Until the next issue, here's where to look:"
