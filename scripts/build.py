@@ -81,7 +81,7 @@ page('index.html',f'{NAME}: which stores AI agents can buy from',home,'Weekly me
 rows=[]
 for r in sorted(R,key=lambda r:(r.get('status')!='ucp',r['name'].lower())):
     u=r.get('ucp') or {}
-    rows.append(dict(n=r['name'],d=r.get('host') or r['domain'],c=r['category'],s=r.get('status','error'),v=u.get('version',''),caps=[capn(x) for x in u.get('capabilities',[])],ph=[phn(x) for x in u.get('payment_handlers',[])],p=u.get('platform_hint',''),co=r.get('country','')))
+    rows.append(dict(n=r['name'],d=r.get('host') or r['domain'],c=r['category'],s=r.get('status','error'),v=u.get('version',''),caps=[capn(x) for x in u.get('capabilities',[])],ph=[phn(x) for x in u.get('payment_handlers',[])],p=u.get('platform_hint','')))
 stores=f'''<h1>All stores checked ({N})</h1><p class="lede">Every domain from our seed list, with the result of fetching <code>/.well-known/ucp</code> on {DAY}. Click a column to sort.</p>
 <div class="filters"><input id="q" placeholder="Search store or domain" aria-label="Search"><select id="fs"><option value="">All results</option>{"".join(f'<option value="{k}">{E(STLABEL.get(k,k))} ({v})</option>' for k,v in ST.most_common())}</select>
 <select id="fc"><option value="">All categories</option>{"".join(f'<option>{E(c)}</option>' for c in CATS)}</select><select id="fk"><option value="">Any capability</option>{"".join(f'<option>{E(capn(c))}</option>' for c,_ in CAPC.most_common())}</select></div>
