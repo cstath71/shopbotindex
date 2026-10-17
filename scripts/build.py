@@ -46,6 +46,7 @@ def page(path,title,body,desc=''):
 <meta property="og:type" content="website"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{pre}favicon.svg" type="image/svg+xml">
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
+<meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
 <link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html">{NAME}</a>{nav}</div></header>
 <main><div class="w">{body}</div></main><footer><div class="w">{NAME} · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer></body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
