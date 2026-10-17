@@ -2,18 +2,18 @@ Welcome to ShopBot Index
 
 Thanks for subscribing to ShopBot Index.
 
-Every Monday the index checks each tracked store for a UCP business profile, the /.well-known/ucp file that is the official machine-readable profile AI shopping agents read. After each crawl you'll get one short, free email: which stores started publishing a UCP profile, which stopped, and what else changed that week.
+ShopBot Index is the weekly index of what online stores tell AI shopping agents. Every Monday it checks each tracked store for a UCP profile, the /.well-known/ucp file that is the official machine-readable profile AI shopping agents read. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, and what else changed that week.
 
 Until the next issue, here's where to look:
 
 - The index: https://shopbotindex.com/
-  Which stores publish a UCP profile, across Shopify stores, big retailers and other stores.
+  What Shopify stores, big retailers and other stores tell AI shopping agents: who publishes a UCP profile, week by week.
 
 - What changed: https://shopbotindex.com/changes.html
   Joined, left and other changes compared with the previous crawl.
 
 - Methodology: https://shopbotindex.com/methodology.html
-  Exactly how each store is checked and how the numbers are produced.
+  Exactly what we check, how we check it, and what it does and doesn't mean.
 
 Questions, or a store you'd like checked? Just reply to this email. It goes to hello@shopbotindex.com.
 
