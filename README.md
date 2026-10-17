@@ -39,5 +39,9 @@ first "add existing contact to segment" (keeps an existing contact's global unsu
 (`synced_to_resend_at is null`) the same way as Fusion Updates (`/workspace/newsletter/sync_subscribers.md`, with `sbi_subscribers` and the segment id above).
 The API key copy lives outside the repo in `/home/box/.private/resend-shopbotindex.json` (never commit it).
 
-## Placeholders
-The "Selling online?" box is a labelled affiliate placeholder; no affiliate account exists.
+## Shopify affiliate (Impact)
+- Approved 17 Oct 2026. Impact account id **7989432**, Shopify campaign **13624**.
+- Tracking link (Shopify free trial): `https://shopify.pxf.io/c/7989432/1061744/13624`, set in `config/site.json` (`shopify_affiliate_url`, `affiliate_disclosure`), so every rebuild (`scripts/weekly.sh`) keeps it.
+- Shown in the "Selling online?" box on the home page and the Shopify segment page, plus the About page; all links use `rel="sponsored noopener"`. Disclosure next to the links and on About + Privacy: "We may earn a commission if you start a Shopify trial through our links."
+- New deep links to other Shopify pages: create them in Impact with **Create a Link** (campaign 13624), then add them to `config/site.json`.
+- Impact site verification meta tags are in the page template in `scripts/build.py`.

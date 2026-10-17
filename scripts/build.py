@@ -66,7 +66,11 @@ SIGNUP_JS="""<script>if(!window.sbiSub){window.sbiSub=function(f){const m=f.pare
 def signup(pre=''):
     return f'''<div class="cta" id="subscribe"><b>Get the weekly index in your inbox.</b> One short email: who joined, who left, what changed.<form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" style="margin-top:.6rem">
 <input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address">{HONEYPOT} <button type="submit">Subscribe</button></form><small class="nl-msg" aria-live="polite">Free. About one email a week. Unsubscribe anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
-AFF='<div class="box"><b>Selling online?</b> <span class="muted">[Affiliate placeholder: a disclosed partner link will go here. No affiliate account exists yet.]</span></div>'
+CFG=json.load(open(os.path.join(ROOT,'config','site.json')))
+AFF_URL=CFG['shopify_affiliate_url']; AFF_DISC=CFG['affiliate_disclosure']
+def aff():
+    s=segstats([r for r in RET if r['segment']=='shopify'])
+    return f'''<div class="box"><b>Selling online?</b> In our latest crawl, {s["ucp"]} of the {s["checked"]} Shopify stores we could check publish a UCP profile ({s["rate"]}). <a href="{E(AFF_URL)}" rel="sponsored noopener" target="_blank">Start a Shopify free trial →</a><br><small class="muted">Affiliate link: {E(AFF_DISC)} It never changes a store's result.</small></div>'''
 if os.path.isdir(DIST): shutil.rmtree(DIST)
 os.makedirs(DIST); open(os.path.join(DIST,'style.css'),'w').write(CSS)
 # ---- changes (weekly diff) ----
@@ -107,7 +111,7 @@ home=f'''<h1>Which online stores can AI shopping agents actually buy from?</h1>
 <h2>Payment handlers listed</h2>{bars(PHC,len(U),phn)}
 <h2>Which AI assistants name which retailers</h2><p>From official announcements and help pages only. <a href="assistants.html">Details →</a></p>
 <div class="tw nomax"><table><tr><th>Assistant</th><th>Retailers named</th><th>Source</th></tr>{"".join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"].split(" (")[-1].rstrip(")"))}</a>, {E(c["date"])}</td></tr>' for c in CH["channels"])}</table></div>
-{signup()}{AFF}'''
+{signup()}{aff()}'''
 page('index.html',f'{NAME}: which online stores AI shopping agents can actually buy from',home,DEFDESC)
 # ---- stores table ----
 rows=[]
@@ -143,7 +147,7 @@ for k in SEG:
     rs=[r for r in RET if r['segment']==k]; s=segstats(rs); cu=collections.Counter(c for r in rs if r['status']=='ucp' for c in r['capabilities'])
     cats=collections.Counter(r['category'] for r in rs)
     ct=''.join(f'<tr><td>{E(c)}</td><td>{n}</td><td>{sum(1 for r in rs if r["category"]==c and r["status"]=="ucp")}</td><td>{sum(1 for r in rs if r["category"]==c and r["status"]=="couldnt_check")}</td></tr>' for c,n in cats.most_common())
-    page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.</p><h2>By category</h2><div class="tw nomax"><table><tr><th>Category</th><th>Tracked</th><th>With UCP</th><th>Couldn\'t check</th></tr>{ct}</table></div>{"<h2>Capabilities declared</h2>"+bars(cu,s["ucp"],capn) if s["ucp"] else ""}<h2>All {len(rs)}</h2>{rtable(rs)}')
+    page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.</p><h2>By category</h2><div class="tw nomax"><table><tr><th>Category</th><th>Tracked</th><th>With UCP</th><th>Couldn\'t check</th></tr>{ct}</table></div>{"<h2>Capabilities declared</h2>"+bars(cu,s["ucp"],capn) if s["ucp"] else ""}<h2>All {len(rs)}</h2>{rtable(rs)}'+(aff() if k=='shopify' else ''))
 # ---- capabilities ----
 page('capabilities/index.html',f'UCP capabilities | {NAME}',f'<h1>UCP capabilities</h1><p class="lede">Capabilities declared in UCP profiles, counted per retailer/store ({len(U)} with a profile).</p><ul>{"".join(f"<li><a href=\"{slug(c)}.html\">{E(capn(c))}</a>: {v} <small>(<code>{E(c)}</code>)</small></li>" for c,v in CAPC.most_common())}</ul>')
 for c,v in CAPC.items():
@@ -186,13 +190,14 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produce
 page('methodology.html',f'Methodology | {NAME}',meth)
 page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index tracks, week by week, which online stores AI shopping agents can discover and buy from through open protocols, across Shopify stores, big retailers and other online stores.</p>
 <p>It is run by Gus, an experienced enterprise software consultant, as an independent project. It is not affiliated with Google, Shopify, OpenAI, Microsoft, Perplexity, PayPal or any retailer listed.</p>
-<p>All figures come from our own public crawl or from linked official sources. Some links may become disclosed affiliate links in future; that will never change a store's result.</p><p>Contact: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a> (including stores that want to be added, removed or corrected; see the <a href="methodology.html#contact">methodology</a>).</p>'''+signup())
+<p>All figures come from our own public crawl or from linked official sources. Shopify trial links on this site (like the <a href="'''+E(AFF_URL)+'''" rel="sponsored noopener" target="_blank">Shopify free trial</a>) are affiliate links: '''+E(AFF_DISC)+''' That never changes a store's result.</p><p>Contact: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a> (including stores that want to be added, removed or corrected; see the <a href="methodology.html#contact">methodology</a>).</p>'''+signup())
 page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short version: we only store what's needed to send you the weekly email.</p>
 <h2>What we store when you subscribe</h2><ul><li>Your email address</li><li>When you signed up</li><li>A one-way hash of your IP address, kept only to limit spam signups (we never store the IP address itself)</li></ul>
 <h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: who joined, who left, what changed). We don't sell or share your data, and we don't add you to other lists.</p>
 <h2>Where it's kept</h2><p>Subscriber data is stored with Supabase (EU region, Frankfurt), and emails will be sent with Resend. Both act as processors for us.</p>
 <h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list. To have your data deleted, or for any question, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
 <h2>Analytics</h2><p>This site uses no cookies and no analytics or tracking scripts.</p>
+<h2>Affiliate links</h2><p>Shopify trial links on this site are affiliate links run through Impact; when you click one, Shopify and Impact may set their own cookies to attribute a trial. '''+E(AFF_DISC)+'''</p>
 <h2>Our crawler</h2><p>ShopBot Index reads only <code>/robots.txt</code> and <code>/.well-known/ucp</code> on the stores it tracks, respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
 <p>Questions about your data: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
 open(os.path.join(DIST,'CNAME'),'w').write(SITE.split('://',1)[1]+'\n')
