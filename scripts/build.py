@@ -227,7 +227,7 @@ def sigpill(cls,lbl): return f'<span class="pill {cls}">{E(lbl)}</span>'
 def readiness(r):
     sg=r.get('signals') or {}; st=r['status']
     if not sg.get('checked'):
-        why='We started checking these signals after this crawl.' if not HAS_SIG else "We couldn't check these signals this week: none of this store's websites answered our crawler, or our weekly time budget ran out before we reached it."
+        why='We start checking these signals with the next weekly crawl.' if not HAS_SIG else "We couldn't check these signals this week: none of this store's websites answered our crawler, or our weekly time budget ran out before we reached it."
         return f'<h2 id="readiness">Agent-readiness signals</h2><p class="muted">{why} <a href="../methodology.html#signals">What we check</a>.</p>'
     rows=[]
     capl=[capn(c) for c in r['capabilities']]
@@ -317,6 +317,10 @@ json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,sep
 os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
 for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
 # ---- methodology ----
+import importlib.util as _ilu
+_sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.py')); _cm=_ilu.module_from_spec(_sp); _sp.loader.exec_module(_cm)
+CRAWL_UA=_cm.UA
+UA_NOTE='' if D.get('user_agent')==CRAWL_UA else f' <small class="muted">(The crawl of {DAY} still used the earlier User-Agent <code>{E(D.get("user_agent",""))}</code>, which read only <code>/robots.txt</code> and <code>/.well-known/ucp</code>.)</small>'
 SIGMETH=f'''<h2 id="signals">1b. Agent-readiness signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score.</p>
 <div class="tw nomax"><table><tr><th>Signal</th><th>How we check</th><th>What it means</th><th>What it doesn't mean</th></tr>
 <tr><td><b>Agent checkout profile (UCP)</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the official machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
@@ -332,10 +336,10 @@ SIGMETH=f'''<h2 id="signals">1b. Agent-readiness signals (beyond UCP)</h2><p>UCP
 <li><b>Microsoft Copilot Checkout</b> enrolment (<a href="https://about.ads.microsoft.com/en/blog/post/january-2026/conversations-that-convert-copilot-checkout-and-brand-agents">Microsoft Advertising</a>).</li>
 <li><b>Card-network agent programs:</b> Visa Intelligent Commerce and its <a href="https://developer.visa.com/capabilities/trusted-agent-protocol/trusted-agent-protocol-specifications/">Trusted Agent Protocol</a>, and Mastercard Agent Pay (<a href="https://blog.cloudflare.com/secure-agentic-commerce/">Cloudflare</a>).</li>
 <li><b>Web Bot Auth:</b> whether a store verifies signed AI agents (<a href="https://developers.cloudflare.com/bots/reference/bot-verification/web-bot-auth/">Cloudflare docs</a>).</li></ul>'''
-CRAWLMETH=f'''<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(D["user_agent"])}</code></li>
-<li>What we read on each website, and nothing else: <code>/robots.txt</code>, <code>/.well-known/ucp</code>, <code>/.well-known/acp.json</code>, <code>/.well-known/ai-catalog.json</code>, <code>/llms.txt</code>, <code>/agents.md</code>, the home page, at most two sitemap files (only when the home page links no product), and one product page. When the UCP profile names an MCP endpoint, we also send it one read-only <code>tools/list</code> request. That's at most about ten requests per website per week.</li>
+CRAWLMETH=f'''<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(CRAWL_UA)}</code>{UA_NOTE}</li>
+<li>What we read on each website, and nothing else: <code>/robots.txt</code>, <code>/.well-known/ucp</code>, <code>/.well-known/acp.json</code>, <code>/.well-known/ai-catalog.json</code>, <code>/llms.txt</code>, <code>/agents.md</code>, the home page, at most two sitemap files (only when the home page links no product), and one product page. When the UCP profile names an MCP endpoint, we also send it one read-only <code>tools/list</code> request. That's usually 7 to 10 requests per website per week, and never more than 14.</li>
 <li>robots.txt is read first and respected for every one of those URLs. If <code>/.well-known/ucp</code> is disallowed for us, we skip the website entirely.</li>
-<li>At most 12 websites at a time and one request at a time per website, with a pause between requests (1 second for the extra signals), 10 to 12 second timeouts, HTTPS only. If a listed host is unreachable we try the same domain with or without <code>www.</code>. The extra signals run within a fixed weekly time budget; websites we don't reach in time show as "not checked".</li>
+<li>At most 12 websites at a time for the UCP pass and 16 for the extra signals, always one request at a time per website, with a pause between requests (1 second for the extra signals), 10 to 12 second timeouts, HTTPS only. If a listed host is unreachable we try the same domain with or without <code>www.</code>. The extra signals run within a fixed weekly time budget; websites we don't reach in time show as "not checked".</li>
 <li>Site owners: to have your site excluded, disallow <code>/</code> (or just the paths above) for <code>ShopBotIndexBot</code> in robots.txt, or email {MAILTO}.</li></ul>'''
 
 SC=collections.Counter(s.get('status','error') for s in SITES)

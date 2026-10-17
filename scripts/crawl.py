@@ -3,7 +3,7 @@
 small global concurrency, timeouts, honest User-Agent. Writes data/crawl-YYYY-MM-DD.json and data/latest.json.
 Phase 1 (unchanged headline metric): robots.txt + /.well-known/ucp for every site.
 Phase 2 (agent-readiness signals, scripts/signals.py): runs after phase 1 within a time budget (env SBI_SIGNALS_BUDGET seconds,
-default 4500); sites not reached in time are recorded as not checked. SBI_SIGNALS=0 skips phase 2 entirely.
+default 3600); sites not reached in time are recorded as not checked. SBI_SIGNALS=0 skips phase 2 entirely.
 Usage: python3 scripts/crawl.py [--limit N] [--every N] [--out DIR]   (--out writes crawl files to DIR instead of data/, for dry runs)"""
 import json, os, sys, collections, time, ssl, datetime, urllib.request, urllib.error, urllib.robotparser, concurrent.futures as cf, threading, re
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data')
@@ -15,7 +15,7 @@ import signals as SIG
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 AGENT_PROFILE=os.environ.get('SBI_AGENT_PROFILE',SITE+'/ucp/agent-profile.json')
 ROBOTS_TXT={}
-TIMEOUT=10; WORKERS=12; PAUSE=0.25; MAXBYTES=512*1024
+TIMEOUT=10; WORKERS=12; WORKERS2=16; PAUSE=0.25; MAXBYTES=512*1024  # WORKERS2: phase 2 (still one request at a time per site)
 CTX=ssl.create_default_context()
 def fetch(url):
     req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'application/json'})
@@ -99,7 +99,7 @@ def agent_profile():
     """Our own UCP agent profile (published by build.py); fall back to Shopify's documented example until ours is live."""
     st,ct,_,body=fetch(AGENT_PROFILE)
     try:
-        if st==200 and isinstance(json.loads(body).get('ucp'),dict): return AGENT_PROFILE
+        if st==200 and 'json' in ct.lower() and isinstance(json.loads(body).get('ucp'),dict): return AGENT_PROFILE  # Shopify rejects non-JSON content types
     except Exception: pass
     return SIG.SHOPIFY_EXAMPLE_PROFILE
 def phase2(res,budget):
@@ -116,7 +116,7 @@ def phase2(res,budget):
         with lock:
             done[0]+=1
             if done[0]%250==0: print('signals',done[0],'/',len(res),round(time.time()-t0),'s',flush=True)
-    with cf.ThreadPoolExecutor(WORKERS) as ex: list(ex.map(one,order))
+    with cf.ThreadPoolExecutor(WORKERS2) as ex: list(ex.map(one,order))
     return dict(agent_profile=prof,seconds=round(time.time()-t0),budget=budget,requests=sum((r.get('signals') or {}).get('requests',0) for r in res),
                 checked=sum(1 for r in res if (r.get('signals') or {}).get('checked')),not_checked_budget=sum(1 for r in res if (r.get('signals') or {}).get('reason')=='time budget reached'))
 def main():
@@ -132,7 +132,12 @@ def main():
             if i%250==0: print(i,'/',len(jobs),round(time.time()-t0),'s',flush=True)
     p1=round(time.time()-t0); print('phase 1 done',p1,'s',flush=True)
     for j,r in zip(jobs,res): r['rid']=j['rid']; r['_rank']=j['rank']
-    p2=phase2(res,int(os.environ.get('SBI_SIGNALS_BUDGET','4500'))) if os.environ.get('SBI_SIGNALS','1')!='0' else None
+    p2=None
+    if os.environ.get('SBI_SIGNALS','1')!='0':
+        try: p2=phase2(res,int(os.environ.get('SBI_SIGNALS_BUDGET','3600')))
+        except Exception as e:  # never let the extra signals break the weekly UCP crawl
+            p2=dict(error=type(e).__name__+': '+str(e)[:200])
+            for r in res: r.setdefault('signals',dict(checked=False,reason='signals pass failed'))
     for r in res: r.pop('_rank',None)
     print('phase 2',p2,flush=True)
     by=collections.defaultdict(list)
@@ -142,6 +147,6 @@ def main():
     doc=dict(crawl_date=day,user_agent=UA,spec='https://ucp.dev/specification/overview/',path='/.well-known/ucp',retailer_count=len(seeds),site_count=len(jobs),
              timing=dict(phase1_seconds=p1,phase2=p2),retailers=retailers,sites=res)
     os.makedirs(out_dir,exist_ok=True)
-    for fn in (f'crawl-{day}.json','latest.json'): json.dump(doc,open(os.path.join(out_dir,fn),'w'),indent=1,ensure_ascii=False)
+    for fn in (f'crawl-{day}.json','latest.json'): json.dump(doc,open(os.path.join(out_dir,fn),'w'),ensure_ascii=False,separators=(',',':'))
     print('done',round(time.time()-t0),'s sites:',collections.Counter(r.get('status') for r in res),'retailers:',collections.Counter((r['segment'],r['status']) for r in retailers))
 if __name__=='__main__': main()
