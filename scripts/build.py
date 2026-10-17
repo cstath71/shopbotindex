@@ -228,7 +228,7 @@ def readiness(r):
     sg=r.get('signals') or {}; st=r['status']
     if not sg.get('checked'):
         why='We start checking these signals with the next weekly crawl.' if not HAS_SIG else "We couldn't check these signals this week: none of this store's websites answered our crawler, or our weekly time budget ran out before we reached it."
-        return f'<h2 id="readiness">Agent-readiness signals</h2><p class="muted">{why} <a href="../methodology.html#signals">What we check</a>.</p>'
+        return f'<h2 id="readiness">Supporting signals</h2><p class="muted">{why} <a href="../methodology.html#signals">What we check</a>.</p>'
     rows=[]
     capl=[capn(c) for c in r['capabilities']]
     if st=='ucp':
@@ -274,7 +274,7 @@ def readiness(r):
     if ac.get('state')=='refused':
         note='<p class="muted"><b>Note:</b> this site\'s bot protection refused our identified crawler'+(' with a challenge page' if ac.get('challenge') else '')+", so some of these signals couldn't be checked. That says nothing about whether shoppers or AI agents can use the site.</p>"
     intro=f'Public signals we checked on {DAY}, besides the UCP profile. They show what the store publishes for AI agents; none of them says whether a particular AI agent can or can\'t buy here.'
-    return f'<h2 id="readiness">Agent-readiness signals</h2><p>{intro} <a href="../methodology.html#signals">What each signal means</a>.</p><div class="tw nomax"><table><tr><th>Signal</th><th>Result</th><th>Details</th></tr>{tr}</table></div>{note}'
+    return f'<h2 id="readiness">Supporting signals</h2><p>{intro} <a href="../methodology.html#signals">What each signal means</a>.</p><div class="tw nomax"><table><tr><th>Signal</th><th>Result</th><th>Details</th></tr>{tr}</table></div>{note}'
 # ---- store pages ----
 def store_desc(r):
     d=primary(r); nm=r['name']; who=nm if nm.lower()==d else f'{nm} ({d})' if d else nm
@@ -321,7 +321,7 @@ import importlib.util as _ilu
 _sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.py')); _cm=_ilu.module_from_spec(_sp); _sp.loader.exec_module(_cm)
 CRAWL_UA=_cm.UA
 UA_NOTE='' if D.get('user_agent')==CRAWL_UA else f' <small class="muted">(The crawl of {DAY} still used the earlier User-Agent <code>{E(D.get("user_agent",""))}</code>, which read only <code>/robots.txt</code> and <code>/.well-known/ucp</code>.)</small>'
-SIGMETH=f'''<h2 id="signals">1b. Agent-readiness signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score.</p>
+SIGMETH=f'''<h2 id="signals">1b. Supporting signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score.</p>
 <div class="tw nomax"><table><tr><th>Signal</th><th>How we check</th><th>What it means</th><th>What it doesn't mean</th></tr>
 <tr><td><b>Agent checkout profile (UCP)</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the official machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
 <tr><td><b>Agent tools (MCP endpoint)</b></td><td>If the UCP profile names an MCP endpoint, we send one read-only JSON-RPC <code>tools/list</code> request, identifying ourselves with our <a href="ucp/agent-profile.json">agent profile</a>. We never call a tool.</td><td>The endpoint is live and lists tools (for example catalog search, cart, checkout) right now.</td><td>That a purchase completes without the buyer; checkouts may hand the buyer back to the store's own checkout page.</td></tr>
@@ -343,8 +343,8 @@ CRAWLMETH=f'''<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(
 <li>Site owners: to have your site excluded, disallow <code>/</code> (or just the paths above) for <code>ShopBotIndexBot</code> in robots.txt, or email {MAILTO}.</li></ul>'''
 
 SC=collections.Counter(s.get('status','error') for s in SITES)
-meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produced. Crawl date: {DAY}.</p>
-<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the official machine-readable profile AI shopping agents read, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP profile. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some agent shopping runs through channels we <a href="#cant-see">can't see from outside</a>, such as product feeds shared privately with AI assistants.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>UCP is our headline measure. We also list other public agent-readiness signals per store (<a href="#signals">section 1b</a>), but we don't test purchases, and we don't score or rank how well a store works with any assistant.</li></ul></div>
+meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check it, and what it does and doesn't mean. UCP profiles are our headline measure; four supporting signals are listed per store. Crawl date: {DAY}.</p>
+<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the official machine-readable profile AI shopping agents read, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP profile. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some agent shopping runs through channels we <a href="#cant-see">can't see from outside</a>, such as product feeds shared privately with AI assistants.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>UCP is our headline measure. We also list four supporting signals per store (<a href="#signals">section 1b</a>), but we don't test purchases, and we don't score or rank how well a store works with any assistant.</li></ul></div>
 <h2>1. What we look for</h2><p>The UCP specification says platforms discover a business by fetching its business profile from <code>/.well-known/ucp</code> (<a href="{E(D["spec"])}">UCP specification overview</a>). The profile is JSON with a <code>ucp</code> object: protocol version, services, capabilities and payment handlers. We fetch that path on each website after reading <code>/robots.txt</code>. This is our headline measure. The other things we read are listed in <a href="#signals">section 1b</a> and <a href="#crawler">section 5</a>.</p>
 {SIGMETH}
 <h2>2. Who we track: three segments, side by side</h2><ul>{"".join(f"<li><b>{SEG[k]}</b> ({sum(1 for r in RET if r['segment']==k)}): {SEGDESC[k]}</li>" for k in SEG)}</ul>
