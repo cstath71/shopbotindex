@@ -49,9 +49,18 @@ Deno.serve(async (req) => {
   const { error } = await sb.from("sbi_subscribers").upsert({ email, ip_hash: ipHash, unsubscribed_at: null }, { onConflict: "email" });
   if (error) return json({ ok: false, error: "store_failed" }, 500, h);
 
-  // Optional: mirror into the Resend segment when secrets are set (RESEND_API_KEY, SBI_RESEND_SEGMENT_ID).
-  const key = Deno.env.get("RESEND_API_KEY");
-  const seg = Deno.env.get("SBI_RESEND_SEGMENT_ID");
+  // Mirror into the Resend segment. Settings come from function secrets (RESEND_API_KEY, SBI_RESEND_SEGMENT_ID) if set,
+  // otherwise from Supabase Vault via public.sbi_resend_config() (executable by service_role only).
+  let key = Deno.env.get("RESEND_API_KEY");
+  let seg = Deno.env.get("SBI_RESEND_SEGMENT_ID");
+  if (!key || !seg) {
+    try {
+      const { data } = await sb.rpc("sbi_resend_config");
+      const cfg = Array.isArray(data) ? data[0] : data;
+      key = key || cfg?.api_key || undefined;
+      seg = seg || cfg?.segment_id || undefined;
+    } catch { /* no config: keep the row for a manual sync */ }
+  }
   if (key && seg) {
     try {
       const auth = { Authorization: `Bearer ${key}`, "Content-Type": "application/json" };

@@ -31,7 +31,9 @@ Forms post to the Supabase edge function `sbi-subscribe` (project `uufmlmwgvoqhh
 honeypot field `website`, email validation, 5 attempts per IP-hash per hour, rows in `sbi_subscribers` (RLS on, no public access).
 Resend segment: **ShopBot Index** `6aeffea0-50d8-4887-b18d-8babefbbc1fa`. Resend sending domain: `shopbotindex.com`
 (id `4793016a-f6c9-40df-9db2-2926aa36ad4c`, EU region eu-west-1, open/click tracking off; DNS records on `send.` + `rsend.` + `resend._domainkey`, no clash with Zoho on the root).
-When the function secrets `RESEND_API_KEY` and `SBI_RESEND_SEGMENT_ID` are set, each signup is mirrored into the segment:
+The Resend API key and segment id are read from function secrets `RESEND_API_KEY` / `SBI_RESEND_SEGMENT_ID` if set, otherwise from Supabase Vault
+(secrets `sbi_resend_api_key`, `sbi_resend_segment_id`) via `public.sbi_resend_config()`, a SECURITY DEFINER function executable only by
+service_role (`supabase/migrations/20261017_sbi_resend_config.sql`; anon/authenticated get "permission denied"). Each signup is mirrored into the segment:
 first "add existing contact to segment" (keeps an existing contact's global unsubscribe status), and on 404 "create contact in segment";
 `synced_to_resend_at` is stamped on success. If the secrets are missing or Resend fails, the row stays in Supabase; sync those rows
 (`synced_to_resend_at is null`) the same way as Fusion Updates (`/workspace/newsletter/sync_subscribers.md`, with `sbi_subscribers` and the segment id above).
