@@ -7,7 +7,7 @@ NAME='ShopBot Index'
 CONTACT='hello@shopbotindex.com'
 MAILTO=f'<a href="mailto:{CONTACT}">{CONTACT}</a>'
 FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
-DEFDESC='Which online stores can AI shopping agents actually buy from? A weekly public crawl of Shopify stores, big retailers and other online stores for Universal Commerce Protocol (UCP) profiles.'
+DEFDESC='Which online stores publish a Universal Commerce Protocol (UCP) profile, the official machine-readable signal that a store supports AI shopping agents? A weekly public crawl of Shopify stores, big retailers and other online stores.'
 E=lambda s: html.escape(str(s if s is not None else ''))
 D=json.load(open(os.path.join(DATA,'latest.json'))); CH=json.load(open(os.path.join(DATA,'channels.json')))
 RET=D['retailers']; SITES=D['sites']; DAY=D['crawl_date']
@@ -59,12 +59,12 @@ def segcards(pre=''):
         s=segstats([r for r in RET if r['segment']==k])
         out+=f'''<a class="seg" href="{pre}segments/{k}.html"><h3>{SEG[k]}</h3><b>{s["ucp"]}</b> <span>of {s["checked"]} we could check publish UCP ({s["rate"]})</span>
 <div class="sbar"><i class="y" style="width:{100*s["ucp"]/max(s["n"],1):.1f}%"></i><i class="n" style="width:{100*s["no"]/max(s["n"],1):.1f}%"></i><i class="c" style="width:{100*s["cc"]/max(s["n"],1):.1f}%"></i></div>
-<small>{s["n"]} tracked · {s["no"]} without · <span class="cc">{s["cc"]} couldn't check</span></small></a>'''
-    return f'<div class="segs">{out}</div><p class="legend"><i class="y"></i> UCP profile <i class="n"></i> no profile <i class="c"></i> couldn\'t check (blocked or unreachable; not counted in the rate)</p>'
+<small>{s["n"]} tracked · {s["no"]} no profile found · <span class="cc">{s["cc"]} couldn't check</span></small></a>'''
+    return f'<div class="segs">{out}</div><p class="legend"><i class="y"></i> UCP profile <i class="n"></i> no profile found <i class="c"></i> couldn\'t check (blocked or unreachable; not counted in the rate)</p>'
 HONEYPOT='<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">'
 SIGNUP_JS="""<script>if(!window.sbiSub){window.sbiSub=function(f){const m=f.parentNode.querySelector('.nl-msg'),b=f.querySelector('button');b.disabled=true;m.textContent='Subscribing…';fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))}).then(r=>r.json().then(j=>[r.status,j])).then(([s,j])=>{if(j.ok){m.textContent="Thanks! You're on the list.";f.reset();}else{m.textContent=(j.error==='invalid_email'?'Please enter a valid email address.':(s===429?'Too many attempts. Please try again later.':'Something went wrong. Please try again.'));}}).catch(()=>{m.textContent='Network error. Please try again.'}).finally(()=>{b.disabled=false});return false;}}</script>"""
 def signup(pre=''):
-    return f'''<div class="cta" id="subscribe"><b>Get the weekly index in your inbox.</b> One short email: who joined, who left, what changed.<form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" style="margin-top:.6rem">
+    return f'''<div class="cta" id="subscribe"><b>Get the weekly index in your inbox.</b> One short email: which stores started or stopped publishing a UCP profile, and what else changed.<form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" style="margin-top:.6rem">
 <input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address">{HONEYPOT} <button type="submit">Subscribe</button></form><small class="nl-msg" aria-live="polite">Free. About one email a week. Unsubscribe anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
 CFG=json.load(open(os.path.join(ROOT,'config','site.json')))
 AFF_URL=CFG['shopify_affiliate_url']; AFF_DISC=CFG['affiliate_disclosure']
@@ -122,27 +122,27 @@ out.textContent='Looking up…';
 const go=L=>{let k=d,hit=null;while(k.indexOf('.')>0){if(L[k]){hit=L[k];break}k=k.slice(k.indexOf('.')+1)}
 if(!hit){const m='mailto:hello@shopbotindex.com?subject='+encodeURIComponent('Please add my store: '+d);out.innerHTML='<b>'+esc(d)+'</b> isn\\'t in the index yet. We only report stores our weekly crawl has checked, so we can\\'t say whether it publishes a UCP profile. <a href="'+m+'">Ask us to add it</a> and we\\'ll include it in a future crawl.';return}
 const st=hit[2],cls=st=='ucp'?'yes':st=='couldnt_check'?'warn':'no',lbl={ucp:'Yes: UCP profile found',no_ucp:'No UCP profile found',couldnt_check:"Couldn't check (blocked or unreachable)"}[st];
-let h='<b>'+esc(hit[1])+'</b> <span class="pill '+cls+'">'+lbl+'</span> in our latest crawl. <a href="'+root+'store/'+hit[0]+'.html">See the full result →</a>';
-if(badge){h+=st=='ucp'?'<div style="margin-top:.8rem"><img src="'+root+'badge/'+hit[0]+'.svg" alt="UCP ready · ShopBot Index" height="20"></div><p>Copy this HTML onto your site:</p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">'+esc('<a href="https://shopbotindex.com/store/'+hit[0]+'.html" title="'+hit[1]+' on ShopBot Index"><img src="https://shopbotindex.com/badge/'+hit[0]+'.svg" alt="UCP ready · ShopBot Index" height="20"></a>')+'</textarea>':'<p class="muted">The badge is only for stores where our latest crawl found a UCP profile.</p>'}
+let h='<b>'+esc(hit[1])+'</b> <span class="pill '+cls+'">'+lbl+'</span> in our latest crawl.'+(st=='no_ucp'?' That means no UCP signal was found, not that AI agents can\\'t shop there.':'')+' <a href="'+root+'store/'+hit[0]+'.html">See the full result →</a>';
+if(badge){h+=st=='ucp'?'<div style="margin-top:.8rem"><img src="'+root+'badge/'+hit[0]+'.svg" alt="UCP profile found · ShopBot Index" height="20"></div><p>Copy this HTML onto your site:</p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">'+esc('<a href="https://shopbotindex.com/store/'+hit[0]+'.html" title="'+hit[1]+' on ShopBot Index"><img src="https://shopbotindex.com/badge/'+hit[0]+'.svg" alt="UCP profile found · ShopBot Index" height="20"></a>')+'</textarea>':'<p class="muted">The badge is only for stores where our latest crawl found a UCP profile.</p>'}
 out.innerHTML=h};
 if(window.sbiLook)go(window.sbiLook);else fetch(root+'stores.json').then(r=>r.json()).then(L=>{window.sbiLook=L;go(L)}).catch(()=>{out.textContent='Could not load the store list. Please try again.'});return false;}}</script>'''
 def checkbox(pre='',badge=False,title='Check your store'):
-    return f'''<div class="box ck"><b>{title}</b> Does your store publish a UCP profile AI shopping agents can read? Look it up in our latest crawl ({DAY}).
+    return f'''<div class="box ck"><b>{title}</b> Does your store publish a UCP profile, the official machine-readable signal for AI shopping agents? Look it up in our latest crawl ({DAY}).
 <form class="ckf" data-root="{pre}"{' data-badge' if badge else ''} onsubmit="return sbiCheck(this)" style="margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.5rem"><input type="text" name="d" placeholder="yourstore.com" required maxlength="253" aria-label="Store domain" autocapitalize="off" spellcheck="false" style="padding:.5rem;border:1px solid #cdd5dd;border-radius:6px;min-width:220px;flex:1"> <button type="submit" style="padding:.5rem 1rem;border:0;border-radius:6px;background:#0f1f2e;color:#fff;font-weight:600">Check</button></form>
 <div class="ck-out" aria-live="polite" style="margin-top:.6rem"></div>{CHECK_JS}</div>'''
 def badge_svg(ok):
-    l,r=('UCP ready','ShopBot Index') if ok else ('ShopBot Index','view listing')
+    l,r=('UCP profile found','ShopBot Index') if ok else ('ShopBot Index','view listing')
     lw=round(len(l)*6.6)+12; rw=round(len(r)*6.6)+12; W=lw+rw; lc='#16a34a' if ok else '#555'; rc='#0f172a' if ok else '#9ca3af'
     t=E(l+' · '+r)
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="20" role="img" aria-label="{t}"><title>{t}</title><linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="r"><rect width="{W}" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#r)"><rect width="{lw}" height="20" fill="{lc}"/><rect x="{lw}" width="{rw}" height="20" fill="{rc}"/><rect width="{W}" height="20" fill="url(#s)"/></g><g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11"><text x="{lw/2}" y="15" fill="#010101" fill-opacity=".3" textLength="{lw-12}">{E(l)}</text><text x="{lw/2}" y="14" textLength="{lw-12}">{E(l)}</text><text x="{lw+rw/2}" y="15" fill="#010101" fill-opacity=".3" textLength="{rw-12}">{E(r)}</text><text x="{lw+rw/2}" y="14" textLength="{rw-12}">{E(r)}</text></g></svg>'''
 def snippet(r):
     u=SLUG[r['id']]
-    return f'<a href="{SITE}/store/{u}.html" title="{E(r["name"])} on ShopBot Index"><img src="{SITE}/badge/{u}.svg" alt="UCP ready · ShopBot Index" height="20"></a>'
+    return f'<a href="{SITE}/store/{u}.html" title="{E(r["name"])} on ShopBot Index"><img src="{SITE}/badge/{u}.svg" alt="UCP profile found · ShopBot Index" height="20"></a>'
 # ---- home ----
 nsites=len(SITES); nsites_u=sum(1 for s in SITES if s.get('status')=='ucp')
 joined_txt=(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
-home=f'''<h1>Which online stores can AI shopping agents actually buy from?</h1>
-<p class="lede">We check {len(RET)} retailers and stores ({nsites} websites) for a published <a href="https://ucp.dev/">Universal Commerce Protocol</a> (UCP) profile, the file AI agents read to learn what a store supports. Every figure comes from our own crawl on {DAY}.</p>
+home=f'''<h1>Which online stores publish a UCP profile for AI shopping agents?</h1>
+<p class="lede">We check {len(RET)} retailers and stores ({nsites} websites) for a published <a href="https://ucp.dev/">Universal Commerce Protocol</a> (UCP) profile, the official machine-readable signal that a store supports AI shopping agents. No profile found means we found no signal, not that AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">What this does and doesn't mean</a>.</p>
 {segcards()}{joined_txt}
 {checkbox()}
 <div class="stats"><div class="stat"><b>{len(U)}</b><span>retailers/stores with a UCP profile on at least one site</span></div>
@@ -152,12 +152,12 @@ home=f'''<h1>Which online stores can AI shopping agents actually buy from?</h1>
 <h2>Big retailers with a UCP profile ({len(BIGU)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({r['sites_with_ucp']} of {r['sites_checked']} sites{', '+E('/'.join(r['platforms'])) if r['platforms'] else ''})</small></li>" for r in BIGU)+"</ul>" if BIGU else "<p>None found in this crawl.</p>"}
 <h2>UCP profiles not on Shopify ({len(NONSHOP)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({E(SEG[r['segment']])})</small></li>" for r in NONSHOP)+"</ul>" if NONSHOP else "<p>None found.</p>"}
 <p><a href="stores.html"><b>Browse all {len(RET)} stores →</b></a></p>
-<h2>What UCP stores support</h2>{bars(CAPC,len(U),capn,lambda k:f"capabilities/{slug(k)}.html")}
+<h2>What UCP profiles declare</h2>{bars(CAPC,len(U),capn,lambda k:f"capabilities/{slug(k)}.html")}
 <h2>Payment handlers listed</h2>{bars(PHC,len(U),phn)}
 <h2>Which AI assistants name which retailers</h2><p>From official announcements and help pages only. <a href="assistants.html">Details →</a></p>
 <div class="tw nomax"><table><tr><th>Assistant</th><th>Retailers named</th><th>Source</th></tr>{"".join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"].split(" (")[-1].rstrip(")"))}</a>, {E(c["date"])}</td></tr>' for c in CH["channels"])}</table></div>
 {signup()}{aff()}'''
-page('index.html',f'{NAME}: which online stores AI shopping agents can actually buy from',home,DEFDESC)
+page('index.html',f'{NAME}: which online stores publish a UCP profile for AI shopping agents',home,DEFDESC)
 # ---- stores table ----
 rows=[]
 for r in sorted(RET,key=lambda r:(r['status']!='ucp',r['name'].lower())):
@@ -223,8 +223,8 @@ def store_desc(r):
     d=primary(r); nm=r['name']; who=nm if nm.lower()==d else f'{nm} ({d})' if d else nm
     if r['status']=='ucp':
         k=len(r['capabilities']); ck=' including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else ''
-        return f"Yes. In ShopBot Index's crawl of {DAY}, {who} published a UCP profile at /.well-known/ucp declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}, so AI shopping agents can discover it."
-    if r['status']=='no_ucp': return f"Not yet. In ShopBot Index's crawl of {DAY}, {who} did not publish a UCP profile at /.well-known/ucp, the file AI shopping agents read to learn what a store supports."
+        return f"Yes. In ShopBot Index's crawl of {DAY}, {who} published a UCP profile at /.well-known/ucp declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}: the official machine-readable signal that a store supports AI shopping agents."
+    if r['status']=='no_ucp': return f"No profile found. In ShopBot Index's crawl of {DAY}, we found no UCP profile at /.well-known/ucp for {who}. That means no machine-readable signal, not that AI agents can't shop there."
     return f"Unknown. In ShopBot Index's crawl of {DAY}, we couldn't check {who}: every request for its UCP profile was refused or failed. That is not the same as no profile."
 PILL={'ucp':'yes','no_ucp':'no','couldnt_check':'warn'}
 for r in RET:
@@ -233,13 +233,13 @@ for r in RET:
     caps=('<h2>What its UCP profile declares</h2><h3>Capabilities</h3><ul>'+''.join(f'<li>{E(capn(c))} <small><code>{E(c)}</code></small></li>' for c in r['capabilities'])+'</ul>'
           +('<h3>Payment handlers</h3><ul>'+''.join(f'<li>{E(phn(x))} <small><code>{E(x)}</code></small></li>' for x in r['payment_handlers'])+'</ul>' if r['payment_handlers'] else '')
           +(f'<p>Platform: {E(" / ".join(r["platforms"]))}</p>' if r['platforms'] else '')) if st=='ucp' else ''
-    meaning={'ucp':'AI shopping agents that support the Universal Commerce Protocol can find this store\'s profile and see what it supports'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')+'. Whether a given assistant actually buys from it depends on that assistant.',
-             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. AI shopping agents that rely on UCP can\'t discover what this store supports through the protocol.',
+    meaning={'ucp':'AI shopping agents that use the Universal Commerce Protocol can read this store\'s profile to see what it supports'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')+'. It doesn\'t guarantee that a given assistant buys from it; that depends on the assistant.',
+             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. That only means we found no UCP signal. AI agents may still be able to shop here, for example through a normal web browser or another protocol such as the Agentic Commerce Protocol (ACP), which we don\'t check.',
              'couldnt_check':'Every website we tried refused our request, timed out or disallowed it in robots.txt. We never try to get around that, so we don\'t know whether it publishes a profile. It is excluded from adoption rates.'}[st]
-    badge=(f'<h2>Badge for this store</h2><p>{E(r["name"])} can show that it is ready for AI shopping agents. Paste this HTML on the site; it links back to this page.</p><p><img src="../badge/{u}.svg" alt="UCP ready · ShopBot Index" height="20"></p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">{E(snippet(r))}</textarea><p class="muted"><a href="../badge.html">About the badge</a>. If a later crawl stops finding the profile, the badge turns into a neutral grey "view listing" link.</p>') if st=='ucp' else ''
+    badge=(f'<h2>Badge for this store</h2><p>{E(r["name"])} can show that it publishes a UCP profile. Paste this HTML on the site; it links back to this page.</p><p><img src="../badge/{u}.svg" alt="UCP profile found · ShopBot Index" height="20"></p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">{E(snippet(r))}</textarea><p class="muted"><a href="../badge.html">About the badge</a>. If a later crawl stops finding the profile, the badge turns into a neutral grey "view listing" link.</p>') if st=='ucp' else ''
     jsonld=json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":NAME,"item":SITE+"/"},{"@type":"ListItem","position":2,"name":"All stores","item":SITE+"/stores.html"},{"@type":"ListItem","position":3,"name":r['name'],"item":f"{SITE}/store/{u}.html"}]},ensure_ascii=False).replace('</','<\\/')
     body=f'''<p class="muted"><a href="../stores.html">All stores</a> › <a href="../segments/{r["segment"]}.html">{E(SEG[r["segment"]])}</a></p>
-<h1>Does {E(r["name"])} support AI shopping agents?</h1>
+<h1>Does {E(r["name"])} publish a UCP profile for AI shopping agents?</h1>
 <p class="lede"><span class="pill {PILL[st]}" style="font-size:1rem">{E(STATUS_SHORT[st])}</span> {E(store_desc(r))}</p>
 <div class="box"><b>What this means.</b> {meaning}</div>
 <h2>Websites checked ({len(ss)})</h2><p>We fetched <code>/.well-known/ucp</code> on each site on {DAY}.</p><div class="tw nomax"><table><tr><th>Website</th><th>Result</th><th class="hide-sm">HTTP</th></tr>{sites}</table></div>
@@ -248,19 +248,20 @@ for r in RET:
 {badge}
 <p>Run this store and think the result is wrong, or want it removed? Email {MAILTO} with the domain; we re-check it in the next weekly crawl and never change a result by hand. <a href="../methodology.html">How we measure</a>.</p>
 {checkbox("../",title="Check another store")}{signup("../")}'''
-    page(f'store/{u}.html',f'{r["name"]} — does it support AI shopping agents? | {NAME}',body,store_desc(r),ogimg='og-store.png',ogtype='article',head=f'<script type="application/ld+json">{jsonld}</script>')
+    page(f'store/{u}.html',f'{r["name"]}: UCP profile for AI shopping agents? | {NAME}',body,store_desc(r),ogimg='og-store.png',ogtype='article',head=f'<script type="application/ld+json">{jsonld}</script>')
 # ---- check + badge pages, lookup JSON, badge SVGs ----
-page('check.html',f'Check your store: does it support AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the file AI shopping agents read to learn what a store supports. We track {len(RET)} retailers and stores.</p>
-{checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: does it publish a UCP profile AI shopping agents can read? Results from our weekly crawl of {len(RET)} retailers and stores.')
-page('badge.html',f'"UCP ready" badge for your store | {NAME}',f'''<h1>A "UCP ready" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page.</p>
-<p><img src="badge/{SLUG[U[0]["id"]] if U else ""}.svg" alt="UCP ready · ShopBot Index" height="20"> <small class="muted">(example)</small></p>
-{checkbox(badge=True,title="Get your badge")}<h2>Rules</h2><ul><li>The badge is only offered for stores where our latest crawl found a profile at <code>/.well-known/ucp</code>.</li><li>Each badge is served from shopbotindex.com and is regenerated every week. If a later crawl no longer finds the profile, it turns into a neutral grey "ShopBot Index · view listing" badge.</li><li>No tracking: the badge is a plain SVG image, with no scripts or cookies.</li></ul>{signup()}''','Stores that publish a UCP profile can embed a free "UCP ready · ShopBot Index" badge linking to their result page.')
+page('check.html',f'Check your store: does it publish a UCP profile? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the official machine-readable signal that a store supports AI shopping agents. We track {len(RET)} retailers and stores. No profile found means no signal, not that AI agents can't shop there (<a href="methodology.html#meaning">details</a>).</p>
+{checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: does it publish a UCP profile, the official machine-readable signal for AI shopping agents? Results from our weekly crawl of {len(RET)} retailers and stores.')
+page('badge.html',f'"UCP profile found" badge for your store | {NAME}',f'''<h1>A "UCP profile found" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page.</p>
+<p><img src="badge/{SLUG[U[0]["id"]] if U else ""}.svg" alt="UCP profile found · ShopBot Index" height="20"> <small class="muted">(example)</small></p>
+{checkbox(badge=True,title="Get your badge")}<h2>Rules</h2><ul><li>The badge is only offered for stores where our latest crawl found a profile at <code>/.well-known/ucp</code>.</li><li>Each badge is served from shopbotindex.com and is regenerated every week. If a later crawl no longer finds the profile, it turns into a neutral grey "ShopBot Index · view listing" badge.</li><li>No tracking: the badge is a plain SVG image, with no scripts or cookies.</li></ul>{signup()}''','Stores that publish a UCP profile can embed a free "UCP profile found · ShopBot Index" badge linking to their result page.')
 json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,separators=(',',':'))
 os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
 for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
 # ---- methodology ----
 SC=collections.Counter(s.get('status','error') for s in SITES)
 meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produced. Crawl date: {DAY}.</p>
+<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the official machine-readable signal that it supports AI shopping agents, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP signal. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some stores use other protocols, such as OpenAI and Stripe's Agentic Commerce Protocol (ACP), which this index doesn't check.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>We measure one public signal. We don't test purchases, and we don't rank how well a store works with any assistant.</li></ul></div>
 <h2>1. What we look for</h2><p>The UCP specification says platforms discover a business by fetching its business profile from <code>/.well-known/ucp</code> (<a href="{E(D["spec"])}">UCP specification overview</a>). The profile is JSON with a <code>ucp</code> object: protocol version, services, capabilities and payment handlers. We fetch that path on each website, plus <code>/robots.txt</code>, and nothing else.</p>
 <h2>2. Who we track: three segments, side by side</h2><ul>{"".join(f"<li><b>{SEG[k]}</b> ({sum(1 for r in RET if r['segment']==k)}): {SEGDESC[k]}</li>" for k in SEG)}</ul>
 <p>Sources: Wikipedia list pages (largest retail companies, department stores by country, supermarket chains, hypermarkets, online marketplaces) resolved to Wikidata for official websites; Wikidata queries for retail chains and e-commerce companies; and public GitHub lists of Shopify stores (<a href="https://github.com/ihof/shopify">ihof/shopify</a>, <a href="https://github.com/dipinarora9/Shopify-Domains-Scraper">dipinarora9/Shopify-Domains-Scraper</a>, first 900 of <a href="https://github.com/TeamDukaan/performance">TeamDukaan/performance</a>). This is not a random sample of all stores; shares are shares of our list.</p>
@@ -273,12 +274,12 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly how the numbers are produce
 <h2>9. AI assistants table</h2><p>Only official company announcements and help-centre pages, linked per row. We don't test those integrations.</p>
 <h2 id="contact">10. Add, remove or correct a store</h2><p>Run a store or retailer that should be added, removed or corrected, or think a result is wrong? Email {MAILTO} with the store's domain. We re-check it in the next weekly crawl and never change a result by hand.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)
-page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index tracks, week by week, which online stores AI shopping agents can discover and buy from through open protocols, across Shopify stores, big retailers and other online stores.</p>
+page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index tracks, week by week, which online stores publish a Universal Commerce Protocol (UCP) profile, the official machine-readable signal that a store supports AI shopping agents, across Shopify stores, big retailers and other online stores.</p>
 <p>It is run by Gus, an experienced enterprise software consultant, as an independent project. It is not affiliated with Google, Shopify, OpenAI, Microsoft, Perplexity, PayPal or any retailer listed.</p>
 <p>All figures come from our own public crawl or from linked official sources. Shopify trial links on this site (like the <a href="'''+E(AFF_URL)+'''" rel="sponsored noopener" target="_blank">Shopify free trial</a>) are affiliate links: '''+E(AFF_DISC)+''' That never changes a store's result.</p><p>Contact: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a> (including stores that want to be added, removed or corrected; see the <a href="methodology.html#contact">methodology</a>).</p>'''+signup())
 page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short version: we only store what's needed to send you the weekly email.</p>
 <h2>What we store when you subscribe</h2><ul><li>Your email address</li><li>When you signed up</li><li>A one-way hash of your IP address, kept only to limit spam signups (we never store the IP address itself)</li></ul>
-<h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: who joined, who left, what changed). We don't sell or share your data, and we don't add you to other lists.</p>
+<h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: which stores started or stopped publishing a UCP profile, and what else changed). We don't sell or share your data, and we don't add you to other lists.</p>
 <h2>Where it's kept</h2><p>Subscriber data is stored with Supabase (EU region, Frankfurt), and emails will be sent with Resend. Both act as processors for us.</p>
 <h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list. To have your data deleted, or for any question, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
 <h2>Analytics</h2><p>This site uses no cookies and no analytics or tracking scripts.</p>

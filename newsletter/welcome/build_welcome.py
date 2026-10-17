@@ -5,9 +5,9 @@ E=html.escape
 SITE='https://shopbotindex.com'
 FROM='ShopBot Index <hello@shopbotindex.com>'; REPLY_TO='hello@shopbotindex.com'
 SUBJECT='Welcome to ShopBot Index'
-PRE="One short email a week: which stores AI shopping agents can buy from, and what changed."
+PRE="One short email a week: which stores started or stopped publishing a UCP profile for AI shopping agents, and what changed."
 P1="Thanks for subscribing to ShopBot Index."
-P2="Every Monday the index checks each tracked store for a UCP business profile, the /.well-known/ucp file that AI shopping agents look for. After each crawl you'll get one short, free email: which stores started supporting AI shopping agents, which stopped, and what else changed that week."
+P2="Every Monday the index checks each tracked store for a UCP business profile, the /.well-known/ucp file that is the official machine-readable signal a store supports AI shopping agents. After each crawl you'll get one short, free email: which stores started publishing a UCP profile, which stopped, and what else changed that week."
 P3="Until the next issue, here's where to look:"
 LINKS=[("The index",SITE+"/","Which stores publish a UCP profile, across Shopify stores, big retailers and other stores."),
        ("What changed",SITE+"/changes.html","Joined, left and other changes compared with the previous crawl."),
@@ -21,7 +21,7 @@ h=f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="vie
 <div style="display:none;max-height:0;overflow:hidden">{E(PRE)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f2f4f7" style="background-color:#f2f4f7"><tr><td align="center" style="padding-top:24px;padding-bottom:24px;padding-left:12px;padding-right:12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:600px;width:100%;background-color:#ffffff">
-<tr><td bgcolor="#14202b" style="background-color:#14202b;padding-top:18px;padding-bottom:18px;padding-left:28px;padding-right:28px"><p style="{F};font-size:20px;line-height:26px;font-weight:700;color:#ffffff;margin:0">ShopBot Index</p><p style="{F};font-size:13px;line-height:18px;color:#d6dee6;margin:2px 0 0 0">Which online stores AI shopping agents can buy from</p></td></tr>
+<tr><td bgcolor="#14202b" style="background-color:#14202b;padding-top:18px;padding-bottom:18px;padding-left:28px;padding-right:28px"><p style="{F};font-size:20px;line-height:26px;font-weight:700;color:#ffffff;margin:0">ShopBot Index</p><p style="{F};font-size:13px;line-height:18px;color:#d6dee6;margin:2px 0 0 0">Which online stores publish a UCP profile for AI shopping agents</p></td></tr>
 <tr><td style="padding-top:28px;padding-bottom:4px;padding-left:28px;padding-right:28px">
 <h1 style="{F};font-size:24px;line-height:30px;color:#14202b;margin:0 0 12px 0">{E(SUBJECT)}</h1>
 {p(E(P1))}{p(E(P2))}{p(E(P3),';margin-bottom:4px')}</td></tr>

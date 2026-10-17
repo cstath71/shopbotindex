@@ -2,7 +2,7 @@
   "from": "ShopBot Index <hello@shopbotindex.com>",
   "reply_to": "hello@shopbotindex.com",
   "subject": "Welcome to ShopBot Index",
-  "preheader": "One short email a week: which stores AI shopping agents can buy from, and what changed.",
+  "preheader": "One short email a week: which stores started or stopped publishing a UCP profile for AI shopping agents, and what changed.",
   "event": "sbi.subscribed",
   "template_alias": "sbi-welcome"
 }
