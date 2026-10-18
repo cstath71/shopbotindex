@@ -95,6 +95,10 @@ def main():
     for j,r in zip(jobs,res): r['rid']=j['rid']
     by=collections.defaultdict(list)
     for r in res: by[r['rid']].append(r)
+    try:  # record-only agent discovery files (scripts/agent_files.py): adds sites[].agent_files, never changes UCP results
+        sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import agent_files as AF
+        print('agent files',AF.run(res,UA,TIMEOUT,WORKERS,PAUSE,MAXBYTES,globals().get('ROBOTS_TXT')),flush=True)
+    except Exception as e: print('agent files pass skipped:',type(e).__name__,str(e)[:200],flush=True)
     retailers=[dict(aggregate(s,by[s['id']]),name=s['name'],segment=s['segment'],category=s['category'],country=s['country'],sources=s['sources']) for s in seeds]
     day=datetime.date.today().isoformat()
     doc=dict(crawl_date=day,user_agent=UA,spec='https://ucp.dev/specification/overview/',path='/.well-known/ucp',retailer_count=len(seeds),site_count=len(jobs),retailers=retailers,sites=res)
