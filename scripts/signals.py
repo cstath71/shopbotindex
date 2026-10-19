@@ -1,6 +1,6 @@
 """Agent-readiness signals beyond UCP (phase 2 of scripts/crawl.py). Stdlib only.
 Every fetch is checked against the site's robots.txt for ShopBotIndexBot first; one request at a time per site with a pause.
-What we read per website (and nothing else): /robots.txt (already fetched in phase 1), /.well-known/acp.json, /.well-known/ai-catalog.json,
+What phase 2 reads per website (and nothing else; the record-only agent discovery files are read by scripts/agent_files.py): /robots.txt (already fetched in phase 1), /.well-known/acp.json, /.well-known/ai-catalog.json,
 /llms.txt, /agents.md, the home page, at most 2 sitemap files (only if the home page links no product), one product page, and, when the
 site's UCP profile declares an MCP endpoint, one read-only JSON-RPC `tools/list` request to that endpoint."""
 import json, re, time, gzip, ssl, urllib.request, urllib.error, urllib.parse, urllib.robotparser
