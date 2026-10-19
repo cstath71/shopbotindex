@@ -99,6 +99,11 @@ if P:
         newly_tracked=[r['id'] for r in RET if r['id'] not in PR],
         capability_changes=[dict(id=r['id'],added=sorted(set(r['capabilities'])-set(PR[r['id']]['capabilities'])),removed=sorted(set(PR[r['id']]['capabilities'])-set(r['capabilities'])))
                             for r in RET if r['status']=='ucp' and r['id'] in PR and PR[r['id']]['status']=='ucp' and set(r['capabilities'])!=set(PR[r['id']]['capabilities'])])
+    # same-store comparison: week-on-week numbers use only stores tracked in both crawls; stores new to the list are 'newly tracked', never 'joined'
+    _both=[r for r in RET if r['id'] in PR]; _sn=segstats(_both); _sp=segstats([PR[r['id']] for r in _both])
+    CHG['same_store']=dict(n=len(_both),ucp=_sn['ucp'],checked=_sn['checked'],ucp_previous=_sp['ucp'],checked_previous=_sp['checked'],
+        by_segment={k:dict(n=len(b),ucp=segstats(b)['ucp'],ucp_previous=segstats([PR[r['id']] for r in b])['ucp']) for k in ('shopify','big','other') for b in [[r for r in _both if r['segment']==k]]})
+    CHG['newly_tracked_by_segment']={k:sum(1 for i in CHG['newly_tracked'] if CR[i]['segment']==k) for k in ('shopify','big','other')}
     json.dump(CHG,open(os.path.join(DATA,'changes-latest.json'),'w'),indent=1)
 elif os.path.exists(os.path.join(DATA,'changes-latest.json')):
     os.remove(os.path.join(DATA,'changes-latest.json'))  # no previous crawl: drop any stale diff
@@ -149,7 +154,15 @@ def snippet(r):
     return f'<a href="{SITE}/store/{u}.html" title="{E(r["name"])} on ShopBot Index"><img src="{SITE}/badge/{u}.svg" alt="UCP profile found · ShopBot Index" height="20"></a>'
 # ---- home ----
 nsites=len(SITES); nsites_u=sum(1 for s in SITES if s.get('status')=='ucp')
-joined_txt=(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
+# list growth notes for the methodology (real counts from data/seeds.json before/after; shown from that crawl on)
+LIST_GROWTH=[('2026-11-02','On 2 Nov 2026 the list grew from 2,276 to 2,950 retailers and stores (2,656 to 3,400 websites), adding stores from public Wikipedia, Wikidata and Shopify-store lists; week-on-week changes compare only stores tracked in both weeks, and shares are of the stores on our list.')]
+def same_store_txt(pre=''):
+    if not CHG or not CHG['newly_tracked']: return ''
+    ss=CHG['same_store']; nt=len(CHG['newly_tracked'])
+    return (f'<p><b>Same stores as last week:</b> {ss["ucp"]} of the {ss["n"]} retailers and stores we tracked in both crawls publish a UCP profile '
+            f'(last week: {ss["ucp_previous"]}). Joined and left count only these. {nt} {"store is" if nt==1 else "stores are"} newly tracked this week '
+            f'and not counted as joining. <a href="{pre}changes.html#new">See them →</a></p>')
+joined_txt=same_store_txt()+(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
 home=f'''<h1>What online stores tell AI shopping agents</h1>
 <p class="lede">Every week we check {len(RET)} retailers and stores ({nsites} websites) to see whether they publish the profile AI shopping agents read. It's called a <a href="https://ucp.dev/">UCP</a> profile. No profile doesn't mean AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">How we measure</a>.</p>
 {segcards()}{joined_txt}
@@ -201,7 +214,7 @@ for k in SEG:
     rs=[r for r in RET if r['segment']==k]; s=segstats(rs); cu=collections.Counter(c for r in rs if r['status']=='ucp' for c in r['capabilities'])
     cats=collections.Counter(r['category'] for r in rs)
     ct=''.join(f'<tr><td>{E(c)}</td><td>{n}</td><td>{sum(1 for r in rs if r["category"]==c and r["status"]=="ucp")}</td><td>{sum(1 for r in rs if r["category"]==c and r["status"]=="couldnt_check")}</td></tr>' for c,n in cats.most_common())
-    page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.</p><h2>By category</h2><div class="tw nomax"><table><tr><th>Category</th><th>Tracked</th><th>With UCP</th><th>Couldn\'t check</th></tr>{ct}</table></div>{"<h2>Capabilities declared</h2>"+bars(cu,s["ucp"],capn) if s["ucp"] else ""}<h2>All {len(rs)}</h2>{rtable(rs)}'+(aff() if k=='shopify' else ''))
+    page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.{(" Of the "+str(len(rs))+" tracked, "+str(CHG["newly_tracked_by_segment"][k])+" are newly tracked this week.") if CHG and CHG["newly_tracked_by_segment"][k] else ""}</p><h2>By category</h2><div class="tw nomax"><table><tr><th>Category</th><th>Tracked</th><th>With UCP</th><th>Couldn\'t check</th></tr>{ct}</table></div>{"<h2>Capabilities declared</h2>"+bars(cu,s["ucp"],capn) if s["ucp"] else ""}<h2>All {len(rs)}</h2>{rtable(rs)}'+(aff() if k=='shopify' else ''))
 # ---- capabilities ----
 page('capabilities/index.html',f'UCP capabilities | {NAME}',f'<h1>UCP capabilities</h1><p class="lede">Capabilities declared in UCP profiles, counted per retailer/store ({len(U)} with a profile).</p><ul>{"".join(f"<li><a href=\"{slug(c)}.html\">{E(capn(c))}</a>: {v} <small>(<code>{E(c)}</code>)</small></li>" for c,v in CAPC.most_common())}</ul>')
 for c,v in CAPC.items():
@@ -219,11 +232,11 @@ page('assistants.html',f'AI assistants and the retailers they name | {NAME}',f'<
 if CHG:
     L=lambda ids: '<ul>'+''.join(f'<li>{E(NM[i]["name"])} <small>({E(SEG[NM[i]["segment"]])})</small></li>' for i in ids)+'</ul>' if ids else '<p class="muted">None.</p>'
     cc=''.join(f'<li>{E(NM[x["id"]]["name"])}: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""} {"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
-    body=f'''<h1>What changed</h1><p class="lede">Crawl of {DAY} compared with {E(CHG["previous"])}.</p>
+    body=f'''<h1>What changed</h1><p class="lede">Crawl of {DAY} compared with {E(CHG["previous"])}. Joined, left and capability changes compare only the {CHG["same_store"]["n"]} retailers and stores tracked in both crawls.</p>{same_store_txt()}
 <h2>Joined: newly publishing UCP ({len(CHG["joined"])})</h2>{L(CHG["joined"])}<h2>Left: profile no longer found ({len(CHG["left"])})</h2>{L(CHG["left"])}
 <h2>Had a profile, now couldn't check ({len(CHG["now_unreachable"])})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"])}
 <h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else "<p class='muted'>None.</p>"}
-<h2>Newly tracked ({len(CHG["newly_tracked"])})</h2><p class="muted">Added to our list this week; not counted as joining.</p>{L(CHG["newly_tracked"])}'''
+<h2 id="new">Newly tracked ({len(CHG["newly_tracked"])})</h2><p class="muted">Added to our list this week; not counted as joining.</p>{L(CHG["newly_tracked"])}'''
 else:
     body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
 page('changes.html',f'What changed | {NAME}',body+signup())
@@ -365,7 +378,7 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check
 {CRAWLMETH}
 <h2>6. Site-level results this crawl ({nsites} websites)</h2><ul>{"".join(f"<li>{E(SITEST.get(k,k))}: {v}</li>" for k,v in SC.most_common())}</ul>
 <h2>7. Platform</h2><p>"Shopify" means the profile's endpoints or extensions reference Shopify. Anything else is shown as another platform. We can only identify a platform for stores that publish a profile.</p>
-<h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).</p>
+<h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).{''.join(' '+g for d,g in LIST_GROWTH if DAY>=d)}</p>
 <h2>9. AI assistants table</h2><p>Only official company announcements and help-centre pages, linked per row. We don't test those integrations.</p>
 <h2 id="contact">10. Add, remove or correct a store</h2><p>Run a store or retailer that should be added, removed or corrected, or think a result is wrong? Email {MAILTO} with the store's domain. We re-check it in the next weekly crawl and never change a result by hand.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)

@@ -26,14 +26,14 @@ workflow (`.github/workflows/pages.yml`) then deploys `dist/` to https://shopbot
    the home page (bot-protection note), one product page (home link, else at most 2 sitemap files; schema.org Product/Offer), and one read-only MCP `tools/list`
    to the endpoint the UCP profile declares, identifying with our agent profile `https://shopbotindex.com/ucp/agent-profile.json` (written by build.py; falls back
    to Shopify's documented example profile if ours isn't reachable as JSON). Every URL is robots-checked, 1 s pause per site. Per site: `sites[].signals`;
-   per retailer: `retailers[].signals` (roll-up). Time budget `SBI_SIGNALS_BUDGET` (seconds, default 4500; 16 sites in parallel); sites not reached are `not checked`.
+   per retailer: `retailers[].signals` (roll-up). Time budget `SBI_SIGNALS_BUDGET` (seconds, default 5400; 16 sites in parallel); sites not reached are `not checked`.
    `SBI_SIGNALS=0` skips phase 2.
    **Phase 3, agent discovery files** (`scripts/agent_files.py`, record-only, on since 19 Oct 2026): for every site that answered the UCP pass,
    `/.well-known/poppy.json`, `/.well-known/agent-card.json`, `/.well-known/agent.json` and `/.well-known/ai-catalog.json` (skipped when phase 2 already read it),
    into `sites[].agent_files` only (build.py never reads it, so nothing changes on the site). Same User-Agent, robots.txt honoured, 12 sites in parallel,
    one request at a time per site, 0.25 s pause, 10 s timeouts, no further requests to a site after a 401/403/429/451 or a failed connection.
-   Time budget `SBI_AGENT_FILES_BUDGET` (seconds, default 1200); `SBI_AGENT_FILES=0` skips it. Across all three phases a website gets at most 18 requests a week.
-   Only this check, on an existing crawl file: `python3 scripts/agent_files.py data/crawl-YYYY-MM-DD.json [--hosts FILE] [--budget 1200] [--dry-run]`
+   Time budget `SBI_AGENT_FILES_BUDGET` (seconds, default 1500); `SBI_AGENT_FILES=0` skips it. Across all three phases a website gets at most 18 requests a week.
+   Only this check, on an existing crawl file: `python3 scripts/agent_files.py data/crawl-YYYY-MM-DD.json [--hosts FILE] [--budget 1500] [--dry-run]`
    (writes `sites[].agent_files` and `timing.agent_files` back into that file; `--hosts` limits it to listed hosts/domains). Dry runs: `python3 scripts/crawl.py --every 5 --out /tmp/sbi-dry` (doesn't touch `data/`), then
    `SBI_DATA_DIR=/tmp/sbi-dry SBI_DIST_DIR=/tmp/sbi-dry/dist python3 scripts/build.py` (copy `data/channels.json` into the dry-run dir first).
 3. `python3 scripts/build.py`: compares with the most recent earlier `crawl-*.json` and writes `data/changes-latest.json` (joined, left, now_unreachable, newly_tracked, capability_changes); then writes `dist/` (home, stores table, segments, capabilities, categories, assistants, what changed, methodology, about, privacy, sitemap, robots, CNAME, OG image from `assets/og.png`).
