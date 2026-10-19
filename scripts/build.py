@@ -227,6 +227,7 @@ else:
     body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
 page('changes.html',f'What changed | {NAME}',body+signup())
 # ---- agent-readiness signals (phase 2 of the crawl) ----
+import datetime as _dt; _nd=_dt.date.fromisoformat(DAY)+_dt.timedelta(days=7-_dt.date.fromisoformat(DAY).weekday()); NEXTCRAWL=f'{_nd.day} {_nd.strftime("%B")} {_nd.year}'  # next Monday after the crawl
 HAS_SIG=any((r.get('signals') or {}).get('checked') for r in RET)
 TOKFAM={'ChatGPT-User':'OpenAI, user-requested','Claude-User':'Anthropic, user-requested','Perplexity-User':'Perplexity, user-requested','Google-Agent':'Google, user-requested',
  'OAI-SearchBot':'OpenAI search','Claude-SearchBot':'Anthropic search','PerplexityBot':'Perplexity search','GPTBot':'OpenAI training','ClaudeBot':'Anthropic training','Google-Extended':'Google Gemini training/grounding'}
@@ -235,7 +236,7 @@ def sigpill(cls,lbl): return f'<span class="pill {cls}">{E(lbl)}</span>'
 def readiness(r):
     sg=r.get('signals') or {}; st=r['status']
     if not sg.get('checked'):
-        why='We start checking these signals with the next weekly crawl.' if not HAS_SIG else "We couldn't check these signals this week: none of this store's websites answered our crawler, or our weekly time budget ran out before we reached it."
+        why=f'We start checking these signals with the next weekly crawl on {NEXTCRAWL}.' if not HAS_SIG else "We couldn't check these signals this week: none of this store's websites answered our crawler, or our weekly time budget ran out before we reached it."
         return f'<h2 id="readiness">Supporting signals</h2><p class="muted">{why} <a href="../methodology.html#signals">What we check</a>.</p>'
     rows=[]
     capl=[capn(c) for c in r['capabilities']]
