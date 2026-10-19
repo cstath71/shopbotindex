@@ -11,7 +11,7 @@ Three segments side by side: Shopify stores, big retailers, other retailers & ma
 cd /workspace/agenticshoppingindex && scripts/weekly.sh
 ```
 
-Crawls (~10 minutes), rebuilds `dist/`, commits `data/` + `dist/` as cstath71 and pushes to `main`; the GitHub Pages
+Crawls (UCP pass ~10 minutes, then the agent-readiness pass within its time budget; see Pipeline), rebuilds `dist/`, commits `data/` + `dist/` as cstath71 and pushes to `main`; the GitHub Pages
 workflow (`.github/workflows/pages.yml`) then deploys `dist/` to https://shopbotindex.com.
 `scripts/weekly.sh --no-push` crawls and builds only. Example cron (Mondays 06:00 box time):
 `0 6 * * 1 cd /workspace/agenticshoppingindex && scripts/weekly.sh >> /tmp/sbi-weekly.log 2>&1`
@@ -21,6 +21,14 @@ workflow (`.github/workflows/pages.yml`) then deploys `dist/` to https://shopbot
 1. `python3 scripts/seeds.py`: builds `data/seeds.json` (one entry per retailer, segment shopify/big/other, country sites as children) from cited public sources (see `data/seeds/SOURCES.md`).
 2. `python3 scripts/crawl.py`: polite crawl (robots.txt honoured, 12 workers, 10 s timeouts, User-Agent `ShopBotIndexBot/1.0` with a link to methodology.html#crawler and hello@shopbotindex.com) and writes `data/crawl-YYYY-MM-DD.json` + `data/latest.json` (latest is not committed).
    Site statuses: ucp, no_ucp, not_json, json_without_ucp, blocked (401/403/429/451), error, robots_disallow. A retailer is `ucp` if any site has a profile, `no_ucp` if any site answered without one, else `couldnt_check` (excluded from rates).
+   **Phase 2, agent-readiness signals** (`scripts/signals.py`, after the UCP pass): for every site that answered, robots.txt AI-agent rules (from the phase-1 fetch),
+   `/.well-known/acp.json` and `/.well-known/ai-catalog.json` (stored quietly, no public column until a store first publishes one), `/llms.txt`, `/agents.md`,
+   the home page (bot-protection note), one product page (home link, else at most 2 sitemap files; schema.org Product/Offer), and one read-only MCP `tools/list`
+   to the endpoint the UCP profile declares, identifying with our agent profile `https://shopbotindex.com/ucp/agent-profile.json` (written by build.py; falls back
+   to Shopify's documented example profile if ours isn't reachable as JSON). Every URL is robots-checked, 1 s pause per site. Per site: `sites[].signals`;
+   per retailer: `retailers[].signals` (roll-up). Time budget `SBI_SIGNALS_BUDGET` (seconds, default 3600; 16 sites in parallel); sites not reached are `not checked`.
+   `SBI_SIGNALS=0` skips phase 2. Dry runs: `python3 scripts/crawl.py --every 5 --out /tmp/sbi-dry` (doesn't touch `data/`), then
+   `SBI_DATA_DIR=/tmp/sbi-dry SBI_DIST_DIR=/tmp/sbi-dry/dist python3 scripts/build.py` (copy `data/channels.json` into the dry-run dir first).
 3. `python3 scripts/build.py`: compares with the most recent earlier `crawl-*.json` and writes `data/changes-latest.json` (joined, left, now_unreachable, newly_tracked, capability_changes); then writes `dist/` (home, stores table, segments, capabilities, categories, assistants, what changed, methodology, about, privacy, sitemap, robots, CNAME, OG image from `assets/og.png`).
 4. `data/channels.json`: assistant to retailer claims, hand-maintained, official sources only.
 
