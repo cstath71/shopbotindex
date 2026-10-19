@@ -1,0 +1,277 @@
+{
+ "date": "2026-10-19",
+ "method": "single Wikidata SPARQL query for P31/P452 of the 579 Wikidata items (query.wikidata.org only, no store site contacted) + manual review of all 725 names and first domains",
+ "core_before": 725,
+ "dropped": 51,
+ "kept": 674,
+ "dropped_by_reason": {
+  "food service (restaurant/café/bakery/ice cream)": [
+   {
+    "id": "Q50024",
+    "name": "Bubba Gump Shrimp Company",
+    "site": "www.bubbagump.com"
+   },
+   {
+    "id": "Q3029195",
+    "name": "Dippin' Dots",
+    "site": "www.dippindots.com"
+   },
+   {
+    "id": "Q55074808",
+    "name": "Inspire Brands",
+    "site": "inspirebrands.com"
+   },
+   {
+    "id": "Q7757289",
+    "name": "Pita Pit",
+    "site": "pitapit.ca"
+   },
+   {
+    "id": "Q17118857",
+    "name": "Paletería La Michoacana",
+    "site": "lamichoacanaweb.com"
+   },
+   {
+    "id": "Q4849261",
+    "name": "Bakers Delight",
+    "site": "www.bakersdelight.com.au"
+   },
+   {
+    "id": "Q7962595",
+    "name": "Wall Drug",
+    "site": "www.walldrug.com"
+   }
+  ],
+  "not a retailer (software/platform/service/manufacturer/media/utility)": [
+   {
+    "id": "Q1159252",
+    "name": "O2 Slovakia",
+    "site": "www.o2.sk"
+   },
+   {
+    "id": "Q122575",
+    "name": "Saregama",
+    "site": "www.saregama.com"
+   },
+   {
+    "id": "Q1307619",
+    "name": "Taiwan Tobacco and Liquor Corporation",
+    "site": "www.ttl.com.tw"
+   },
+   {
+    "id": "Q61478755",
+    "name": "Beate Uhse",
+    "site": "www.beate-uhse.com"
+   },
+   {
+    "id": "Q29467401",
+    "name": "Rajesh Exports",
+    "site": "www.rajeshindia.com"
+   },
+   {
+    "id": "Q20313312",
+    "name": "Commerce.com, Inc.",
+    "site": "www.commerce.com"
+   },
+   {
+    "id": "Q15728212",
+    "name": "ESteem Group",
+    "site": "esteemgroup.com"
+   },
+   {
+    "id": "Q138854957",
+    "name": "Haizol",
+    "site": "www.haizol.com"
+   },
+   {
+    "id": "Q896637",
+    "name": "Intershop",
+    "site": "www.intershop.de"
+   },
+   {
+    "id": "Q5001308",
+    "name": "Buscapé",
+    "site": "www.buscape.com.br"
+   },
+   {
+    "id": "Q59275384",
+    "name": "Printful",
+    "site": "www.printful.com"
+   },
+   {
+    "id": "Q5419210",
+    "name": "Salesforce Marketing Cloud",
+    "site": "www.salesforce.com"
+   },
+   {
+    "id": "Q17074388",
+    "name": "Jugos del Valle-Santa Clara",
+    "site": "jugosdelvalle.com.mx"
+   },
+   {
+    "id": "Q17084987",
+    "name": "Payless Car Rental",
+    "site": "www.paylesscar.com"
+   },
+   {
+    "id": "Q30141858",
+    "name": "TXU Energy",
+    "site": "www.txu.com"
+   },
+   {
+    "id": "Q39073359",
+    "name": "3dcart",
+    "site": "www.3dcart.com"
+   },
+   {
+    "id": "Q17144066",
+    "name": "Ticket Liquidator",
+    "site": "www.ticketliquidator.com"
+   },
+   {
+    "id": "Q21463663",
+    "name": "TodayTix",
+    "site": "www.todaytix.com"
+   },
+   {
+    "id": "Q130337189",
+    "name": "Nuvemshop",
+    "site": "www.nuvemshop.com.br"
+   },
+   {
+    "id": "Q4686512",
+    "name": "Adventure Landing",
+    "site": "www.adventurelanding.com"
+   },
+   {
+    "id": "Q6801485",
+    "name": "McGuff Companies",
+    "site": "www.mcguff.com"
+   },
+   {
+    "id": "Q18206732",
+    "name": "Ecwid",
+    "site": "www.ecwid.ru"
+   },
+   {
+    "id": "Q140570448",
+    "name": "Bir ecosystem",
+    "site": "bir.az"
+   },
+   {
+    "id": "Q108103714",
+    "name": "Hemali",
+    "site": "hemali.no"
+   },
+   {
+    "id": "Q7532027",
+    "name": "sittercity.com",
+    "site": "www.sittercity.com"
+   },
+   {
+    "id": "Q131684429",
+    "name": "Legiit",
+    "site": "legiit.com"
+   },
+   {
+    "id": "Q20715068",
+    "name": "Shift",
+    "site": "shift.com"
+   },
+   {
+    "id": "Q15806115",
+    "name": "Distri",
+    "site": "distributionz.com"
+   },
+   {
+    "id": "Q137997406",
+    "name": "Rekrutha",
+    "site": "rekrutha.com"
+   }
+  ],
+  "holding/corporate site or mall operator, not a shop": [
+   {
+    "id": "Q482841",
+    "name": "Lotte",
+    "site": "www.lotte.co.jp"
+   },
+   {
+    "id": "Q1435535",
+    "name": "Folli Follie",
+    "site": "www.ffgroup.com"
+   },
+   {
+    "id": "Q1111963",
+    "name": "Colruyt Group",
+    "site": "www.colruytgroup.com"
+   },
+   {
+    "id": "Q812055",
+    "name": "BayWa",
+    "site": "www.baywa.com"
+   },
+   {
+    "id": "Q47508300",
+    "name": "INGKA Group",
+    "site": "www.ingka.com"
+   },
+   {
+    "id": "Q3051909",
+    "name": "Maxeda",
+    "site": "www.maxeda.nl"
+   },
+   {
+    "id": "Q16951260",
+    "name": "Starmalls",
+    "site": "www.starmalls.com.ph"
+   },
+   {
+    "id": "Q27926304",
+    "name": "Global Fashion Group",
+    "site": "www.global-fashion-group.com"
+   },
+   {
+    "id": "Q114890066",
+    "name": "Reitan Retail",
+    "site": "www.reitanretail.no"
+   },
+   {
+    "id": "Q125558693",
+    "name": "Boon Food Group",
+    "site": "boonfoodgroup.nl"
+   },
+   {
+    "id": "Q5017081",
+    "name": "Cafaro Company",
+    "site": "www.cafarocompany.com"
+   }
+  ],
+  "Shopify list: app/admin/government site, not a shop": [
+   {
+    "id": "recurpay.com",
+    "name": "recurpay.com",
+    "site": "www.recurpay.com"
+   },
+   {
+    "id": "shopiapps.in",
+    "name": "shopiapps.in",
+    "site": "webpush.shopiapps.in"
+   },
+   {
+    "id": "nilkamalfurniture.com",
+    "name": "nilkamalfurniture.com",
+    "site": "admin.nilkamalfurniture.com"
+   },
+   {
+    "id": "gsfdcltd.co.in",
+    "name": "gsfdcltd.co.in",
+    "site": "www.gsfdcltd.co.in"
+   }
+  ]
+ },
+ "kept_by_segment": {
+  "big": 53,
+  "other": 479,
+  "shopify": 142
+ }
+}

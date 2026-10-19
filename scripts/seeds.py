@@ -4,6 +4,7 @@ Segments (side by side, none primary):
   big     : retailers on Wikipedia's 'List of largest retail companies' OR with Wikipedia articles in >=10 languages
   other   : other retail chains, department stores, supermarkets, hypermarkets and online marketplaces from Wikipedia/Wikidata
 Multi-country sites of one retailer (several official websites on its Wikidata item) are kept as children of that retailer.
+Stores added later come from frozen data/seeds/additions-YYYY-MM-DD.json files and carry added='YYYY-MM-DD'.
 Usage: python3 scripts/seeds.py"""
 import json, os, re, csv, urllib.parse, collections
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); S=os.path.join(ROOT,'data','seeds')
@@ -73,7 +74,16 @@ with open(os.path.join(S,'teamdukaan_shopify.csv'),newline='',errors='ignore') a
         if not row or row[0].strip().upper()=='URL': continue
         if add_shop(host(row[0]),'https://github.com/TeamDukaan/performance/blob/master/shopify%20stores%20-%20shopify.csv','D2C brands (India)','India'): n+=1
         if n>=TEAMDUKAAN_LIMIT: break
+# 4) Additions with a start date (frozen lists, data/seeds/additions-YYYY-MM-DD.json): new stores tagged 'added' so the weekly
+#    comparison can treat them as newly tracked. Same rules: one entry per retailer, each host used once overall, max 8 sites.
+for fn in sorted(f for f in os.listdir(S) if re.fullmatch(r'additions-\d{4}-\d{2}-\d{2}\.json',f)):
+    A=json.load(open(os.path.join(S,fn)))
+    for it in A['stores']:
+        if it['id'] in R: continue
+        R[it['id']]=dict(id=it['id'],name=it['name'],segment=it['segment'],category=it['category'],country=it.get('country',''),
+                         sitelinks=it.get('sitelinks',0),sources=list(it['sources']),sites=[],added=it.get('added',A['added']))
+        add_sites(it['id'],[host(s) for s in it['sites']])
 seeds=[r for r in R.values() if r['sites']]
 json.dump(sorted(seeds,key=lambda x:(x['segment'],x['name'].lower())),open(os.path.join(ROOT,'data','seeds.json'),'w'),indent=1,ensure_ascii=False)
 print('retailers',len(seeds),'sites',sum(len(s['sites']) for s in seeds),collections.Counter(s['segment'] for s in seeds),
-      'multi-site',sum(1 for s in seeds if len(s['sites'])>1))
+      'multi-site',sum(1 for s in seeds if len(s['sites'])>1),'added',dict(collections.Counter(s['added'] for s in seeds if s.get('added'))))
