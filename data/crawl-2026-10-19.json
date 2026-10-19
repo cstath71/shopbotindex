@@ -51615,10 +51615,9 @@
      "status": 404
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
-    "requests": 4
+    "requests": 6
    }
   },
   {
@@ -51683,8 +51682,20 @@
    "status": "no_ucp",
    "rid": "Q63327",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -51775,8 +51786,20 @@
    "status": "no_ucp",
    "rid": "Q63327",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -51923,8 +51946,20 @@
    "status": "no_ucp",
    "rid": "Q2831861",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -52127,8 +52162,20 @@
    "status": "no_ucp",
    "rid": "Q125054",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -52375,8 +52422,20 @@
    "status": "no_ucp",
    "rid": "Q3884",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -52389,8 +52448,20 @@
    "status": "no_ucp",
    "rid": "Q3884",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -52553,8 +52624,20 @@
    "status": "no_ucp",
    "rid": "Q297410",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -52740,8 +52823,20 @@
    "status": "no_ucp",
    "rid": "Q4826087",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -52870,8 +52965,20 @@
    "status": "no_ucp",
    "rid": "Q81856",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53223,8 +53330,20 @@
    "status": "not_json",
    "rid": "Q1022075",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53313,8 +53432,20 @@
    "status": "no_ucp",
    "rid": "Q675232",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53327,8 +53458,20 @@
    "status": "no_ucp",
    "rid": "Q240",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53367,8 +53510,20 @@
    "status": "no_ucp",
    "rid": "Q47822",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53411,8 +53566,20 @@
    "status": "no_ucp",
    "rid": "Q1032400",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53919,8 +54086,23 @@
    "status": "no_ucp",
    "rid": "Q5105515",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": "error",
+     "error": "URLError: <urlopen error timed out>"
+    },
+    "a2a_card_legacy": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "ai_catalog": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "requests": 3
    }
   },
   {
@@ -53959,8 +54141,20 @@
    "status": "no_ucp",
    "rid": "Q3268010",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -53999,8 +54193,20 @@
    "status": "no_ucp",
    "rid": "Q3268010",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -54040,7 +54246,8 @@
    "rid": "Q3268010",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: connection failed",
+    "requests": 1
    }
   },
   {
@@ -54087,8 +54294,20 @@
    "status": "no_ucp",
    "rid": "Q3268010",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -54321,8 +54540,20 @@
    "status": "no_ucp",
    "rid": "Q1130247",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -54467,8 +54698,24 @@
    "status": "not_json",
    "rid": "Q715583",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -55045,8 +55292,20 @@
    "status": "no_ucp",
    "rid": "Q5289230",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -55059,8 +55318,20 @@
    "status": "no_ucp",
    "rid": "Q3033947",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -55099,8 +55370,25 @@
    "status": "not_json",
    "rid": "Q1185381",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.dondondonki.com/sg/"
+    },
+    "a2a_card": {
+     "status": "error",
+     "error": "TimeoutError: The read operation timed out"
+    },
+    "a2a_card_legacy": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "ai_catalog": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "requests": 3
    }
   },
   {
@@ -55263,8 +55551,20 @@
    "status": "no_ucp",
    "rid": "Q58024",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -55475,8 +55775,20 @@
    "status": "no_ucp",
    "rid": "Q623133",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -55552,8 +55864,24 @@
    "status": "not_json",
    "rid": "Q56853086",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -55592,8 +55920,20 @@
    "status": "no_ucp",
    "rid": "Q1353939",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -55826,8 +56166,20 @@
    "status": "no_ucp",
    "rid": "Q5410132",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -55902,8 +56254,20 @@
    "status": "no_ucp",
    "rid": "Q5500950",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -56193,8 +56557,20 @@
    "status": "no_ucp",
    "rid": "Q1541470",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -56514,8 +56890,20 @@
    "status": "no_ucp",
    "rid": "Q2604175",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -56632,8 +57020,20 @@
    "status": "no_ucp",
    "rid": "Q2604175",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -56699,7 +57099,8 @@
    "rid": "Q1639719",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: connection failed",
+    "requests": 1
    }
   },
   {
@@ -56713,8 +57114,28 @@
    "status": "not_json",
    "rid": "Q1639719",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.hy-vee.com/meals-to-go"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.hy-vee.com/meals-to-go"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.hy-vee.com/meals-to-go"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.hy-vee.com/meals-to-go"
+    },
+    "requests": 5
    }
   },
   {
@@ -56969,8 +57390,20 @@
    "status": "no_ucp",
    "rid": "Q3153200",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -57276,8 +57709,20 @@
    "status": "no_ucp",
    "rid": "Q1688026",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -57316,8 +57761,20 @@
    "status": "no_ucp",
    "rid": "Q1918981",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -57521,8 +57978,20 @@
    "status": "no_ucp",
    "rid": "Q685967",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -57807,8 +58276,20 @@
    "status": "no_ucp",
    "rid": "Q207154",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -57966,8 +58447,20 @@
    "status": "no_ucp",
    "rid": "Q889624",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -58032,8 +58525,20 @@
    "status": "no_ucp",
    "rid": "Q151954",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -58098,8 +58603,20 @@
    "status": "no_ucp",
    "rid": "Q151954",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -58264,8 +58781,20 @@
    "status": "no_ucp",
    "rid": "Q3064071",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -58448,8 +58977,23 @@
    "status": "no_ucp",
    "rid": "Q504998",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": "error",
+     "error": "TimeoutError: The read operation timed out"
+    },
+    "a2a_card_legacy": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "ai_catalog": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "requests": 3
    }
   },
   {
@@ -59058,8 +59602,20 @@
    "status": "no_ucp",
    "rid": "Q2381223",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -59108,8 +59664,20 @@
    "status": "no_ucp",
    "rid": "Q2381223",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -59314,8 +59882,20 @@
    "status": "no_ucp",
    "rid": "Q1145669",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -59510,8 +60090,28 @@
    "status": "not_json",
    "rid": "Q340",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://ville.montreal.qc.ca/page_404_500/page404.htm"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://ville.montreal.qc.ca/page_404_500/page404.htm"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://ville.montreal.qc.ca/page_404_500/page404.htm"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://ville.montreal.qc.ca/page_404_500/page404.htm"
+    },
+    "requests": 5
    }
   },
   {
@@ -59920,8 +60520,20 @@
    "status": "no_ucp",
    "rid": "Q174310",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -60384,8 +60996,24 @@
    "status": "not_json",
    "rid": "Q1660552",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -61060,8 +61688,20 @@
    "status": "no_ucp",
    "rid": "Q1575057",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -61646,8 +62286,20 @@
    "status": "no_ucp",
    "rid": "Q2670328",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -61786,8 +62438,28 @@
    "status": "not_json",
    "rid": "Q3892249",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://s-etukortti.fi:443/"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://s-etukortti.fi:443/"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://s-etukortti.fi:443/"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://s-etukortti.fi:443/"
+    },
+    "requests": 5
    }
   },
   {
@@ -62343,8 +63015,20 @@
    "status": "no_ucp",
    "rid": "Q2035375",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 247
+    },
+    "a2a_card": {
+     "status": 247
+    },
+    "a2a_card_legacy": {
+     "status": 247
+    },
+    "ai_catalog": {
+     "status": 247
+    },
+    "requests": 5
    }
   },
   {
@@ -62367,8 +63051,28 @@
    "status": "not_json",
    "rid": "Q610492",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://spar-international.com/"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://spar-international.com/"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://spar-international.com/"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://spar-international.com/"
+    },
+    "requests": 5
    }
   },
   {
@@ -62765,8 +63469,28 @@
    "status": "not_json",
    "rid": "Q2117484",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://error.taobao.com/tbpc/error.html?from=https://www.taobao.com/.well-known/poppy.json"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://error.taobao.com/tbpc/error.html?from=https://www.taobao.com/.well-known/agent-card.json"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://error.taobao.com/tbpc/error.html?from=https://www.taobao.com/.well-known/agent.json"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://error.taobao.com/tbpc/error.html?from=https://www.taobao.com/.well-known/ai-catalog.json"
+    },
+    "requests": 5
    }
   },
   {
@@ -63214,8 +63938,20 @@
    "status": "no_ucp",
    "rid": "Q7880076",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -63368,8 +64104,20 @@
    "status": "no_ucp",
    "rid": "Q43295",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -63523,18 +64271,15 @@
      "status": 404
     },
     "a2a_card": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
     "a2a_card_legacy": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
-    "requests": 2
+    "requests": 6
    }
   },
   {
@@ -63571,8 +64316,28 @@
    "status": "not_json",
    "rid": "Q18712620",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://corporate.walgreens.com/"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://corporate.walgreens.com/"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://corporate.walgreens.com/"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://corporate.walgreens.com/"
+    },
+    "requests": 5
    }
   },
   {
@@ -63947,8 +64712,20 @@
    "status": "no_ucp",
    "rid": "Q706247",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -64017,8 +64794,20 @@
    "status": "no_ucp",
    "rid": "Q386170",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -64234,8 +65023,20 @@
    "status": "no_ucp",
    "rid": "Q10305",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -64381,8 +65182,20 @@
    "status": "no_ucp",
    "rid": "Q55600347",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -64615,8 +65428,23 @@
    "status": "no_ucp",
    "rid": "Q2917936",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": "error",
+     "error": "URLError: <urlopen error timed out>"
+    },
+    "a2a_card_legacy": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "ai_catalog": {
+     "status": "not fetched",
+     "reason": "connection failed earlier"
+    },
+    "requests": 3
    }
   },
   {
@@ -64686,18 +65514,15 @@
      "status": 404
     },
     "a2a_card": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
     "a2a_card_legacy": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
-    "requests": 2
+    "requests": 6
    }
   },
   {
@@ -64736,8 +65561,20 @@
    "status": "no_ucp",
    "rid": "Q51844714",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -64750,8 +65587,20 @@
    "status": "no_ucp",
    "rid": "Q51844714",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -64893,8 +65742,20 @@
    "status": "no_ucp",
    "rid": "Q4682711",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 503
+    },
+    "a2a_card": {
+     "status": 503
+    },
+    "a2a_card_legacy": {
+     "status": 503
+    },
+    "ai_catalog": {
+     "status": 503
+    },
+    "requests": 5
    }
   },
   {
@@ -65030,8 +65891,20 @@
    "status": "no_ucp",
    "rid": "Q4734952",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65066,8 +65939,20 @@
    "status": "no_ucp",
    "rid": "Q4740862",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65133,8 +66018,20 @@
    "status": "no_ucp",
    "rid": "Q4740862",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65173,8 +66070,20 @@
    "status": "no_ucp",
    "rid": "Q4740862",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65265,8 +66174,20 @@
    "status": "no_ucp",
    "rid": "Q3064093",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65369,8 +66290,20 @@
    "status": "no_ucp",
    "rid": "Q60765315",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65383,8 +66316,20 @@
    "status": "no_ucp",
    "rid": "Q4797122",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65443,8 +66388,24 @@
    "status": "not_json",
    "rid": "Q4816566",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -65457,8 +66418,20 @@
    "status": "no_ucp",
    "rid": "Q108165945",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65570,8 +66543,20 @@
    "status": "no_ucp",
    "rid": "Q4058209",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 450
+    },
+    "a2a_card": {
+     "status": 450
+    },
+    "a2a_card_legacy": {
+     "status": 450
+    },
+    "ai_catalog": {
+     "status": 450
+    },
+    "requests": 5
    }
   },
   {
@@ -65654,8 +66639,20 @@
    "status": "no_ucp",
    "rid": "Q17232036",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65668,8 +66665,20 @@
    "status": "no_ucp",
    "rid": "Q4079814",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -65682,8 +66691,20 @@
    "status": "no_ucp",
    "rid": "Q4851443",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -66281,8 +67302,20 @@
    "status": "no_ucp",
    "rid": "Q609913",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -66469,8 +67502,20 @@
    "status": "no_ucp",
    "rid": "Q4968659",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -66582,8 +67627,20 @@
    "status": "no_ucp",
    "rid": "Q4985016",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -66959,14 +68016,12 @@
      "status": 405
     },
     "a2a_card_legacy": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 405
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 405
     },
-    "requests": 3
+    "requests": 6
    }
   },
   {
@@ -67083,8 +68138,20 @@
    "status": "no_ucp",
    "rid": "Q747678",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67127,8 +68194,20 @@
    "status": "no_ucp",
    "rid": "Q795474",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67141,8 +68220,20 @@
    "status": "no_ucp",
    "rid": "Q5055676",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67155,8 +68246,20 @@
    "status": "no_ucp",
    "rid": "Q5055676",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67169,8 +68272,20 @@
    "status": "no_ucp",
    "rid": "Q5055676",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67183,8 +68298,20 @@
    "status": "no_ucp",
    "rid": "Q5055676",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67357,8 +68484,20 @@
    "status": "no_ucp",
    "rid": "Q27897515",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -67466,8 +68605,24 @@
    "status": "not_json",
    "rid": "Q10453555",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -67806,8 +68961,20 @@
    "status": "no_ucp",
    "rid": "Q2363991",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 456
+    },
+    "a2a_card": {
+     "status": 456
+    },
+    "a2a_card_legacy": {
+     "status": 456
+    },
+    "ai_catalog": {
+     "status": 456
+    },
+    "requests": 5
    }
   },
   {
@@ -68031,8 +69198,24 @@
    "status": "not_json",
    "rid": "Q5175411",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -68268,8 +69451,24 @@
    "status": "not_json",
    "rid": "Q55390991",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -68382,8 +69581,20 @@
    "status": "no_ucp",
    "rid": "Q5226584",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -68462,8 +69673,20 @@
    "status": "no_ucp",
    "rid": "Q10937898",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -68675,8 +69898,20 @@
    "status": "no_ucp",
    "rid": "Q65154379",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -69064,8 +70299,20 @@
    "status": "no_ucp",
    "rid": "Q5331091",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -69078,8 +70325,20 @@
    "status": "no_ucp",
    "rid": "Q5331091",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -69471,7 +70730,8 @@
    "rid": "Q1059636",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: connection failed",
+    "requests": 1
    }
   },
   {
@@ -69570,8 +70830,20 @@
    "status": "no_ucp",
    "rid": "Q5422131",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -69818,8 +71090,20 @@
    "status": "no_ucp",
    "rid": "Q5435855",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 500
+    },
+    "a2a_card": {
+     "status": 500
+    },
+    "a2a_card_legacy": {
+     "status": 500
+    },
+    "ai_catalog": {
+     "status": 500
+    },
+    "requests": 5
    }
   },
   {
@@ -70063,8 +71347,20 @@
    "status": "no_ucp",
    "rid": "Q16981107",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -70478,8 +71774,20 @@
    "status": "no_ucp",
    "rid": "Q5503071",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -70786,8 +72094,20 @@
    "status": "no_ucp",
    "rid": "Q1522721",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -71137,8 +72457,20 @@
    "status": "no_ucp",
    "rid": "Q106411451",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -71357,8 +72689,20 @@
    "status": "no_ucp",
    "rid": "Q11221981",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -71811,8 +73155,20 @@
    "status": "no_ucp",
    "rid": "Q903805",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -72108,8 +73464,20 @@
    "status": "no_ucp",
    "rid": "Q5887921",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -72374,8 +73742,20 @@
    "status": "no_ucp",
    "rid": "Q5970945",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -72677,8 +74057,20 @@
    "status": "no_ucp",
    "rid": "Q6168434",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -73163,8 +74555,20 @@
    "status": "no_ucp",
    "rid": "Q6346093",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -73431,8 +74835,20 @@
    "status": "no_ucp",
    "rid": "Q6398037",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -73533,8 +74949,24 @@
    "status": "not_json",
    "rid": "Q11604928",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -73713,8 +75145,20 @@
    "status": "no_ucp",
    "rid": "Q110104471",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -74193,8 +75637,20 @@
    "status": "no_ucp",
    "rid": "Q6512810",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -74284,8 +75740,20 @@
    "status": "no_ucp",
    "rid": "Q3240853",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -74994,8 +76462,20 @@
    "status": "no_ucp",
    "rid": "Q3276565",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -75081,8 +76561,20 @@
    "status": "no_ucp",
    "rid": "Q13646560",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -75095,8 +76587,20 @@
    "status": "not_json",
    "rid": "Q13646560",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -75109,8 +76613,20 @@
    "status": "no_ucp",
    "rid": "Q1694737",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -75305,8 +76821,20 @@
    "status": "no_ucp",
    "rid": "Q3297791",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -75646,8 +77174,20 @@
    "status": "no_ucp",
    "rid": "Q7698875",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -75933,8 +77473,20 @@
    "status": "no_ucp",
    "rid": "Q23808789",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -76053,8 +77605,20 @@
    "status": "no_ucp",
    "rid": "Q11087941",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -76223,8 +77787,20 @@
    "status": "no_ucp",
    "rid": "Q6910891",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -76846,8 +78422,20 @@
    "status": "no_ucp",
    "rid": "Q22907412",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 503
+    },
+    "a2a_card": {
+     "status": 503
+    },
+    "a2a_card_legacy": {
+     "status": 503
+    },
+    "ai_catalog": {
+     "status": 503
+    },
+    "requests": 5
    }
   },
   {
@@ -77125,7 +78713,8 @@
    "rid": "Q3357096",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: 403",
+    "requests": 1
    }
   },
   {
@@ -77269,8 +78858,20 @@
    "status": "no_ucp",
    "rid": "Q2042514",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -77669,8 +79270,20 @@
    "status": "no_ucp",
    "rid": "Q104532444",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -77932,8 +79545,20 @@
    "status": "no_ucp",
    "rid": "Q22921009",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -78014,8 +79639,20 @@
    "status": "no_ucp",
    "rid": "Q7203672",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -78239,7 +79876,8 @@
    "rid": "Q2741995",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: 403",
+    "requests": 1
    }
   },
   {
@@ -78379,8 +80017,20 @@
    "status": "no_ucp",
    "rid": "Q7242562",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -78535,8 +80185,20 @@
    "status": "no_ucp",
    "rid": "Q751963",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -78606,8 +80268,20 @@
    "status": "no_ucp",
    "rid": "Q7262792",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -78654,8 +80328,20 @@
    "status": "no_ucp",
    "rid": "Q17058977",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -78827,8 +80513,28 @@
    "status": "not_json",
    "rid": "Q7300856",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.realcanadiansuperstore.ca/.well-known/poppy.json"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.realcanadiansuperstore.ca/.well-known/agent-card.json"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.realcanadiansuperstore.ca/.well-known/agent.json"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.realcanadiansuperstore.ca/.well-known/ai-catalog.json"
+    },
+    "requests": 5
    }
   },
   {
@@ -79235,8 +80941,20 @@
    "status": "no_ucp",
    "rid": "Q13567254",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -80046,8 +81764,24 @@
    "status": "not_json",
    "rid": "Q7511598",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -80134,8 +81868,20 @@
    "status": "no_ucp",
    "rid": "Q7391510",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -80302,8 +82048,20 @@
    "status": "no_ucp",
    "rid": "Q3915538",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -80354,8 +82112,20 @@
    "status": "no_ucp",
    "rid": "Q22688437",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 400
+    },
+    "a2a_card": {
+     "status": 400
+    },
+    "a2a_card_legacy": {
+     "status": 400
+    },
+    "ai_catalog": {
+     "status": 400
+    },
+    "requests": 5
    }
   },
   {
@@ -80501,8 +82271,28 @@
    "status": "not_json",
    "rid": "Q7579970",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.sportsgirl.com.au/"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.sportsgirl.com.au/"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.sportsgirl.com.au/"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.sportsgirl.com.au/"
+    },
+    "requests": 5
    }
   },
   {
@@ -81158,8 +82948,20 @@
    "status": "no_ucp",
    "rid": "Q1510161",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -81419,8 +83221,20 @@
    "status": "no_ucp",
    "rid": "Q7669631",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -81806,8 +83620,20 @@
    "status": "no_ucp",
    "rid": "Q60772582",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -82123,8 +83949,20 @@
    "status": "no_ucp",
    "rid": "Q863194",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -82163,8 +84001,20 @@
    "status": "no_ucp",
    "rid": "Q1090880",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -82552,8 +84402,20 @@
    "status": "no_ucp",
    "rid": "Q683265",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -82977,8 +84839,20 @@
    "status": "no_ucp",
    "rid": "Q2128566",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -83064,8 +84938,24 @@
    "status": "not_json",
    "rid": "Q7937539",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -83078,8 +84968,20 @@
    "status": "no_ucp",
    "rid": "Q7941609",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -83092,8 +84994,20 @@
    "status": "no_ucp",
    "rid": "Q7941609",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -83484,8 +85398,22 @@
    "status": "no_ucp",
    "rid": "Q845257",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 406
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 406
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -83498,8 +85426,20 @@
    "status": "no_ucp",
    "rid": "Q16648226",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -83564,8 +85504,20 @@
    "status": "no_ucp",
    "rid": "Q8033997",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -83830,8 +85782,28 @@
    "status": "not_json",
    "rid": "Q8067635",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zazzle.com/shop"
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zazzle.com/shop"
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zazzle.com/shop"
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zazzle.com/shop"
+    },
+    "requests": 5
    }
   },
   {
@@ -83844,8 +85816,20 @@
    "status": "no_ucp",
    "rid": "Q184399",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -84198,8 +86182,20 @@
    "status": "no_ucp",
    "rid": "64facets.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -87362,8 +89358,20 @@
    "status": "no_ucp",
    "rid": "ascoli.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -88809,8 +90817,20 @@
    "status": "no_ucp",
    "rid": "bakfolie.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -89626,8 +91646,24 @@
    "status": "not_json",
    "rid": "beefboy.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -89727,8 +91763,20 @@
    "status": "no_ucp",
    "rid": "bellyarmor.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 202
+    },
+    "a2a_card": {
+     "status": 202
+    },
+    "a2a_card_legacy": {
+     "status": 202
+    },
+    "ai_catalog": {
+     "status": 202
+    },
+    "requests": 5
    }
   },
   {
@@ -92039,7 +94087,8 @@
    "rid": "bombayshirts.com",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: 403",
+    "requests": 1
    }
   },
   {
@@ -93150,8 +95199,20 @@
    "status": "no_ucp",
    "rid": "bundlebee.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -93403,8 +95464,20 @@
    "status": "no_ucp",
    "rid": "byjus.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -95093,10 +97166,9 @@
      "status": 404
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
-    "requests": 4
+    "requests": 6
    }
   },
   {
@@ -95909,8 +97981,20 @@
    "status": "no_ucp",
    "rid": "corp.vashiisl.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -98112,8 +100196,24 @@
    "status": "not_json",
    "rid": "discobeads.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -98796,10 +100896,9 @@
      "status": 404
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 404
     },
-    "requests": 4
+    "requests": 6
    }
   },
   {
@@ -99373,8 +101472,20 @@
    "status": "no_ucp",
    "rid": "eflash-us.doverstreetmarket.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 402
+    },
+    "a2a_card": {
+     "status": 402
+    },
+    "a2a_card_legacy": {
+     "status": 402
+    },
+    "ai_catalog": {
+     "status": 402
+    },
+    "requests": 5
    }
   },
   {
@@ -99784,8 +101895,20 @@
    "status": "no_ucp",
    "rid": "elektroncycles.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -101366,8 +103489,24 @@
    "status": "not_json",
    "rid": "feig.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -104490,8 +106629,20 @@
    "status": "no_ucp",
    "rid": "gritzo.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -106471,8 +108622,20 @@
    "status": "no_ucp",
    "rid": "honeybud.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -110204,8 +112367,20 @@
    "status": "no_ucp",
    "rid": "kidstudio.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -112281,8 +114456,24 @@
    "status": "not_json",
    "rid": "lenskart.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -112812,8 +115003,20 @@
    "status": "no_ucp",
    "rid": "linkpop.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -119951,8 +122154,20 @@
    "status": "no_ucp",
    "rid": "oneness287.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -120705,8 +122920,20 @@
    "status": "no_ucp",
    "rid": "pak.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -121680,8 +123907,20 @@
    "status": "no_ucp",
    "rid": "pimages.indigifts.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -125291,8 +127530,20 @@
    "status": "no_ucp",
    "rid": "rooneyshop.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -127844,8 +130095,24 @@
    "status": "not_json",
    "rid": "shopperr.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -131519,8 +133786,24 @@
    "status": "not_json",
    "rid": "stickr.nl",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card": {
+     "status": 200,
+     "valid": false
+    },
+    "a2a_card_legacy": {
+     "status": 200,
+     "valid": false
+    },
+    "ai_catalog": {
+     "status": 200,
+     "valid": false
+    },
+    "requests": 5
    }
   },
   {
@@ -135986,7 +138269,8 @@
    "rid": "thepostcard.in",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: connection failed",
+    "requests": 1
    }
   },
   {
@@ -136690,7 +138974,8 @@
    "rid": "theushop.in",
    "agent_files": {
     "checked": false,
-    "reason": "time budget reached"
+    "reason": "robots.txt: connection failed",
+    "requests": 1
    }
   },
   {
@@ -138946,8 +141231,20 @@
    "status": "no_ucp",
    "rid": "varaveda.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -140079,8 +142376,20 @@
    "status": "no_ucp",
    "rid": "warranty.boat-lifestyle.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -140316,8 +142625,20 @@
    "status": "no_ucp",
    "rid": "werwellness.in",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -141201,8 +143522,20 @@
    "status": "no_ucp",
    "rid": "yamaha-motor-india.com",
    "agent_files": {
-    "checked": false,
-    "reason": "time budget reached"
+    "checked": true,
+    "poppy": {
+     "status": 404
+    },
+    "a2a_card": {
+     "status": 404
+    },
+    "a2a_card_legacy": {
+     "status": 404
+    },
+    "ai_catalog": {
+     "status": 404
+    },
+    "requests": 5
    }
   },
   {
@@ -141477,22 +143810,26 @@
    "agent_files": {
     "checked": true,
     "poppy": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zael.nl/"
     },
     "a2a_card": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zael.nl/"
     },
     "a2a_card_legacy": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zael.nl/"
     },
     "ai_catalog": {
-     "status": "not fetched",
-     "reason": "time budget reached"
+     "status": 200,
+     "valid": false,
+     "final_url": "https://www.zael.nl/"
     },
-    "requests": 1
+    "requests": 6
    }
   },
   {
@@ -141850,19 +144187,55 @@
  "timing": {
   "agent_files": {
    "enabled": true,
-   "seconds": 601,
-   "budget": 600,
-   "checked": 1698,
-   "requests": 8439,
+   "sites_selected": 1915,
+   "checked": 1880,
+   "requests": 9371,
    "valid": {
     "poppy": 0,
     "a2a_card": 1,
     "a2a_card_legacy": 1,
     "ai_catalog": 3
    },
-   "not_checked_budget": 190,
-   "run_at": "2026-10-19T10:46:58+00:00",
-   "sites_selected": 1915
+   "not_checked_budget": 0,
+   "partly_checked_budget": 0,
+   "max_requests_per_site": 6,
+   "runs": [
+    {
+     "enabled": true,
+     "seconds": 601,
+     "budget": 600,
+     "checked": 1698,
+     "requests": 8439,
+     "valid": {
+      "poppy": 0,
+      "a2a_card": 1,
+      "a2a_card_legacy": 1,
+      "ai_catalog": 3
+     },
+     "not_checked_budget": 190,
+     "run_at": "2026-10-19T10:46:58+00:00",
+     "sites_selected": 1915
+    },
+    {
+     "enabled": true,
+     "seconds": 105,
+     "budget": 1200,
+     "checked": 182,
+     "requests": 910,
+     "valid": {
+      "poppy": 0,
+      "a2a_card": 0,
+      "a2a_card_legacy": 0,
+      "ai_catalog": 0
+     },
+     "not_checked_budget": 0,
+     "run_at": "2026-10-19T10:53:10+00:00",
+     "sites_selected": 190,
+     "scope": "sites not reached by the first run",
+     "partial_sites_completed": 7,
+     "partial_requests": 22
+    }
+   ]
   }
  }
 }
