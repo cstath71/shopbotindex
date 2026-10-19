@@ -3,9 +3,9 @@
 small global concurrency, timeouts, honest User-Agent. Writes data/crawl-YYYY-MM-DD.json and data/latest.json.
 Phase 1 (unchanged headline metric): robots.txt + /.well-known/ucp for every site.
 Phase 2 (agent-readiness signals, scripts/signals.py): runs after phase 1 within a time budget (env SBI_SIGNALS_BUDGET seconds,
-default 3600); sites not reached in time are recorded as not checked. SBI_SIGNALS=0 skips phase 2 entirely.
+default 4500); sites not reached in time are recorded as not checked. SBI_SIGNALS=0 skips phase 2 entirely.
 Phase 3 (record-only agent discovery files, scripts/agent_files.py): poppy.json, A2A agent card, ai-catalog.json in sites[].agent_files,
-time budget SBI_AGENT_FILES_BUDGET (default 600 s); SBI_AGENT_FILES=0 skips it. At most 18 requests per website per week across all phases.
+time budget SBI_AGENT_FILES_BUDGET (default 1200 s); SBI_AGENT_FILES=0 skips it. At most 18 requests per website per week across all phases.
 Usage: python3 scripts/crawl.py [--limit N] [--every N] [--out DIR]   (--out writes crawl files to DIR instead of data/, for dry runs)"""
 import json, os, sys, collections, time, ssl, datetime, urllib.request, urllib.error, urllib.robotparser, concurrent.futures as cf, threading, re
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data')
@@ -136,7 +136,7 @@ def main():
     for j,r in zip(jobs,res): r['rid']=j['rid']; r['_rank']=j['rank']
     p2=None
     if os.environ.get('SBI_SIGNALS','1')!='0':
-        try: p2=phase2(res,int(os.environ.get('SBI_SIGNALS_BUDGET','3600')))
+        try: p2=phase2(res,int(os.environ.get('SBI_SIGNALS_BUDGET','4500')))
         except Exception as e:  # never let the extra signals break the weekly UCP crawl
             p2=dict(error=type(e).__name__+': '+str(e)[:200])
             for r in res: r.setdefault('signals',dict(checked=False,reason='signals pass failed'))
