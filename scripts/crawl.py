@@ -4,11 +4,13 @@ small global concurrency, timeouts, honest User-Agent. Writes data/crawl-YYYY-MM
 Phase 1 (unchanged headline metric): robots.txt + /.well-known/ucp for every site.
 Phase 2 (agent-readiness signals, scripts/signals.py): runs after phase 1 within a time budget (env SBI_SIGNALS_BUDGET seconds,
 default 3600); sites not reached in time are recorded as not checked. SBI_SIGNALS=0 skips phase 2 entirely.
+Phase 3 (record-only agent discovery files, scripts/agent_files.py): poppy.json, A2A agent card, ai-catalog.json in sites[].agent_files,
+time budget SBI_AGENT_FILES_BUDGET (default 600 s); SBI_AGENT_FILES=0 skips it. At most 18 requests per website per week across all phases.
 Usage: python3 scripts/crawl.py [--limit N] [--every N] [--out DIR]   (--out writes crawl files to DIR instead of data/, for dry runs)"""
 import json, os, sys, collections, time, ssl, datetime, urllib.request, urllib.error, urllib.robotparser, concurrent.futures as cf, threading, re
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.path.join(ROOT,'data')
 UA=('ShopBotIndexBot/1.0 (+https://shopbotindex.com/methodology.html#crawler; hello@shopbotindex.com; reads /robots.txt, /.well-known/ucp, '
-    '/.well-known/acp.json, /.well-known/ai-catalog.json, /llms.txt, /agents.md, the home page, up to 2 sitemap files and 1 product page, '
+    '/.well-known/acp.json, /.well-known/ai-catalog.json, /.well-known/poppy.json, /.well-known/agent-card.json, /.well-known/agent.json, /llms.txt, /agents.md, the home page, up to 2 sitemap files and 1 product page, '
     'and sends one read-only MCP tools/list request to the endpoint a UCP profile declares)')
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import signals as SIG
@@ -142,14 +144,15 @@ def main():
     print('phase 2',p2,flush=True)
     by=collections.defaultdict(list)
     for r in res: by[r['rid']].append(r)
+    p3=None
     try:  # record-only agent discovery files (scripts/agent_files.py): adds sites[].agent_files, never changes UCP results
         sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import agent_files as AF
-        print('agent files',AF.run(res,UA,TIMEOUT,WORKERS,PAUSE,MAXBYTES,globals().get('ROBOTS_TXT')),flush=True)
-    except Exception as e: print('agent files pass skipped:',type(e).__name__,str(e)[:200],flush=True)
+        p3=AF.run(res,UA,TIMEOUT,WORKERS,PAUSE,MAXBYTES,globals().get('ROBOTS_TXT')); print('agent files',p3,flush=True)
+    except Exception as e: p3=dict(error=type(e).__name__+': '+str(e)[:200]); print('agent files pass skipped:',p3['error'],flush=True)
     retailers=[dict(aggregate(s,by[s['id']]),name=s['name'],segment=s['segment'],category=s['category'],country=s['country'],sources=s['sources']) for s in seeds]
     day=datetime.date.today().isoformat()
     doc=dict(crawl_date=day,user_agent=UA,spec='https://ucp.dev/specification/overview/',path='/.well-known/ucp',retailer_count=len(seeds),site_count=len(jobs),
-             timing=dict(phase1_seconds=p1,phase2=p2),retailers=retailers,sites=res)
+             timing=dict(phase1_seconds=p1,phase2=p2,agent_files=p3),retailers=retailers,sites=res)
     os.makedirs(out_dir,exist_ok=True)
     for fn in (f'crawl-{day}.json','latest.json'): json.dump(doc,open(os.path.join(out_dir,fn),'w'),ensure_ascii=False,separators=(',',':'))
     print('done',round(time.time()-t0),'s sites:',collections.Counter(r.get('status') for r in res),'retailers:',collections.Counter((r['segment'],r['status']) for r in retailers))
