@@ -1,6 +1,6 @@
 # ShopBot Index (shopbotindex.com)
 
-What online stores tell AI shopping agents: the weekly index. Headline measure: does a store publish a UCP profile, the official machine-readable profile AI shopping agents read? A static site that measures which online stores publish a
+What online stores tell AI shopping agents: the weekly index. Headline measure: does a store publish a UCP profile, the machine-readable profile AI shopping agents read? A static site that measures which online stores publish a
 Universal Commerce Protocol (UCP) business profile at `/.well-known/ucp` (path per the UCP spec:
 https://ucp.dev/specification/overview/ , "Discovery: Fetch business profile from /.well-known/ucp").
 Three segments side by side: Shopify stores, big retailers, other retailers & marketplaces.
