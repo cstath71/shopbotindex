@@ -4,6 +4,7 @@ import json, os, re, html, glob, shutil, collections
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.environ.get('SBI_DATA_DIR') or os.path.join(ROOT,'data'); DIST=os.environ.get('SBI_DIST_DIR') or os.path.join(ROOT,'dist')  # env overrides for dry-run previews
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 NAME='ShopBot Index'
+OGV='4'  # cache-buster for og.png/og-store.png (rendered by scripts/og_images.py); bump when the cards change so X/LinkedIn refetch
 CONTACT='hello@shopbotindex.com'
 MAILTO=f'<a href="mailto:{CONTACT}">{CONTACT}</a>'
 FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
@@ -50,7 +51,7 @@ def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
-<meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{E(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ShopBotIndex"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc or DEFDESC)}"><meta name="twitter:image" content="{SITE}/{ogimg}">{head}
+<meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/{ogimg}?v={OGV}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{E(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ShopBotIndex"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc or DEFDESC)}"><meta name="twitter:image" content="{SITE}/{ogimg}?v={OGV}">{head}
 <link rel="icon" href="{pre}favicon.ico" sizes="any"><link rel="icon" href="{pre}favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="{pre}apple-touch-icon.png">
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
 <meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
