@@ -2,7 +2,7 @@ Welcome to ShopBot Index
 
 Thanks for subscribing to ShopBot Index.
 
-ShopBot Index is the weekly index of what online stores tell AI shopping agents. Every Monday it checks each tracked store for a UCP profile, the /.well-known/ucp file that is the official machine-readable profile AI shopping agents read. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, and what else changed that week.
+ShopBot Index is the weekly index of what online stores tell AI shopping agents. Every Monday it checks each tracked store for a UCP profile, the /.well-known/ucp file, the machine-readable profile AI shopping agents read. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, and what else changed that week.
 
 Until the next issue, here's where to look:
 

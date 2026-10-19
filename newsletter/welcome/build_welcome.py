@@ -6,9 +6,9 @@ SITE='https://shopbotindex.com'
 FROM='ShopBot Index <hello@shopbotindex.com>'; REPLY_TO='hello@shopbotindex.com'
 SUBJECT='Welcome to ShopBot Index: what online stores tell AI shopping agents'
 H1='Welcome to ShopBot Index'
-PRE="One short email a week: which online stores started or stopped publishing the official profile AI shopping agents read."
+PRE="One short email a week: which online stores started or stopped publishing the profile AI shopping agents read."
 P1="Thanks for subscribing to ShopBot Index."
-P2="ShopBot Index is the weekly index of what online stores tell AI shopping agents. Every Monday it checks each tracked store for a UCP profile, the /.well-known/ucp file that is the official machine-readable profile AI shopping agents read. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, and what else changed that week."
+P2="ShopBot Index is the weekly index of what online stores tell AI shopping agents. Every Monday it checks each tracked store for a UCP profile, the /.well-known/ucp file, the machine-readable profile AI shopping agents read. After each crawl you'll get one short, free email: which stores started or stopped publishing a UCP profile, and what else changed that week."
 P3="Until the next issue, here's where to look:"
 LINKS=[("The index",SITE+"/","What Shopify stores, big retailers and other stores tell AI shopping agents: who publishes a UCP profile, week by week."),
        ("What changed",SITE+"/changes.html","Joined, left and other changes compared with the previous crawl."),
