@@ -4,7 +4,7 @@ import json, os, re, html, glob, shutil, collections
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.environ.get('SBI_DATA_DIR') or os.path.join(ROOT,'data'); DIST=os.environ.get('SBI_DIST_DIR') or os.path.join(ROOT,'dist')  # env overrides for dry-run previews
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 NAME='ShopBot Index'
-OGV='2'  # cache-buster for og.png/og-store.png (rendered by scripts/og_images.py); bump when the cards change so X/LinkedIn refetch
+OGV='3'  # cache-buster for og.png/og-store.png (rendered by scripts/og_images.py); bump when the cards change so X/LinkedIn refetch
 CONTACT='hello@shopbotindex.com'
 MAILTO=f'<a href="mailto:{CONTACT}">{CONTACT}</a>'
 FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
