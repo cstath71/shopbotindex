@@ -4,6 +4,9 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const ALLOWED = ["https://shopbotindex.com", "https://www.shopbotindex.com", "https://cstath71.github.io", "http://localhost:4321"];
 const EMAIL_RE = /^[^\s@<>()\[\],;:"]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/;
 const MAX_PER_HOUR = 5;
+const MAX_WATCHES = 25; // per subscriber
+const WATCH_RE = /^[A-Za-z0-9._-]{1,120}$/;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 function cors(origin: string | null) {
   const o = origin && ALLOWED.includes(origin) ? origin : ALLOWED[0];
@@ -30,13 +33,29 @@ Deno.serve(async (req) => {
     else body = Object.fromEntries((await req.formData()).entries());
   } catch { return json({ ok: false, error: "bad_request" }, 400, h); }
 
-  // Honeypot: real users never fill the hidden 'website' field. Pretend success.
-  if (String(body.website ?? "").trim() !== "") return json({ ok: true }, 200, h);
+  const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+
+  // Honeypot: real users never fill the hidden 'sbi_hp_note' field (renamed from 'website' on 20 Oct 2026 because browsers
+  // can autofill 'website'; the old name is still checked for pages cached before the change). Pretend success.
+  // Counted per day only (public.sbi_honeypot_daily); nothing about the request is stored.
+  if (String(body.sbi_hp_note ?? "").trim() !== "" || String(body.website ?? "").trim() !== "") {
+    try { await sb.rpc("sbi_count_honeypot"); } catch { /* counting is best effort */ }
+    return json({ ok: true }, 200, h);
+  }
+
+  // "Stop these alerts" link (shopbotindex.com/unwatch.html?t=<token>): deletes that one watch. The subscription itself is untouched.
+  if (body.action === "unwatch") {
+    const t = String(body.token ?? "").trim().toLowerCase();
+    if (!UUID_RE.test(t)) return json({ ok: false, error: "bad_token" }, 400, h);
+    const { data } = await sb.from("sbi_watches").delete().eq("token", t).select("id");
+    return json({ ok: true, removed: (data?.length ?? 0) > 0 }, 200, h);
+  }
 
   const email = String(body.email ?? "").trim().toLowerCase();
   if (email.length > 254 || !EMAIL_RE.test(email)) return json({ ok: false, error: "invalid_email" }, 400, h);
-
-  const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+  // Optional "Watch this store": the crawl's store id (retailers[].id). Invalid values are ignored, the signup still goes through.
+  const watch = String(body.watch ?? "").trim();
+  const watchOk = watch !== "" && WATCH_RE.test(watch);
   const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
   const ipHash = await sha256("sbi:" + ip);
 
@@ -48,6 +67,20 @@ Deno.serve(async (req) => {
 
   const { error } = await sb.from("sbi_subscribers").upsert({ email, ip_hash: ipHash, unsubscribed_at: null }, { onConflict: "email" });
   if (error) return json({ ok: false, error: "store_failed" }, 500, h);
+
+  let watching = false;
+  if (watchOk) {
+    try {
+      const { data: sub } = await sb.from("sbi_subscribers").select("id").eq("email", email).single();
+      if (sub?.id) {
+        const { count: nw } = await sb.from("sbi_watches").select("id", { count: "exact", head: true }).eq("subscriber_id", sub.id);
+        if ((nw ?? 0) < MAX_WATCHES) {
+          const { error: we } = await sb.from("sbi_watches").upsert({ subscriber_id: sub.id, store_id: watch }, { onConflict: "subscriber_id,store_id", ignoreDuplicates: true });
+          watching = !we;
+        }
+      }
+    } catch { /* the signup itself already succeeded */ }
+  }
 
   // Mirror into the Resend segment. Settings come from function secrets (RESEND_API_KEY, SBI_RESEND_SEGMENT_ID) if set,
   // otherwise from Supabase Vault via public.sbi_resend_config() (executable by service_role only).
@@ -81,5 +114,5 @@ Deno.serve(async (req) => {
       if (r.ok) await sb.from("sbi_subscribers").update({ synced_to_resend_at: new Date().toISOString() }).eq("email", email);
     } catch { /* keep the Supabase row; sync later */ }
   }
-  return json({ ok: true }, 200, h);
+  return json(watchOk ? { ok: true, watching } : { ok: true }, 200, h);
 });

@@ -43,7 +43,7 @@ Stdlib Python only. Site URL via `SBI_SITE` (default https://shopbotindex.com). 
 
 ## Newsletter signup
 Forms post to the Supabase edge function `sbi-subscribe` (project `uufmlmwgvoqhhtqgrclu`, source in `supabase/functions/sbi-subscribe/`):
-honeypot field `website`, email validation, 5 attempts per IP-hash per hour, rows in `sbi_subscribers` (RLS on, no public access).
+honeypot field `sbi_hp_note` (renamed from `website` on 20 Oct 2026 because browsers autofill that name; the function still drops either; drops are counted per day in `sbi_honeypot_daily`, nothing else stored), email validation, 5 attempts per IP-hash per hour, rows in `sbi_subscribers` (RLS on, no public access).
 Resend segment: **ShopBot Index** `6aeffea0-50d8-4887-b18d-8babefbbc1fa`. Resend sending domain: `shopbotindex.com`
 (id `4793016a-f6c9-40df-9db2-2926aa36ad4c`, EU region eu-west-1, open/click tracking off; DNS records on `send.` + `rsend.` + `resend._domainkey`, no clash with Zoho on the root).
 The Resend API key and segment id are read from function secrets `RESEND_API_KEY` / `SBI_RESEND_SEGMENT_ID` if set, otherwise from Supabase Vault
@@ -64,6 +64,14 @@ re-subscribes or reserved test domains (example.com/.net/.org, *.test, *.example
 Off: `delete from vault.secrets where name='sbi_welcome_enabled';` On: `select vault.create_secret('true','sbi_welcome_enabled','Send ShopBot Index welcome from sbi-subscribe');`
 Content: `newsletter/welcome/build_welcome.py` builds `welcome.html` / `welcome.txt`; after editing, rerun it, `update-template` (html + text) and `publish-template`.
 Test with Resend's sandbox address `delivered+<tag>@resend.dev` (not excluded, so it runs the whole path), then delete the contact, the `sbi_subscribers` row and the `sbi_signup_attempts` entry.
+
+## Signup placement, "Watch this store", visit counter (20 Oct 2026, approved by Gus)
+- Forms: one-line form under the home hero and near the top of stores, methodology and AI-assistants pages (plus the bottom box); on every store page a "Watch {store}" form right under the result; a slim sticky bar (hidden while a form or the footer is on screen, closable, no storage). Copy: "Every Monday: which stores started or stopped publishing a UCP profile, the profile AI shopping agents read."
+- Watch: the store form sends `watch=<retailers[].id>`; `sbi-subscribe` (v6) subscribes as before and adds a row to `sbi_watches` (subscriber_id, store_id, token; max 25 per subscriber). `unwatch.html?t=<token>` deletes one watch (action `unwatch`).
+- Alerts: `scripts/watch_alerts.py` (run by `weekly.sh` after the push) sends the week's joined (started) and left (stopped) stores to the function `sbi-watch-alerts` (shared secret in Vault `sbi_alerts_token`, box copy `/home/box/.private/sbi-alerts.json`). Real alert emails go out only when Vault `sbi_watch_alerts_enabled` = `'true'`; until then every run is a dry run. Test send: `python3 scripts/watch_alerts.py --send --only-to cstath@mail.grokbot.com`. Already-alerted watches are skipped (`last_alert_crawl`), Resend global unsubscribes are respected.
+  On: `select vault.create_secret('true','sbi_watch_alerts_enabled','Send ShopBot Index watch alerts');` Off: `delete from vault.secrets where name='sbi_watch_alerts_enabled';`
+- Visit counter: every page posts {path, referrer domain, utm_source (or ?ref=), utm_medium, utm_campaign} to `sbi-hit`, which adds 1 to a daily total in `sbi_pageviews_daily`. No IP, cookie, user agent or identifier stored; nothing sent with Do Not Track or Global Privacy Control (checked in the page and in the function); bots and other origins ignored. Read counts with `supabase/queries/visits.sql`.
+- Migration: `supabase/migrations/20261020_sbi_watch_visits_honeypot.sql`. Tests: `python3 -m unittest discover -s tests` (after a build).
 
 ## Shopify affiliate (Impact)
 - Approved 17 Oct 2026. Impact account id **7989432**, Shopify campaign **13624**.
