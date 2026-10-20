@@ -44,10 +44,11 @@ def hero(body):
     m=re.search(r'<h1>.*?</h1>\s*<p class="lede">.*?</p>',body,re.S)
     if not m: return body
     art='<img class="hero-art" src="robot-hero.png" width="210" height="210" alt="ShopBot Index robot pushing a shopping cart">'
-    return body[:m.start()]+f'<section class="hero">{art}<div class="hero-t">{m.group(0)}</div></section>'+body[m.end():]
+    return body[:m.start()]+f'<section class="hero">{art}<div class="hero-t">{m.group(0)}</div></section>'+signup_slim()+body[m.end():]
 def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     pre='../'*path.count('/')
     if path=='index.html': body=hero(body)
+    if path in TOPFORM_PAGES: body=re.sub(r'(<p class="lede">.*?</p>)',lambda m:m.group(1)+signup_slim(pre),body,count=1,flags=re.S)+signup(pre)
     nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
@@ -56,7 +57,7 @@ def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
 <meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
 <link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html"><img src="{pre}logo-32.png" srcset="{pre}logo-64.png 2x, {pre}logo-96.png 3x" width="32" height="32" alt="">{NAME}</a>{nav}</div></header>
-<main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer></body></html>'''
+<main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer>{sticky_bar(pre) if path not in NOBAR_PAGES else ''}{VISIT_JS}</body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
 def bars(counter,total,namef=lambda x:x,link=None,label='Stores'):
     rows=''.join(f'<tr><td>{(f"<a href=\"{link(k)}\">{E(namef(k))}</a>") if link else E(namef(k))}</td><td>{v}</td><td>{pct(v,total)}</td><td class="hide-sm" style="width:35%"><div class="bar"><i style="width:{100*v/max(total,1):.1f}%"></i></div></td></tr>' for k,v in counter.most_common())
@@ -69,11 +70,40 @@ def segcards(pre=''):
 <div class="sbar"><i class="y" style="width:{100*s["ucp"]/max(s["n"],1):.1f}%"></i><i class="n" style="width:{100*s["no"]/max(s["n"],1):.1f}%"></i><i class="c" style="width:{100*s["cc"]/max(s["n"],1):.1f}%"></i></div>
 <small>{s["n"]} tracked · {s["no"]} no UCP profile found · <span class="cc">{s["cc"]} couldn't check</span></small></a>'''
     return f'<div class="segs">{out}</div><p class="legend"><i class="y"></i> UCP profile <i class="n"></i> no profile found <i class="c"></i> couldn\'t check (blocked or unreachable; not counted in the rate)</p>'
-HONEYPOT='<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">'
-SIGNUP_JS="""<script>if(!window.sbiSub){window.sbiSub=function(f){const m=f.parentNode.querySelector('.nl-msg'),b=f.querySelector('button');b.disabled=true;m.textContent='Subscribing…';fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))}).then(r=>r.json().then(j=>[r.status,j])).then(([s,j])=>{if(j.ok){m.textContent="Thanks! You're on the list for the weekly ShopBot Index email.";f.reset();}else{m.textContent=(j.error==='invalid_email'?'Please enter a valid email address.':(s===429?'Too many attempts. Please try again later.':'Something went wrong. Please try again.'));}}).catch(()=>{m.textContent='Network error. Please try again.'}).finally(()=>{b.disabled=false});return false;}}</script>"""
+HONEYPOT='<input type="text" name="sbi_hp_note" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">'  # anti-spam trap; a name browsers don't autofill (was "website" until 20 Oct 2026)'
+SIGNUP_JS="""<script>if(!window.sbiSub){window.sbiSub=function(f){const m=f.parentNode.querySelector('.nl-msg'),b=f.querySelector('button');b.disabled=true;m.textContent='Subscribing…';fetch(f.action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))}).then(r=>r.json().then(j=>[r.status,j])).then(([s,j])=>{if(j.ok){m.textContent=(j.watching&&f.dataset.okWatch)||"Thanks! You're on the list for Monday's email.";f.reset();}else{m.textContent=(j.error==='invalid_email'?'Please enter a valid email address.':(s===429?'Too many attempts. Please try again later.':'Something went wrong. Please try again.'));}}).catch(()=>{m.textContent='Network error. Please try again.'}).finally(()=>{b.disabled=false});return false;}}</script>"""
 def signup(pre=''):
-    return f'''<div class="cta" id="subscribe"><b>Get the weekly index of what online stores tell AI shopping agents.</b> One short email after each Monday crawl: which stores started or stopped publishing the profile AI shopping agents read, and what else changed.<form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" style="margin-top:.6rem">
-<input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address">{HONEYPOT} <button type="submit">Subscribe</button></form><small class="nl-msg" aria-live="polite">Free. About one email a week. Unsubscribe anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
+    return f'''<div class="cta" id="subscribe"><b>Get the weekly index of what online stores tell AI shopping agents.</b> {NL_COPY} One short email after each Monday crawl.<form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" style="margin-top:.6rem">
+<input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address">{HONEYPOT} <button type="submit">Send me Monday's changes</button></form><small class="nl-msg" aria-live="polite">Free. About one email a week. Unsubscribe anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
+# ---- signup placement, "watch this store", visit counter (20 Oct 2026) ----
+NL_COPY='Every Monday: which stores started or stopped publishing a UCP profile, the profile AI shopping agents read.'
+TOPFORM_PAGES=('stores.html','methodology.html','assistants.html')
+NOBAR_PAGES=('unwatch.html',)
+def signup_slim(pre=''):
+    # one-line form near the top of a page (home hero, stores, methodology, AI assistants)
+    return f'''<div class="nl-top" id="subscribe-top"><p><b>{NL_COPY}</b> One short email, free.</p><form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)">
+<input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address">{HONEYPOT}<button type="submit">Send me Monday's changes</button></form><small class="nl-msg" aria-live="polite">Unsubscribe anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
+def watch_form(r,pre='../'):
+    # store pages, right under the result: subscribe + watch this store (sbi-subscribe stores r['id'] in sbi_watches)
+    nm=E(r['name'])
+    return f'''<div class="nl-top watch" id="watch"><p><b>Watch {nm}.</b> Email me if {nm} starts or stops publishing a UCP profile.</p><form class="nl" action="{FORM_ACTION}" method="post" onsubmit="return sbiSub(this)" data-ok-watch="Thanks! We'll email you if {nm} starts or stops publishing a UCP profile, plus the Monday email.">
+<input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address"><input type="hidden" name="watch" value="{E(r['id'])}">{HONEYPOT}<button type="submit">Watch this store</button></form><small class="nl-msg" aria-live="polite">Free. You'll also get the Monday email: which stores started or stopped publishing a UCP profile. Unsubscribe or stop the alerts anytime. <a href="{pre}privacy.html">Privacy</a></small>{SIGNUP_JS}</div>'''
+def sticky_bar(pre=''):
+    # slim bar at the bottom of the screen; hidden while a signup form or the footer is on screen, closable; no storage of any kind
+    return f'''<div class="nl-bar" id="nl-bar" hidden><span>Every Monday: which stores started or stopped publishing a UCP profile<span class="nl-bar-long">, the profile AI shopping agents read</span>.</span><a class="nl-bar-go" href="#subscribe">Subscribe</a><button type="button" class="nl-bar-x" aria-label="Close">×</button></div>
+<script>(function(){{var b=document.getElementById('nl-bar');if(!b||!('IntersectionObserver' in window))return;var vis=new Set(),closed=false,past=false;
+function upd(){{var show=!closed&&past&&vis.size==0;b.hidden=!show;document.body.classList.toggle('has-bar',show)}}
+var t=document.querySelectorAll('.nl-top,.cta,footer');var go=b.querySelector('.nl-bar-go');var f=document.getElementById('subscribe-top')||document.getElementById('watch')||document.getElementById('subscribe');if(f)go.setAttribute('href','#'+f.id);
+go.addEventListener('click',function(e){{if(f){{e.preventDefault();f.scrollIntoView({{behavior:'smooth',block:'center'}});var i=f.querySelector('input[type=email]');if(i)setTimeout(function(){{i.focus({{preventScroll:true}})}},400)}}}});
+b.querySelector('.nl-bar-x').addEventListener('click',function(){{closed=true;upd()}});
+var io=new IntersectionObserver(function(es){{es.forEach(function(e){{e.isIntersecting?vis.add(e.target):vis.delete(e.target)}});upd()}});t.forEach(function(x){{io.observe(x)}});
+window.addEventListener('scroll',function(){{var p=window.scrollY>window.innerHeight*0.6;if(p!=past){{past=p;upd()}}}},{{passive:true}})}})();</script>'''
+# cookie-free visit counter (Supabase function sbi-hit): sends only the path, the referrer's domain and utm tags (?ref= counts as utm_source);
+# nothing is sent if the browser has Do Not Track or Global Privacy Control on, or the page isn't on shopbotindex.com
+VISIT_JS='''<script>(function(){try{var n=navigator,w=window,h=location.hostname;if(n.doNotTrack=='1'||w.doNotTrack=='1'||n.msDoNotTrack=='1'||n.globalPrivacyControl===true)return;if(h!='shopbotindex.com'&&h!='www.shopbotindex.com')return;
+var q=new URLSearchParams(location.search),r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
+var b=JSON.stringify({p:location.pathname,r:r,s:q.get('utm_source')||q.get('ref')||'',m:q.get('utm_medium')||'',c:q.get('utm_campaign')||''}),u='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-hit';
+if(n.sendBeacon)n.sendBeacon(u,new Blob([b],{type:'text/plain'}));else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}})();</script>'''
 CFG=json.load(open(os.path.join(ROOT,'config','site.json')))
 AFF_URL=CFG['shopify_affiliate_url']; AFF_DISC=CFG['affiliate_disclosure']
 def aff():
@@ -309,6 +339,7 @@ for r in RET:
 <h1>What does {E(r["name"])} tell AI shopping agents?</h1>
 <p class="lede"><span class="pill {PILL[st]}" style="font-size:1rem">{E(STATUS_SHORT[st])}</span> {E(store_desc(r))}</p>
 <div class="box"><b>What this means.</b> {meaning}</div>
+{watch_form(r)}
 <h2>Websites checked ({len(ss)})</h2><p>We fetched <code>/.well-known/ucp</code> on each site on {DAY}.</p><div class="tw nomax"><table><tr><th>Website</th><th>Result</th><th class="hide-sm">HTTP</th></tr>{sites}</table></div>
 {caps}
 {readiness(r)}
@@ -373,14 +404,20 @@ page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Ind
 <p>It is run by Gus, an experienced enterprise software consultant, as an independent project. It is not affiliated with Google, Shopify, OpenAI, Microsoft, Perplexity, PayPal or any retailer listed.</p>
 <p>All figures come from our own public crawl or from linked official sources. Shopify trial links on this site (like the <a href="'''+E(AFF_URL)+'''" rel="sponsored noopener" target="_blank">Shopify free trial</a>) are affiliate links: '''+E(AFF_DISC)+''' That never changes a store's result.</p><p>Contact: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a> (including stores that want to be added, removed or corrected; see the <a href="methodology.html#contact">methodology</a>).</p>'''+signup())
 page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short version: we only store what's needed to send you the weekly email.</p>
-<h2>What we store when you subscribe</h2><ul><li>Your email address</li><li>When you signed up</li><li>A one-way hash of your IP address, kept only to limit spam signups (we never store the IP address itself)</li></ul>
-<h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: which stores started or stopped publishing a UCP profile, and what else changed). We don't sell or share your data, and we don't add you to other lists.</p>
+<h2>What we store when you subscribe</h2><ul><li>Your email address</li><li>When you signed up</li><li>A one-way hash of your IP address, kept only to limit spam signups (we never store the IP address itself)</li><li>If you use "Watch this store": which stores you watch</li></ul>
+<h2>How we use it</h2><p>Only to send the ShopBot Index email (about one a week: which stores started or stopped publishing a UCP profile, and what else changed) and, if you watch a store, an email when that store starts or stops publishing a UCP profile. Every alert has a link to stop alerts for that store. We don't sell or share your data, and we don't add you to other lists.</p>
 <h2>Where it's kept</h2><p>Subscriber data is stored with Supabase (EU region, Frankfurt), and emails will be sent with Resend. Both act as processors for us.</p>
 <h2>Unsubscribe and deletion</h2><p>Every email will have a one-click unsubscribe link, and unsubscribing removes you from the list. To have your data deleted, or for any question, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
-<h2>Analytics</h2><p>This site uses no cookies and no analytics or tracking scripts.</p>
+<h2>Visit counts</h2><p>This site uses no cookies and no third-party analytics or tracking. To see which pages people read, each page sends one anonymous count to our own database (Supabase, EU): the page's path, the domain of the website that linked to it, and any utm or ref tags in the link. We store only daily totals of those. We don't store your IP address, any identifier, your browser or device, or anything else about you, so a visit can't be linked to you or to your other visits. If your browser sends Do Not Track or Global Privacy Control, nothing is sent.</p>
+<h2>Spam protection</h2><p>Our signup forms have a hidden field that people never see or fill in. When it's filled, we drop the signup and add one to a daily count; nothing else about that request is stored.</p>
 <h2>Affiliate links</h2><p>Shopify trial links on this site are affiliate links run through Impact; when you click one, Shopify and Impact may set their own cookies to attribute a trial. '''+E(AFF_DISC)+'''</p>
 <h2>Our crawler</h2><p>ShopBot Index reads a short, fixed list of public files and pages on the stores it tracks (robots.txt, the UCP profile, a few agent-related files, the home page and one product page; full list in the methodology), respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
 <p>Questions about your data: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
+# ---- "stop alerts" page for watch alerts (linked from each alert email; not in the sitemap) ----
+UNWATCH_JS='''<script>(function(){var o=document.getElementById('uw'),t=new URLSearchParams(location.search).get('t')||'';if(!/^[0-9a-f-]{36}$/i.test(t)){o.textContent='This link is incomplete. Copy the whole link from the email, or write to hello@shopbotindex.com.';return}
+fetch('''+json.dumps(FORM_ACTION)+''',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'unwatch',token:t})}).then(r=>r.json()).then(j=>{o.textContent=j.ok?(j.removed?"Done. You won't get alerts for this store any more. The Monday email is unchanged; it has its own unsubscribe link.":"These alerts were already stopped."):"Something went wrong. Please try again, or write to hello@shopbotindex.com."}).catch(()=>{o.textContent='Network error. Please try again.'})})();</script>'''
+page('unwatch.html',f'Stop store alerts | {NAME}',f'<h1>Stop alerts for a store</h1><p class="lede" id="uw" aria-live="polite">Stopping the alerts…</p>{UNWATCH_JS}',head='<meta name="robots" content="noindex">'); PAGES.remove('unwatch.html')
+json.dump({r['id']:[SLUG[r['id']],r['name'],r['status']] for r in RET},open(os.path.join(DATA,'slugs-latest.json'),'w'),ensure_ascii=False,separators=(',',':'))  # for scripts/watch_alerts.py; not committed (.gitignore)
 os.makedirs(os.path.join(DIST,'ucp'),exist_ok=True)
 _V='2026-08-25'; _cap=lambda: [{'version':_V}]
 json.dump({'ucp':{'version':_V,'services':{'dev.ucp.shopping':[{'version':_V,'spec':f'https://ucp.dev/{_V}/specification/overview','transport':'mcp','schema':f'https://ucp.dev/{_V}/services/shopping/mcp.openrpc.json'}]},

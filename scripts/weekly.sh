@@ -12,3 +12,5 @@ if git diff --cached --quiet; then echo "No changes to publish."; exit 0; fi
 git -c user.name=cstath71 -c user.email=227154513+cstath71@users.noreply.github.com commit -q -m "Weekly crawl $(date +%F)"
 git push -q origin main
 echo "Pushed weekly crawl $(date +%F)."
+# "Watch this store" alerts (sends only when Vault flag sbi_watch_alerts_enabled is on; otherwise a dry run). Never blocks the crawl.
+python3 scripts/watch_alerts.py --send || echo "Watch alerts failed; the crawl is already published. Rerun: python3 scripts/watch_alerts.py --send"
