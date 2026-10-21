@@ -11,5 +11,34 @@
   "Q3210329"
  ],
  "newly_tracked": [],
- "capability_changes": []
+ "capability_changes": [],
+ "same_store": {
+  "n": 2276,
+  "ucp": 770,
+  "checked": 1667,
+  "ucp_previous": 771,
+  "checked_previous": 1680,
+  "by_segment": {
+   "shopify": {
+    "n": 1188,
+    "ucp": 712,
+    "ucp_previous": 711
+   },
+   "big": {
+    "n": 380,
+    "ucp": 8,
+    "ucp_previous": 9
+   },
+   "other": {
+    "n": 708,
+    "ucp": 50,
+    "ucp_previous": 51
+   }
+  }
+ },
+ "newly_tracked_by_segment": {
+  "shopify": 0,
+  "big": 0,
+  "other": 0
+ }
 }
