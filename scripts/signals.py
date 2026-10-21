@@ -5,7 +5,7 @@ What phase 2 reads per website (and nothing else; the record-only agent discover
 site's UCP profile declares an MCP endpoint, one read-only JSON-RPC `tools/list` request to that endpoint."""
 import json, re, time, gzip, ssl, urllib.request, urllib.error, urllib.parse, urllib.robotparser
 TIMEOUT=12; PAUSE=1.0; MAXB=1536*1024; CTX=ssl.create_default_context()
-# robots.txt tokens we report (official docs: OpenAI, Anthropic, Perplexity, Google; see methodology)
+# robots.txt tokens we report (from the docs of OpenAI, Anthropic, Perplexity and Google; see methodology)
 TOKENS=['ChatGPT-User','Claude-User','Perplexity-User','Google-Agent','OAI-SearchBot','Claude-SearchBot','PerplexityBot','GPTBot','ClaudeBot','Google-Extended']
 FAMILY={'user':['ChatGPT-User','Claude-User','Perplexity-User','Google-Agent'],'search':['OAI-SearchBot','Claude-SearchBot','PerplexityBot'],'training':['GPTBot','ClaudeBot','Google-Extended']}
 SHOPIFY_EXAMPLE_PROFILE='https://shopify.dev/ucp/agent-profiles/examples/2026-08-25/valid-with-capabilities.json'

@@ -1,4 +1,4 @@
-"""Fetch retailer candidates from Wikipedia list pages, resolve to Wikidata items (official websites, industry, country).
+"""Fetch retailer candidates from Wikipedia list pages, resolve to Wikidata items (own websites, industry, country).
 Writes data/seeds/wikipedia_lists.json. Usage: python3 scripts/wiki_seeds.py"""
 import json, os, time, urllib.request, urllib.parse
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); OUT=os.path.join(ROOT,'data','seeds','wikipedia_lists.json')
