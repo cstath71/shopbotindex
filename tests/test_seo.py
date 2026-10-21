@@ -23,6 +23,11 @@ class Seo(unittest.TestCase):
             h=open(f).read(); self.assertEqual(len(re.findall(r'<h1[ >]',h)),1,f); lds(h)
             ts[re.search(r'<title>(.*?)</title>',h).group(1)]+=1
         self.assertEqual([t for t,n in ts.items() if n>1],[])
+    def test_no_official_anywhere(self):
+        # Gus's rule: the word 'official' never appears on the site (store domains such as chiqueofficial.com are data, not wording)
+        for f in glob.glob(os.path.join(DIST,'**','*'),recursive=True):
+            if os.path.isfile(f) and f.endswith(('.html','.txt','.xml','.json','.svg')):
+                self.assertIsNone(re.search(r'(?<![a-z0-9.-])official(?!ly?[a-z0-9-]*\.[a-z])',open(f).read(),re.I),f)
     def test_root_files(self):
         r=R('robots.txt'); self.assertIn('User-agent: *\nAllow: /',r); self.assertIn('User-agent: GPTBot',r); self.assertIn('Sitemap: https://shopbotindex.com/sitemap.xml',r)
         self.assertNotIn('Disallow',r)

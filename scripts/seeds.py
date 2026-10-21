@@ -3,7 +3,7 @@ Segments (side by side, none primary):
   shopify : stores from public lists of Shopify stores
   big     : retailers on Wikipedia's 'List of largest retail companies' OR with Wikipedia articles in >=10 languages
   other   : other retail chains, department stores, supermarkets, hypermarkets and online marketplaces from Wikipedia/Wikidata
-Multi-country sites of one retailer (several official websites on its Wikidata item) are kept as children of that retailer.
+Multi-country sites of one retailer (several of its own websites on its Wikidata item) are kept as children of that retailer.
 Stores added later come from frozen data/seeds/additions-YYYY-MM-DD.json files and carry added='YYYY-MM-DD'.
 Usage: python3 scripts/seeds.py"""
 import json, os, re, csv, urllib.parse, collections

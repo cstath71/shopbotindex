@@ -37,7 +37,7 @@ workflow (`.github/workflows/pages.yml`) then deploys `dist/` to https://shopbot
    (writes `sites[].agent_files` and `timing.agent_files` back into that file; `--hosts` limits it to listed hosts/domains). Dry runs: `python3 scripts/crawl.py --every 5 --out /tmp/sbi-dry` (doesn't touch `data/`), then
    `SBI_DATA_DIR=/tmp/sbi-dry SBI_DIST_DIR=/tmp/sbi-dry/dist python3 scripts/build.py` (copy `data/channels.json` into the dry-run dir first).
 3. `python3 scripts/build.py`: compares with the most recent earlier `crawl-*.json` and writes `data/changes-latest.json` (joined, left, now_unreachable, newly_tracked, capability_changes); then writes `dist/` (home, stores table, segments, capabilities, categories, assistants, what changed, methodology, about, privacy, sitemap, robots, CNAME, OG image from `assets/og.png`).
-4. `data/channels.json`: assistant to retailer claims, hand-maintained, official sources only.
+4. `data/channels.json`: assistant to retailer claims, hand-maintained, companies' own announcements and help pages only.
 
 Stdlib Python only. Site URL via `SBI_SITE` (default https://shopbotindex.com). Preview: `cd dist && python3 -m http.server 4321`.
 

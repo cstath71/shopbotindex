@@ -1,5 +1,5 @@
 {
- "note": "Only what official company sources state. Each row is an announcement or help-centre statement on the date shown; it is not an independent test of current availability.",
+ "note": "Only what the companies' own announcements and help pages state. Each row is an announcement or help-centre statement on the date shown; it is not an independent test of current availability.",
  "checked_on": "2026-10-17",
  "channels": [
   {"assistant": "Google Search / AI Mode", "feature": "Agentic checkout (Google buys on the merchant's site with Google Pay after the shopper confirms)", "how": "Completes on the merchant's site", "region": "US",
