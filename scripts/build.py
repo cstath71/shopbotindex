@@ -66,7 +66,7 @@ def segcards(pre=''):
     out=''
     for k in ('shopify','big','other'):
         s=segstats([r for r in RET if r['segment']==k])
-        out+=f'''<a class="seg" href="{pre}segments/{k}.html"><h3>{SEG[k]}</h3><b>{s["ucp"]}</b> <span>of {s["checked"]} we could check publish a UCP profile ({s["rate"]})</span>
+        out+=f'''<a class="seg" href="{pre}segments/{k}.html"><h2>{SEG[k]}</h2><b>{s["ucp"]}</b> <span>of {s["checked"]} we could check publish a UCP profile ({s["rate"]})</span>
 <div class="sbar"><i class="y" style="width:{100*s["ucp"]/max(s["n"],1):.1f}%"></i><i class="n" style="width:{100*s["no"]/max(s["n"],1):.1f}%"></i><i class="c" style="width:{100*s["cc"]/max(s["n"],1):.1f}%"></i></div>
 <small>{s["n"]} tracked · {s["no"]} no UCP profile found · <span class="cc">{s["cc"]} couldn't check</span></small></a>'''
     return f'<div class="segs">{out}</div><p class="legend"><i class="y"></i> UCP profile <i class="n"></i> no profile found <i class="c"></i> couldn\'t check (blocked or unreachable; not counted in the rate)</p>'
@@ -429,6 +429,5 @@ OG=os.path.join(ROOT,'assets','og.png')
 if os.path.exists(OG): shutil.copy(OG,os.path.join(DIST,'og.png'))
 OGS=os.path.join(ROOT,'assets','og-store.png')
 if os.path.exists(OGS): shutil.copy(OGS,os.path.join(DIST,'og-store.png'))
-open(os.path.join(DIST,'robots.txt'),'w').write(f'User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n')
-open(os.path.join(DIST,'sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{SITE}/{p.replace("index.html","")}</loc><lastmod>{DAY}</lastmod></url>\n' for p in PAGES)+'</urlset>\n')
+import seo; seo.run(globals())  # summaries, FAQs, JSON-LD, descriptions, breadcrumbs, robots.txt (AI crawlers), sitemap.xml, llms.txt, IndexNow key (scripts/seo.py)
 print('built',len(PAGES),'pages;',{k:segstats([r for r in RET if r['segment']==k]) for k in SEG},'nonshopify',len(NONSHOP),'big ucp',len(BIGU))
