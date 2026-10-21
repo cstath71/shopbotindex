@@ -14,4 +14,4 @@ The weekly routine drafts the email from `data/changes-latest.json` and the buil
   `You're getting this because you subscribed at shopbotindex.com. Unsubscribe: {{{RESEND_UNSUBSCRIBE_URL}}} · Privacy: https://shopbotindex.com/privacy.html`
 
 Until five-signals ships and Release 2 adds its change types, don't mention agent tools, AI rules in robots.txt, llms.txt / AI guidance files or product data.
-Never say a store "supports", "officially supports" or "blocks" AI agents, or that agents can or can't buy there.
+Never say a store "supports" (in any wording) or "blocks" AI agents, or that agents can or can't buy there.
