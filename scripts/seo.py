@@ -96,7 +96,7 @@ def run(g):
         else:
             cl=crumbs(p)
             if cl:
-                vis='<p class="muted crumbs">'+' › '.join(f'<a href="{pre}{u or "index.html"}">{E(n)}</a>' if i<len(cl)-1 else E(n) for i,(n,u) in enumerate(cl))+'</p>'
+                vis='<p class="muted crumbs">'+' › '.join(f'<a href="{(pre+u) or "./"}">{E(n)}</a>' if i<len(cl)-1 else E(n) for i,(n,u) in enumerate(cl))+'</p>'
                 h=h.replace('<h1>',vis+'<h1>',1)
                 lds=[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+'/'+u} for i,(n,u) in enumerate(cl)]}]
         if lds: h=h.replace('</head>',_ld({"@context":"https://schema.org","@graph":lds})+'</head>',1)

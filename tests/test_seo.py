@@ -36,3 +36,7 @@ class Seo(unittest.TestCase):
         self.assertIsNone(re.search(r'\b(official|PrimeLogic|Stathopoulos|Switzerland)\b',l+R('llms-full.txt'),re.I))
         import sys; sys.path.insert(0,os.path.join(ROOT,'scripts')); from seo import INDEXNOW_KEY as K
         self.assertEqual(R(f'{K}.txt'),K)
+    def test_internal_links_use_clean_urls(self):
+        # Google treats /index.html and / as two URLs; internal links must point at the canonical one.
+        for p in ('index.html','methodology.html','segments/big.html','categories/electronics.html','store/ikea.html','unwatch.html'):
+            self.assertNotRegex(R(p),r'href="[^"]*index\.html',p)
