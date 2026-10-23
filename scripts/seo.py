@@ -49,12 +49,14 @@ def run(g):
     DATASET={"@type":"Dataset","@id":SITE+"/#dataset","name":f"{NAME}: weekly crawl of UCP profiles","url":SITE+"/",
              "description":_txt(home_sum)+' Each record says whether the store publishes a UCP profile at /.well-known/ucp, and if so which capabilities and payment handlers it declares.',
              "creator":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"dateModified":DAY,
+             "license":SITE+"/terms.html","copyrightNotice":f"© {DAY[:4]} {NAME}. All rights reserved.",
              "measurementTechnique":"HTTPS request for /.well-known/ucp on each website, after reading robots.txt",
              "variableMeasured":["Whether a UCP profile is published at /.well-known/ucp","Capabilities declared in the UCP profile","Payment handlers listed in the UCP profile"]}
     # ---- page-specific descriptions where the site default was used ----
     desc={'segments/index.html':f'Shopify stores, big retailers and other retailers & marketplaces side by side: how many of each publish a UCP profile, the profile AI shopping agents read, in the crawl of {_date(DAY)}.',
           'methodology.html':'How ShopBot Index measures: what our crawler reads on each website (robots.txt first, then /.well-known/ucp), what "couldn\'t check" means, and what a UCP profile does and doesn\'t tell you.',
           'about.html':'About ShopBot Index, the independent weekly index of what online stores tell AI shopping agents, and how to contact us.',
+          'terms.html':'ShopBot Index terms of use: all rights reserved; you may link to pages and quote individual findings with credit; bulk copying or republishing the data needs written permission.',
           'privacy.html':'ShopBot Index privacy: what we store when you subscribe, cookie-free visit counts, and how to unsubscribe or ask for deletion.',
           'assistants.html':'Which AI assistants name which retailers for shopping, from the companies\' own announcements and help pages, with links and dates.',
           'capabilities/index.html':f'Capabilities declared in UCP profiles, counted per store, across the {len(U)} stores with a UCP profile in the crawl of {_date(DAY)}.',
@@ -63,7 +65,11 @@ def run(g):
     for c in g['CATS']:
         s=segstats([r for r in RET if r['category']==c]); desc[f'categories/{slug(c)}.html']=f'{c}: {s["ucp"]} of {s["checked"]} stores we could check publish a UCP profile ({s["rate"]}) in the crawl of {_date(DAY)}; {s["cc"]} couldn\'t be checked.'
     for c,v in g['CAPC'].items(): desc[f'capabilities/{slug(c)}.html']=f'{capn(c)} ({c}): declared by {v} of the {len(U)} stores with a UCP profile ({pct(v,len(U))}) in the crawl of {_date(DAY)}, with the list of stores.'
-    if CHG: desc['changes.html']=f'What changed between the ShopBot Index crawls of {_date(CHG["previous"])} and {_date(DAY)}: {len(CHG["joined"])} started publishing a UCP profile, {len(CHG["left"])} stopped, plus capability changes.'
+    if CHG: desc['changes.html']=f'Which stores started or stopped publishing a UCP profile between the ShopBot Index crawls of {_date(CHG["previous"])} and {_date(DAY)}: {len(CHG["joined"])} joined, {len(CHG["left"])} left, {len(CHG["now_unreachable"])} couldn\'t be checked, {len(CHG["capability_changes"])} capability changes. Each store links to its result.'
+    chg_faq=[
+     ('What counts as a store joining?','A store we already tracked joins when our crawl now finds a UCP profile at <code>/.well-known/ucp</code> and the previous crawl found none or couldn\'t check it. Stores newly added to our list are shown as newly tracked, not as joining.'),
+     ('What counts as a store leaving?','A store leaves when the previous crawl found a UCP profile and its website answered this time without one. If the website blocked our crawler or was unreachable, the store is listed under "couldn\'t check" and is not counted as leaving.'),
+     ('How often is this page updated?',f'After every crawl. The crawl runs on Mondays; the latest was on {_date(DAY)}'+(f' and the next is due on {NEXTCRAWL}' if NEXTCRAWL else '')+'. <a href="methodology.html#changes">How we compare crawls</a>.')]
     # ---- breadcrumbs (visible + JSON-LD) on segment, category and capability pages ----
     def crumbs(path):
         sec,_,leaf=path.partition('/')
@@ -93,6 +99,9 @@ def run(g):
             h=_insert_after_topform(h,sum_html(meth_sum)); h=_insert_before_bottom_cta(h,faq_html(meth_faq))
             lds=[{"@type":"WebPage","@id":SITE+"/methodology.html","url":SITE+"/methodology.html","name":f"Methodology | {NAME}","dateModified":DAY,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}},
                  dict(DATASET,url=SITE+"/methodology.html"),ORG,faq_ld(meth_faq)]
+        elif p=='changes.html' and CHG:
+            h=_insert_before_bottom_cta(h,faq_html(chg_faq))
+            lds=[{"@type":"WebPage","@id":SITE+"/changes.html","url":SITE+"/changes.html","name":g['CHGTITLE'],"dateModified":DAY,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}},faq_ld(chg_faq)]
         else:
             cl=crumbs(p)
             if cl:
@@ -133,7 +142,8 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('Check your store','check.html','Look up any domain in the latest crawl.'),
            ('Methodology','methodology.html','Exactly what we fetch, how, and what the results do and don\'t mean.'),
            ('AI assistants','assistants.html','Which AI assistants name which retailers, from the companies\' own announcements, with links.'),
-           ('About','about.html','Who runs the index and how to contact us.')]
+           ('About','about.html','Who runs the index and how to contact us.'),
+           ('Terms of use','terms.html','All rights reserved. Link to pages and quote individual findings with credit and a link; bulk copying or republishing the data needs written permission.')]
     return f'''# {NAME}
 
 > {NAME} is an independent weekly index of what online stores tell AI shopping agents. Every Monday it checks {ALL["n"]} retailers and stores ({nsites} websites): Shopify stores, big retailers and other retailers & marketplaces. The headline measure is whether each one publishes a UCP profile, the profile AI shopping agents read, at /.well-known/ucp.

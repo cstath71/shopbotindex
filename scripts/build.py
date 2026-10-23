@@ -57,7 +57,7 @@ def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
 <meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
 <link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre or './'}"><img src="{pre}logo-32.png" srcset="{pre}logo-64.png 2x, {pre}logo-96.png 3x" width="32" height="32" alt="">{NAME}</a>{nav}</div></header>
-<main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer>{sticky_bar(pre) if path not in NOBAR_PAGES else ''}{VISIT_JS}</body></html>'''
+<main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}terms.html">Terms</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer>{sticky_bar(pre) if path not in NOBAR_PAGES else ''}{VISIT_JS}</body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
 def bars(counter,total,namef=lambda x:x,link=None,label='Stores'):
     rows=''.join(f'<tr><td>{(f"<a href=\"{link(k)}\">{E(namef(k))}</a>") if link else E(namef(k))}</td><td>{v}</td><td>{pct(v,total)}</td><td class="hide-sm" style="width:35%"><div class="bar"><i style="width:{100*v/max(total,1):.1f}%"></i></div></td></tr>' for k,v in counter.most_common())
@@ -100,7 +100,7 @@ var io=new IntersectionObserver(function(es){{es.forEach(function(e){{e.isInters
 window.addEventListener('scroll',function(){{var p=window.scrollY>window.innerHeight*0.6;if(p!=past){{past=p;upd()}}}},{{passive:true}})}})();</script>'''
 # cookie-free visit counter (Supabase function sbi-hit): sends only the path, the referrer's domain and utm tags (?ref= counts as utm_source);
 # nothing is sent if the browser has Do Not Track or Global Privacy Control on, or the page isn't on shopbotindex.com
-VISIT_JS='''<script>(function(){try{var n=navigator,w=window,h=location.hostname;if(n.doNotTrack=='1'||w.doNotTrack=='1'||n.msDoNotTrack=='1'||n.globalPrivacyControl===true)return;if(h!='shopbotindex.com'&&h!='www.shopbotindex.com')return;
+VISIT_JS='''<script>(function(){try{var n=navigator,w=window,h=location.hostname;if(n.doNotTrack=='1'||w.doNotTrack=='1'||n.msDoNotTrack=='1'||n.globalPrivacyControl===true)return;if(h!='shopbotindex.com'&&h!='www.shopbotindex.com')return;if(n.webdriver||/bot|crawl|spider|slurp|headless|lighthouse/i.test(n.userAgent||''))return;
 var q=new URLSearchParams(location.search),r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
 var b=JSON.stringify({p:location.pathname,r:r,s:q.get('utm_source')||q.get('ref')||'',m:q.get('utm_medium')||'',c:q.get('utm_campaign')||''}),u='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-hit';
 if(n.sendBeacon)n.sendBeacon(u,new Blob([b],{type:'text/plain'}));else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}})();</script>'''
@@ -246,17 +246,51 @@ for c in CATS:
 li=''.join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{E(c["feature"])}<br><small>{E(c["how"])} · {E(c["region"])}</small></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td>{E(c["date"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"])}</a></td></tr>' for c in CH['channels'])
 page('assistants.html',f'AI assistants and the retailers they name | {NAME}',f'<h1>AI assistants and the retailers they name</h1><p class="lede">{E(CH["note"])} Last checked {E(CH["checked_on"])}.</p><div class="tw nomax"><table><tr><th>Assistant</th><th>Feature</th><th>Retailers named</th><th>Date</th><th>Source</th></tr>{li}</table></div>')
 # ---- changes ----
+def _dlong(d): x=_dt.date.fromisoformat(d); return f'{x.day} {x.strftime("%B")} {x.year}'
+import datetime as _dt
+def _hist():
+    # every comparison our saved crawls allow (consecutive crawl-*.json files in the current format); nothing is typed in by hand
+    cs=[]
+    for f in sorted(glob.glob(os.path.join(DATA,'crawl-*.json'))):
+        d=json.load(open(f))
+        if 'retailers' in d: cs.append(d)
+    out=[]
+    for a,b in zip(cs,cs[1:]):
+        A={r['id']:r['status'] for r in a['retailers']}
+        j=sum(1 for r in b['retailers'] if r['status']=='ucp' and r['id'] in A and A[r['id']]!='ucp')
+        l=sum(1 for r in b['retailers'] if A.get(r['id'])=='ucp' and r['status']=='no_ucp')
+        u=sum(1 for r in b['retailers'] if A.get(r['id'])=='ucp' and r['status']=='couldnt_check')
+        out.append((a['crawl_date'],b['crawl_date'],j,l,u,sum(1 for r in b['retailers'] if r['status']=='ucp')))
+    return cs,out
+CHGTITLE='What changed: stores that started or stopped publishing a UCP profile'
 if CHG:
-    L=lambda ids: '<ul>'+''.join(f'<li>{E(NM[i]["name"])} <small>({E(SEG[NM[i]["segment"]])})</small></li>' for i in ids)+'</ul>' if ids else '<p class="muted">None.</p>'
-    cc=''.join(f'<li>{E(NM[x["id"]]["name"])}: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""} {"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
-    body=f'''<h1>What changed</h1><p class="lede">Crawl of {DAY} compared with {E(CHG["previous"])}.</p>
-<h2>Joined: newly publishing UCP ({len(CHG["joined"])})</h2>{L(CHG["joined"])}<h2>Left: profile no longer found ({len(CHG["left"])})</h2>{L(CHG["left"])}
-<h2>Had a profile, now couldn't check ({len(CHG["now_unreachable"])})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"])}
-<h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else "<p class='muted'>None.</p>"}
-<h2>Newly tracked ({len(CHG["newly_tracked"])})</h2><p class="muted">Added to our list this week; not counted as joining.</p>{L(CHG["newly_tracked"])}'''
+    pv=_dlong(CHG['previous']); cu=_dlong(DAY); nT=len(RET); nU=sum(1 for r in RET if r['status']=='ucp')
+    SL=lambda i: f'<a href="store/{SLUG[i]}.html">{E(NM[i]["name"])}</a> <small>({E(SEG[NM[i]["segment"]])})</small>'
+    def L(ids,why,empty): return '<ul>'+''.join(f'<li>{SL(i)}: {why}</li>' for i in ids)+'</ul>' if ids else f'<p>{empty}</p>'
+    n=lambda k: len(CHG[k])
+    pl=lambda k,one,many: (one if n(k)==1 else many).format(n=n(k))
+    intro=(f'<p class="lede">Between our crawls of {pv} and {cu}, {pl("joined","{n} retailer or store","{n} retailers and stores")} started publishing a UCP profile, the profile AI shopping agents read, '
+           f'and {n("left")} stopped. Of the stores that had a profile, {n("now_unreachable")} couldn&#39;t be checked this time, so '
+           f'{"it is" if n("now_unreachable")==1 else "they are"} not counted as leaving. In the crawl of {cu}, {nU} of the {nT} retailers and stores we track publish a UCP profile.</p>'
+           f'<p>How we count: each crawl is compared, store by store, with the previous one. <b>Joined</b> means a store we already tracked now has a UCP profile at <code>/.well-known/ucp</code> after the previous crawl found none or couldn\'t check it. '
+           f'<b>Left</b> means a store had a profile in the previous crawl and its website answered this time without one. <b>Couldn\'t check</b> means the website blocked our crawler or was unreachable, so we don\'t know, and we never count that as leaving. '
+           f'Stores added to our list are shown as newly tracked, not as joining. Details are in the <a href="methodology.html#changes">methodology</a>.</p>')
+    cc=''.join(f'<li><a href="store/{SLUG[x["id"]]}.html">{E(NM[x["id"]]["name"])}</a>: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""}{"; " if x["added"] and x["removed"] else ""}{"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
+    cs,H=_hist()
+    if len(H)>1:
+        hist='<h2>Earlier comparisons</h2><div class="tw"><table><tr><th>Crawls compared</th><th>Joined</th><th>Left</th><th>Had a profile, now couldn\'t check</th><th>With a UCP profile</th></tr>'+''.join(f'<tr><td>{_dlong(a)} → {_dlong(b)}</td><td>{j}</td><td>{l}</td><td>{u}</td><td>{t}</td></tr>' for a,b,j,l,u,t in reversed(H))+'</table></div>'
+    else:
+        hist=f'<h2>Earlier comparisons</h2><p>None yet. Our crawl of {_dlong(cs[0]["crawl_date"])} is the first one saved in this format, so this is the first comparison. Each new crawl adds a row here.</p>'
+    body=f'''<h1>{CHGTITLE}</h1>{intro}
+<h2>Joined: newly publishing a UCP profile ({n("joined")})</h2>{L(CHG["joined"],f"no UCP profile found on {pv}, profile found on {cu}.",f"No store started publishing a UCP profile between {pv} and {cu}.")}
+<h2>Left: profile no longer found ({n("left")})</h2>{L(CHG["left"],f"UCP profile found on {pv}, none found on {cu}.",f"No store stopped publishing a UCP profile between {pv} and {cu}.")}
+<h2>Had a profile, now couldn't check ({n("now_unreachable")})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"],f"UCP profile found on {pv}; on {cu} the site blocked us or was unreachable.",f"Every store that had a UCP profile on {pv} could be checked again on {cu}.")}
+<h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else f"<p>No store changed its declared capabilities between these two crawls.</p>"}
+<h2>Newly tracked ({n("newly_tracked")})</h2><p class="muted">Added to our list this time; not counted as joining.</p>{L(CHG["newly_tracked"],"added to our list for this crawl.",f"No stores were added to our list between {pv} and {cu}; we tracked the same {nT} both times.")}
+{hist}'''
 else:
-    body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
-page('changes.html',f'What changed | {NAME}',body+signup())
+    body=f'<h1>{CHGTITLE}</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing a UCP profile), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
+page('changes.html',f'What changed: stores that started or stopped publishing a UCP profile | {NAME}',body+signup())
 # ---- agent-readiness signals (phase 2 of the crawl) ----
 import datetime as _dt; _nd=_dt.date.fromisoformat(DAY)+_dt.timedelta(days=7-_dt.date.fromisoformat(DAY).weekday()); NEXTCRAWL=f'{_nd.day} {_nd.strftime("%B")} {_nd.year}'  # next Monday after the crawl
 HAS_SIG=any((r.get('signals') or {}).get('checked') for r in RET)
@@ -396,7 +430,7 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check
 {CRAWLMETH}
 <h2>6. Site-level results this crawl ({nsites} websites)</h2><ul>{"".join(f"<li>{E(SITEST.get(k,k))}: {v}</li>" for k,v in SC.most_common())}</ul>
 <h2>7. Platform</h2><p>"Shopify" means the profile's endpoints or extensions reference Shopify. Anything else is shown as another platform. We can only identify a platform for stores that publish a profile.</p>
-<h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).</p>
+<h2 id="changes">8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).</p>
 <h2>9. AI assistants table</h2><p>Only company announcements and help-centre pages, linked per row. We don't test those integrations.</p>
 <h2 id="contact">10. Add, remove or correct a store</h2><p>Run a store or retailer that should be added, removed or corrected, or think a result is wrong? Email {MAILTO} with the store's domain. We re-check it in the next weekly crawl and never change a result by hand.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)
@@ -413,6 +447,13 @@ page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short
 <h2>Affiliate links</h2><p>Shopify trial links on this site are affiliate links run through Impact; when you click one, Shopify and Impact may set their own cookies to attribute a trial. '''+E(AFF_DISC)+'''</p>
 <h2>Our crawler</h2><p>ShopBot Index reads a short, fixed list of public files and pages on the stores it tracks (robots.txt, the UCP profile, a few agent-related files, the home page and one product page; full list in the methodology), respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
 <p>Questions about your data: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
+page('terms.html',f'Terms of use | {NAME}','''<h1>Terms of use</h1><p class="lede">Short version: link to us and quote our findings with credit; ask before copying the data in bulk.</p>
+<h2>Copyright</h2><p>Copyright © 2026 ShopBot Index. All rights reserved. This covers the site's text, its data and the way the data is compiled and presented.</p>
+<h2>What you may do</h2><ul><li>Link to any page on this site.</li><li>Quote individual findings, such as one store's result or a headline figure, with credit to ShopBot Index and a link to <a href="https://shopbotindex.com/">shopbotindex.com</a>.</li></ul>
+<h2>What needs our written permission</h2><p>Copying, scraping or republishing the dataset or large parts of it, in any form. To ask, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
+<h2>About the data</h2><p>The data comes from automated crawls and is provided as is. It may contain errors. Each result is a snapshot of what a store's website published when we checked it. It says nothing about whether AI agents can buy at that store. If you think a result is wrong, see the <a href="methodology.html#contact">methodology</a> for how to ask us to re-check it.</p>
+<h2>Names and trademarks</h2><p>Store names and trademarks belong to their owners. ShopBot Index is independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</p>
+<p>Questions: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
 # ---- "stop alerts" page for watch alerts (linked from each alert email; not in the sitemap) ----
 UNWATCH_JS='''<script>(function(){var o=document.getElementById('uw'),t=new URLSearchParams(location.search).get('t')||'';if(!/^[0-9a-f-]{36}$/i.test(t)){o.textContent='This link is incomplete. Copy the whole link from the email, or write to hello@shopbotindex.com.';return}
 fetch('''+json.dumps(FORM_ACTION)+''',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'unwatch',token:t})}).then(r=>r.json()).then(j=>{o.textContent=j.ok?(j.removed?"Done. You won't get alerts for this store any more. The Monday email is unchanged; it has its own unsubscribe link.":"These alerts were already stopped."):"Something went wrong. Please try again, or write to hello@shopbotindex.com."}).catch(()=>{o.textContent='Network error. Please try again.'})})();</script>'''

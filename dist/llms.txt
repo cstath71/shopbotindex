@@ -25,6 +25,7 @@ How to read the results:
 - [Methodology](https://shopbotindex.com/methodology.html): Exactly what we fetch, how, and what the results do and don't mean.
 - [AI assistants](https://shopbotindex.com/assistants.html): Which AI assistants name which retailers, from the companies' own announcements, with links.
 - [About](https://shopbotindex.com/about.html): Who runs the index and how to contact us.
+- [Terms of use](https://shopbotindex.com/terms.html): All rights reserved. Link to pages and quote individual findings with credit and a link; bulk copying or republishing the data needs written permission.
 
 ## Data
 
