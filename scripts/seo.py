@@ -163,7 +163,7 @@ How to read the results:
 ## Data
 
 - One page per store: {SITE}/store/<name>.html (all listed in {SITE}/sitemap.xml)
-- Store lookup used by "Check your store": {SITE}/stores.json (domain -> [page slug, store name, result: ucp | no_ucp | couldnt_check])
+- Store lookup used by "Check your store": {SITE}/stores.json (domain -> [page slug, store name, result: ucp | no_ucp | couldnt_check, store id])
 - Updated every Monday after the crawl. Full text of the key facts and methodology: {SITE}/llms-full.txt
 
 ## FAQ

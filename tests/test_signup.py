@@ -25,6 +25,12 @@ class Site(unittest.TestCase):
     def test_check_result_offers_watch(self):
         # the store lookup result links to that store's watch form
         for f in ('check.html','index.html'): self.assertIn(".html#watch\"><b>Watch '",R(f),f)
+    def test_store_owner_page(self):
+        # for-stores.html: lookup with an inline watch form; wording rules; linked from check.html; in the sitemap
+        h=R('for-stores.html'); self.assertIn('data-watch',h); self.assertIn('window.sbiSub',h); self.assertIn("doesn't mean AI agents can't shop",h)
+        self.assertIn("we don't know whether it publishes a UCP profile",h); self.assertIn('for-stores.html',R('check.html')); self.assertIn('/for-stores.html',R('sitemap.xml'))
+        t=re.sub(r'<script.*?</script>','',h,flags=re.S).lower(); self.assertNotIn('official',t); self.assertNotIn('can buy',t); self.assertNotIn("agents can't buy",t)
+        L=json.load(open(os.path.join(DIST,'stores.json'))); self.assertEqual(L['ikea.com'][3],'Q54078')
     def test_forms_post_to_function_with_honeypot(self):
         for p in ('index.html','stores.html','store/ikea.html'):
             h=R(p)
