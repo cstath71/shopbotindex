@@ -1,8 +1,8 @@
 # ShopBot Index
 
-> ShopBot Index is an independent weekly index of what online stores tell AI shopping agents. Every Monday it checks 2276 retailers and stores (2656 websites): Shopify stores, big retailers and other retailers & marketplaces. The headline measure is whether each one publishes a UCP profile, the profile AI shopping agents read, at /.well-known/ucp.
+> ShopBot Index is an independent weekly index of what online stores tell AI shopping agents. Every Monday it checks 2179 retailers and stores (2549 websites): Shopify stores, big retailers and other retailers & marketplaces. The headline measure is whether each one publishes a UCP profile, the profile AI shopping agents read, at /.well-known/ucp.
 
-Latest crawl: 2026-10-26. In ShopBot Index's crawl of 26 October 2026, 773 of the 1627 retailers and stores we could check publish a UCP profile, the profile AI shopping agents read (47.5%). By segment: Shopify stores 713 of 908 (78.5%), big retailers 11 of 265 (4.2%) and other retailers & marketplaces 49 of 454 (10.8%). We couldn't check 649 of the 2276 we track (blocked or unreachable), so they aren't counted, and we re-check every store each Monday.
+Latest crawl: 2026-10-26. In ShopBot Index's crawl of 26 October 2026, 773 of the 1552 retailers and stores we could check publish a UCP profile, the profile AI shopping agents read (49.8%). By segment: Shopify stores 713 of 908 (78.5%), big retailers 11 of 201 (5.5%) and other retailers & marketplaces 49 of 443 (11.1%). We couldn't check 627 of the 2179 we track (blocked or unreachable), so they aren't counted, and we re-check every store each Monday.
 
 How to read the results:
 - "UCP profile found": the store publishes a Universal Commerce Protocol profile at /.well-known/ucp and lists what it supports. A UCP profile isn't proof that AI agents can shop at a store.
@@ -13,11 +13,11 @@ How to read the results:
 ## Key pages
 
 - [Home](https://shopbotindex.com/): Headline numbers from the latest crawl, by segment, big retailers with a UCP profile, capabilities and payment handlers.
-- [All stores](https://shopbotindex.com/stores.html): Every one of the 2276 retailers and stores with its result (the table is drawn with JavaScript; each store also has its own page under /store/).
+- [All stores](https://shopbotindex.com/stores.html): Every one of the 2179 retailers and stores with its result (the table is drawn with JavaScript; each store also has its own page under /store/).
 - [Segments](https://shopbotindex.com/segments/): Shopify stores, big retailers, other retailers & marketplaces, side by side.
 - [Shopify stores](https://shopbotindex.com/segments/shopify.html): 713 of 908 checked publish a UCP profile (78.5%).
-- [Big retailers](https://shopbotindex.com/segments/big.html): 11 of 265 checked publish a UCP profile (4.2%).
-- [Other retailers & marketplaces](https://shopbotindex.com/segments/other.html): 49 of 454 checked publish a UCP profile (10.8%).
+- [Big retailers](https://shopbotindex.com/segments/big.html): 11 of 201 checked publish a UCP profile (5.5%).
+- [Other retailers & marketplaces](https://shopbotindex.com/segments/other.html): 49 of 443 checked publish a UCP profile (11.1%).
 - [Capabilities](https://shopbotindex.com/capabilities/): What UCP profiles declare (checkout, cart, catalog search and more), with the stores declaring each.
 - [Categories](https://shopbotindex.com/categories/): Results by store category.
 - [What changed](https://shopbotindex.com/changes.html): This week compared with the previous crawl: who started or stopped publishing a UCP profile.
@@ -36,8 +36,8 @@ How to read the results:
 ## FAQ
 
 - **What is a UCP profile?** A Universal Commerce Protocol (UCP) profile is a JSON file a store publishes at `/.well-known/ucp`: the machine-readable profile AI shopping agents read. It lists the protocol version, services, capabilities (for example checkout, cart or catalog search) and payment handlers. [How we check it](https://shopbotindex.com/methodology.html).
-- **How many online stores publish a UCP profile?** In our crawl of 26 October 2026, 773 of the 1627 retailers and stores we could check (47.5%). By segment: Shopify stores 713 of 908 (78.5%), big retailers 11 of 265 (4.2%) and other retailers & marketplaces 49 of 454 (10.8%). These are shares of our list of 2276, not of all online stores.
-- **Which big retailers publish a UCP profile?** 11 in the crawl of 26 October 2026: Asprey, Debenhams PLC, FAO Schwarz, Farfetch, IKEA, Mexx, On AG, Pepco, Quiksilver, The Body Shop and Zellers. That is 11 of the 265 big retailers we could check. [See all big retailers](https://shopbotindex.com/segments/big.html).
+- **How many online stores publish a UCP profile?** In our crawl of 26 October 2026, 773 of the 1552 retailers and stores we could check (49.8%). By segment: Shopify stores 713 of 908 (78.5%), big retailers 11 of 201 (5.5%) and other retailers & marketplaces 49 of 443 (11.1%). These are shares of our list of 2179, not of all online stores.
+- **Which big retailers publish a UCP profile?** 11 in the crawl of 26 October 2026: Asprey, Debenhams PLC, FAO Schwarz, Farfetch, IKEA, Mexx, On AG, Pepco, Quiksilver, The Body Shop and Zellers. That is 11 of the 201 big retailers we could check. [See all big retailers](https://shopbotindex.com/segments/big.html).
 - **What does it mean if a store has no UCP profile?** Only that we found no profile at `/.well-known/ucp`. Some agent shopping runs through a normal web browser or through channels we can't see from outside, such as product feeds shared privately with AI assistants. Equally, a UCP profile isn't proof that AI agents can shop at a store.
 - **How often is ShopBot Index updated?** Every week. The crawl runs on Mondays; the latest was on 26 October 2026 and the next is due on 2 November 2026. [See what changed](https://shopbotindex.com/changes.html).
 - **How can I check my own store?** Type its domain into [Check your store](https://shopbotindex.com/check.html). It looks the domain up in our latest crawl. If the store isn't in the index yet, email [hello@shopbotindex.com](mailto:hello@shopbotindex.com) and we'll include it in a future crawl.
@@ -45,8 +45,8 @@ How to read the results:
 ## Methodology
 
 - **What does ShopBot Index check on each website?** It reads `/robots.txt` first, then fetches `/.well-known/ucp`, where the UCP specification says a business publishes its profile. It also records supporting signals: an MCP endpoint named in the UCP profile, AI-agent rules in robots.txt, `/llms.txt` or `/agents.md`, and schema.org Product markup on one product page. [Details](https://shopbotindex.com/methodology.html#signals).
-- **Why are some stores marked "couldn't check"?** Every one of their websites refused our request (401/403/429), timed out, failed TLS or DNS, or disallowed the path in robots.txt. We never try to get around that. These stores are shown separately and left out of adoption rates: 649 of 2276 in the crawl of 26 October 2026.
-- **Which stores are tracked?** Three segments, side by side: Shopify stores (1188), Big retailers (380) and Other retailers & marketplaces (708). They come from Wikipedia and Wikidata lists and public lists of Shopify stores. This is not a random sample of all stores, so shares are shares of our list.
+- **Why are some stores marked "couldn't check"?** Every one of their websites refused our request (401/403/429), timed out, failed TLS or DNS, or disallowed the path in robots.txt. We never try to get around that. These stores are shown separately and left out of adoption rates: 627 of 2179 in the crawl of 26 October 2026.
+- **Which stores are tracked?** Three segments, side by side: Shopify stores (1188), Big retailers (297) and Other retailers & marketplaces (694). They come from Wikipedia and Wikidata lists and public lists of Shopify stores. This is not a random sample of all stores, so shares are shares of our list.
 - **How many requests does the crawler send?** Usually 10 to 14 per website per week, and never more than 18, one at a time per website, with robots.txt respected for every URL. [How we fetch](https://shopbotindex.com/methodology.html#crawler).
 - **How can a website opt out?** Disallow `/` (or just the paths we read) for `ShopBotIndexBot` in robots.txt, or email [hello@shopbotindex.com](mailto:hello@shopbotindex.com).
 - **Does ShopBot Index test purchases?** No. We don't test purchases, and we don't score or rank how well a store works with any assistant.
@@ -59,8 +59,8 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 ## Results by segment (crawl of 2026-10-26)
 
 - Shopify stores (Stores from public lists of Shopify stores.): 1188 tracked, 713 UCP profile found, 195 no UCP profile found, 280 couldn't check; 713 of 908 checked (78.5%).
-- Big retailers (Retailers on Wikipedia's List of largest retail companies, or with Wikipedia articles in 10+ languages.): 380 tracked, 11 UCP profile found, 254 no UCP profile found, 115 couldn't check; 11 of 265 checked (4.2%).
-- Other retailers & marketplaces (Other retail chains, department stores, supermarkets, hypermarkets and online marketplaces listed on Wikipedia or Wikidata.): 708 tracked, 49 UCP profile found, 405 no UCP profile found, 254 couldn't check; 49 of 454 checked (10.8%).
+- Big retailers (Retailers on Wikipedia's List of largest retail companies, or with Wikipedia articles in 10+ languages.): 297 tracked, 11 UCP profile found, 190 no UCP profile found, 96 couldn't check; 11 of 201 checked (5.5%).
+- Other retailers & marketplaces (Other retail chains, department stores, supermarkets, hypermarkets and online marketplaces listed on Wikipedia or Wikidata.): 694 tracked, 49 UCP profile found, 394 no UCP profile found, 251 couldn't check; 49 of 443 checked (11.1%).
 
 ## Capabilities declared in UCP profiles (773 stores with a profile)
 
@@ -491,7 +491,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [lovebeautyandplanet.in](https://shopbotindex.com/store/lovebeautyandplanet-in.html) (Shopify stores; 11 capabilities declared, including checkout)
 - [Lovisa](https://shopbotindex.com/store/lovisa.html) (Other retailers & marketplaces; 11 capabilities declared, including checkout)
 - [luba-amsterdam.nl](https://shopbotindex.com/store/luba-amsterdam-nl.html) (Shopify stores; 11 capabilities declared, including checkout)
-- [Ludwig Görtz](https://shopbotindex.com/store/ludwig-g-rtz.html) (Other retailers & marketplaces; 13 capabilities declared, including checkout)
+- [Ludwig Görtz](https://shopbotindex.com/store/ludwig-gortz.html) (Other retailers & marketplaces; 13 capabilities declared, including checkout)
 - [luxurionworld.com](https://shopbotindex.com/store/luxurionworld-com.html) (Shopify stores; 11 capabilities declared, including checkout)
 - [maate.in](https://shopbotindex.com/store/maate-in.html) (Shopify stores; 11 capabilities declared, including checkout)
 - [macaronstore.nl](https://shopbotindex.com/store/macaronstore-nl.html) (Shopify stores; 11 capabilities declared, including checkout)

@@ -23,3 +23,10 @@ Public lists of stores that run on Shopify:
 - One retailer per Wikidata item; its official site(s) are its child sites (up to 8 per retailer). Multi-country sites like Pepco are one retailer with several children.
 - Each host is used once overall (leading `www.` ignored). myshopify.com and support/help/blog/store/dtc subdomains are skipped.
 - `pilot-crawl-2026-10-17.json` is the first crawl in the old per-site format, kept for reference and ignored by the weekly diff.
+
+## Entries left out: not online shops
+Some Wikipedia list entries resolve to Wikidata items that are not shops: towns, cities and regions (a hypermarket's location linked
+from List_of_hypermarkets, for example), newspapers, a software licence, a web archive, an event, restaurants and cafés, and services
+such as streaming, gyms, karaoke and arcades. They are listed with the reason in `config/non_shops.json` and left out of
+`data/seeds.json`, the crawl and the site (`scripts/nonshops.py`). Their Wikidata classes are also skipped by `scripts/wiki_seeds.py`
+when the Wikipedia seeds are refreshed.

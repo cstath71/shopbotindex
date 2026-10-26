@@ -123,6 +123,8 @@ def phase2(res,budget):
                 checked=sum(1 for r in res if (r.get('signals') or {}).get('checked')),not_checked_budget=sum(1 for r in res if (r.get('signals') or {}).get('reason')=='time budget reached'))
 def main():
     seeds=json.load(open(os.path.join(DATA,'seeds.json')))
+    from nonshops import IDS as NON_SHOPS  # config/non_shops.json: never crawl places, newspapers, restaurants etc.
+    seeds=[s for s in seeds if s['id'] not in NON_SHOPS]
     if '--every' in sys.argv: seeds=seeds[::int(sys.argv[sys.argv.index('--every')+1])]
     if '--limit' in sys.argv: seeds=seeds[:int(sys.argv[sys.argv.index('--limit')+1])]
     out_dir=sys.argv[sys.argv.index('--out')+1] if '--out' in sys.argv else DATA

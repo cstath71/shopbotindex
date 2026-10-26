@@ -178,21 +178,6 @@
   ]
  },
  {
-  "id": "Q3113",
-  "name": "Allier",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 105,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q3113"
-  ],
-  "sites": [
-   "www.allier.fr"
-  ]
- },
- {
   "id": "Q3884",
   "name": "Amazon",
   "segment": "big",
@@ -231,36 +216,6 @@
   ]
  },
  {
-  "id": "Q4740856",
-  "name": "Amazon Prime Video",
-  "segment": "big",
-  "category": "Online retail & marketplaces",
-  "country": "United States",
-  "sitelinks": 53,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q4740856"
-  ],
-  "sites": [
-   "www.primevideo.com"
-  ]
- },
- {
-  "id": "Q1202476",
-  "name": "Ampang Jaya",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Malaysia",
-  "sitelinks": 30,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q1202476"
-  ],
-  "sites": [
-   "www.mpaj.gov.my"
-  ]
- },
- {
   "id": "Q1041890",
   "name": "Animate",
   "segment": "big",
@@ -273,21 +228,6 @@
   ],
   "sites": [
    "www.animate.co.jp"
-  ]
- },
- {
-  "id": "Q996161",
-  "name": "Arteixo",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Spain",
-  "sitelinks": 52,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q996161"
-  ],
-  "sites": [
-   "www.arteixo.org"
   ]
  },
  {
@@ -355,22 +295,6 @@
   ]
  },
  {
-  "id": "Q272228",
-  "name": "Auderghem",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Belgium",
-  "sitelinks": 49,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q272228"
-  ],
-  "sites": [
-   "www.auderghem.be",
-   "www.oudergem.be"
-  ]
- },
- {
   "id": "Q4826087",
   "name": "AutoZone",
   "segment": "big",
@@ -401,81 +325,6 @@
   ],
   "sites": [
    "www.dufry.com"
-  ]
- },
- {
-  "id": "Q14182",
-  "name": "Banjarmasin",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Indonesia",
-  "sitelinks": 77,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q14182"
-  ],
-  "sites": [
-   "www.banjarmasinkota.go.id"
-  ]
- },
- {
-  "id": "Q81856",
-  "name": "Beaverton",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United States",
-  "sitelinks": 61,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q81856"
-  ],
-  "sites": [
-   "www.beavertonoregon.gov"
-  ]
- },
- {
-  "id": "Q171545",
-  "name": "Belfort",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "France",
-  "sitelinks": 84,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q171545"
-  ],
-  "sites": [
-   "www.belfort.fr"
-  ]
- },
- {
-  "id": "Q69836",
-  "name": "Bellevue",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Switzerland",
-  "sitelinks": 34,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q69836"
-  ],
-  "sites": [
-   "www.mairie-bellevue.ch"
-  ]
- },
- {
-  "id": "Q64",
-  "name": "Berlin",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Margraviate of Brandenburg, Brandenburg-Prussia, Kingdom of Prussia, North Germa",
-  "sitelinks": 334,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q64"
-  ],
-  "sites": [
-   "www.berlin.de"
   ]
  },
  {
@@ -638,66 +487,6 @@
   ]
  },
  {
-  "id": "Q675232",
-  "name": "Bondoufle",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 45,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q675232"
-  ],
-  "sites": [
-   "www.ville-bondoufle.fr"
-  ]
- },
- {
-  "id": "Q240",
-  "name": "Brussels-Capital Region",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Belgium",
-  "sitelinks": 132,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q240"
-  ],
-  "sites": [
-   "be.brussels"
-  ]
- },
- {
-  "id": "Q499873",
-  "name": "Burgwedel",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Germany",
-  "sitelinks": 44,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q499873"
-  ],
-  "sites": [
-   "www.burgwedel.de"
-  ]
- },
- {
-  "id": "Q47822",
-  "name": "Bury",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United Kingdom",
-  "sitelinks": 45,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q47822"
-  ],
-  "sites": [
-   "www.bury.gov.uk"
-  ]
- },
- {
   "id": "Q1032400",
   "name": "Canadian Tire",
   "segment": "big",
@@ -846,22 +635,6 @@
   ]
  },
  {
-  "id": "Q212793",
-  "name": "Charenton-le-Pont",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 57,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q212793"
-  ],
-  "sites": [
-   "www.charenton.fr",
-   "www.charentonlepont.fr"
-  ]
- },
- {
   "id": "Q2961952",
   "name": "Chedraui",
   "segment": "big",
@@ -926,21 +699,6 @@
    "circlek.com.mx",
    "www.circlek.com.vn",
    "circlekindo.com"
-  ]
- },
- {
-  "id": "Q217057",
-  "name": "Clonmel",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Ireland",
-  "sitelinks": 45,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q217057"
-  ],
-  "sites": [
-   "www.clonmel.ie"
   ]
  },
  {
@@ -1037,52 +795,6 @@
   ]
  },
  {
-  "id": "Q380987",
-  "name": "Coquelles",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 49,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q380987"
-  ],
-  "sites": [
-   "www.coquelles.fr"
-  ]
- },
- {
-  "id": "Q1130247",
-  "name": "Coraopolis",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United States",
-  "sitelinks": 28,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q1130247"
-  ],
-  "sites": [
-   "www.coraopolispa.com"
-  ]
- },
- {
-  "id": "Q14112",
-  "name": "Corsica",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 186,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q14112"
-  ],
-  "sites": [
-   "www.corse.fr",
-   "www.isula.corsica"
-  ]
- },
- {
   "id": "Q715583",
   "name": "Costco",
   "segment": "big",
@@ -1134,21 +846,6 @@
   ],
   "sites": [
    "www.crocs.com"
-  ]
- },
- {
-  "id": "Q239091",
-  "name": "Croix",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 57,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q239091"
-  ],
-  "sites": [
-   "www.ville-croix.fr"
   ]
  },
  {
@@ -1212,21 +909,6 @@
   ]
  },
  {
-  "id": "Q287895",
-  "name": "Deerfield",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United States",
-  "sitelinks": 35,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q287895"
-  ],
-  "sites": [
-   "www.waukeganweb.net"
-  ]
- },
- {
   "id": "Q22000919",
   "name": "Deliveroo",
   "segment": "big",
@@ -1254,21 +936,6 @@
   ],
   "sites": [
    "www.deloitte.com"
-  ]
- },
- {
-  "id": "Q131478",
-  "name": "Der Spiegel",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Germany",
-  "sitelinks": 65,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q131478"
-  ],
-  "sites": [
-   "www.spiegel.de"
   ]
  },
  {
@@ -1429,21 +1096,6 @@
   ]
  },
  {
-  "id": "Q837109",
-  "name": "Dublin",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United States",
-  "sitelinks": 52,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q837109"
-  ],
-  "sites": [
-   "www.dublin.ca.gov"
-  ]
- },
- {
   "id": "Q1266203",
   "name": "Dunnes Stores",
   "segment": "big",
@@ -1559,22 +1211,6 @@
   ],
   "sites": [
    "company.emart.com"
-  ]
- },
- {
-  "id": "Q14641",
-  "name": "Emmen",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Netherlands",
-  "sitelinks": 69,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q14641"
-  ],
-  "sites": [
-   "www.emmen.nl",
-   "gemeente.emmen.nl"
   ]
  },
  {
@@ -1805,36 +1441,6 @@
   ]
  },
  {
-  "id": "Q3769",
-  "name": "French Guiana",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France, Portuguese Empire",
-  "sitelinks": 222,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q3769"
-  ],
-  "sites": [
-   "www.ctguyane.fr"
-  ]
- },
- {
-  "id": "Q36378",
-  "name": "Fribourg",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Switzerland",
-  "sitelinks": 92,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q36378"
-  ],
-  "sites": [
-   "www.ville-fribourg.ch"
-  ]
- },
- {
   "id": "Q3073195",
   "name": "Furla",
   "segment": "big",
@@ -1895,21 +1501,6 @@
   ]
  },
  {
-  "id": "Q12273",
-  "name": "Gijón",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Spain",
-  "sitelinks": 100,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q12273"
-  ],
-  "sites": [
-   "www.gijon.es"
-  ]
- },
- {
   "id": "Q457503",
   "name": "Globus",
   "segment": "big",
@@ -1940,21 +1531,6 @@
   ],
   "sites": [
    "www.globus.ch"
-  ]
- },
- {
-  "id": "Q22169",
-  "name": "GNU Free Documentation License",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "",
-  "sitelinks": 108,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q22169"
-  ],
-  "sites": [
-   "www.gnu.org"
   ]
  },
  {
@@ -2033,21 +1609,6 @@
   ]
  },
  {
-  "id": "Q22395",
-  "name": "Grosbliederstroff",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 39,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q22395"
-  ],
-  "sites": [
-   "www.grosbliederstroff.fr"
-  ]
- },
- {
   "id": "Q1820565",
   "name": "Groupement Mousquetaires",
   "segment": "big",
@@ -2075,21 +1636,6 @@
   ],
   "sites": [
    "www.groupon.com"
-  ]
- },
- {
-  "id": "Q16635",
-  "name": "Guam",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "United States, Spain",
-  "sitelinks": 195,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q16635"
-  ],
-  "sites": [
-   "guam.gov"
   ]
  },
  {
@@ -2439,36 +1985,6 @@
   ]
  },
  {
-  "id": "Q9676",
-  "name": "Isle of Man",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Isle of Man",
-  "sitelinks": 178,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q9676"
-  ],
-  "sites": [
-   "www.gov.im"
-  ]
- },
- {
-  "id": "Q193877",
-  "name": "Ivry-sur-Seine",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 61,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q193877"
-  ],
-  "sites": [
-   "www.ivry94.fr"
-  ]
- },
- {
   "id": "Q920037",
   "name": "J. C. Penney",
   "segment": "big",
@@ -2481,21 +1997,6 @@
   ],
   "sites": [
    "www.jcpenney.com"
-  ]
- },
- {
-  "id": "Q3630",
-  "name": "Jakarta",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Indonesia",
-  "sitelinks": 251,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q3630"
-  ],
-  "sites": [
-   "www.jakarta.go.id"
   ]
  },
  {
@@ -2830,81 +2331,6 @@
   ]
  },
  {
-  "id": "Q1161356",
-  "name": "Lacroix-Saint-Ouen",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 42,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q1161356"
-  ],
-  "sites": [
-   "www.ville-lacroixsaintouen.fr"
-  ]
- },
- {
-  "id": "Q1020014",
-  "name": "Lancing",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United Kingdom",
-  "sitelinks": 16,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q1020014"
-  ],
-  "sites": [
-   "www.lancingparishcouncil.gov.uk"
-  ]
- },
- {
-  "id": "Q325946",
-  "name": "Landerneau",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 53,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q325946"
-  ],
-  "sites": [
-   "www.landerneau.bzh"
-  ]
- },
- {
-  "id": "Q207154",
-  "name": "Langon",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "France",
-  "sitelinks": 57,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q207154"
-  ],
-  "sites": [
-   "www.langon33.fr"
-  ]
- },
- {
-  "id": "Q14484",
-  "name": "Las Condes",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Chile",
-  "sitelinks": 43,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q14484"
-  ],
-  "sites": [
-   "www.lascondes.cl"
-  ]
- },
- {
   "id": "Q18712406",
   "name": "Lazada Group",
   "segment": "big",
@@ -3034,21 +2460,6 @@
   ],
   "sites": [
    "www.stockmanngroup.fi"
-  ]
- },
- {
-  "id": "Q597",
-  "name": "Lisbon",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Portugal, Roman Republic, Kingdom of the Suebi, Visigothic Kingdom, Umayyad Cali",
-  "sitelinks": 267,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q597"
-  ],
-  "sites": [
-   "www.lisboa.pt"
   ]
  },
  {
@@ -3222,22 +2633,6 @@
   ]
  },
  {
-  "id": "Q2807",
-  "name": "Madrid",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Spain",
-  "sitelinks": 306,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q2807"
-  ],
-  "sites": [
-   "www.madrid.es",
-   "www.munimadrid.es"
-  ]
- },
- {
   "id": "Q940518",
   "name": "Magnit",
   "segment": "big",
@@ -3273,36 +2668,6 @@
   ]
  },
  {
-  "id": "Q240504",
-  "name": "Makó",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Hungary, Kingdom of Hungary, Austria–Hungary, Austrian Empire",
-  "sitelinks": 48,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q240504"
-  ],
-  "sites": [
-   "www.mako.hu"
-  ]
- },
- {
-  "id": "Q185221",
-  "name": "Malacca",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Malaysia, Portuguese Empire",
-  "sitelinks": 89,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q185221"
-  ],
-  "sites": [
-   "www.melaka.gov.my"
-  ]
- },
- {
   "id": "Q3027516",
   "name": "Marathon Sports",
   "segment": "big",
@@ -3335,21 +2700,6 @@
   ]
  },
  {
-  "id": "Q17054",
-  "name": "Martinique",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 187,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q17054"
-  ],
-  "sites": [
-   "www.martinique.pref.gouv.fr"
-  ]
- },
- {
   "id": "Q6777917",
   "name": "Marui",
   "segment": "big",
@@ -3362,21 +2712,6 @@
   ],
   "sites": [
    "www.0101.co.jp"
-  ]
- },
- {
-  "id": "Q121157",
-  "name": "Mashhad",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Iran",
-  "sitelinks": 121,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q121157"
-  ],
-  "sites": [
-   "www.mashhad.ir"
   ]
  },
  {
@@ -3407,22 +2742,6 @@
   ],
   "sites": [
    "www.maximagrupe.eu"
-  ]
- },
- {
-  "id": "Q17063",
-  "name": "Mayotte",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 165,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q17063"
-  ],
-  "sites": [
-   "mayotte.fr",
-   "www.mayotte.pref.gouv.fr"
   ]
  },
  {
@@ -3664,37 +2983,6 @@
   ]
  },
  {
-  "id": "Q340",
-  "name": "Montreal",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Canada",
-  "sitelinks": 194,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q340"
-  ],
-  "sites": [
-   "ville.montreal.qc.ca",
-   "montreal.ca"
-  ]
- },
- {
-  "id": "Q2027955",
-  "name": "Mooresville",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United States",
-  "sitelinks": 36,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q2027955"
-  ],
-  "sites": [
-   "www.ci.mooresville.nc.us"
-  ]
- },
- {
   "id": "Q922344",
   "name": "Morrisons",
   "segment": "big",
@@ -3755,21 +3043,6 @@
   ],
   "sites": [
    "www.naspers.com"
-  ]
- },
- {
-  "id": "Q488708",
-  "name": "Neckarsulm",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Germany",
-  "sitelinks": 65,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q488708"
-  ],
-  "sites": [
-   "www.neckarsulm.de"
   ]
  },
  {
@@ -3913,21 +3186,6 @@
   ]
  },
  {
-  "id": "Q1952",
-  "name": "Nova Scotia",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Canada",
-  "sitelinks": 156,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q1952"
-  ],
-  "sites": [
-   "novascotia.ca"
-  ]
- },
- {
   "id": "Q1337797",
   "name": "Office Depot",
   "segment": "big",
@@ -3998,21 +3256,6 @@
   ]
  },
  {
-  "id": "Q14317",
-  "name": "Oviedo",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Spain",
-  "sitelinks": 119,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q14317"
-  ],
-  "sites": [
-   "www.oviedo.es"
-  ]
- },
- {
   "id": "Q2365235",
   "name": "Ozon",
   "segment": "big",
@@ -4056,21 +3299,6 @@
   "sites": [
    "eu.patagonia.com",
    "www.patagonia.com"
-  ]
- },
- {
-  "id": "Q1025966",
-  "name": "Pattani",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Thailand",
-  "sitelinks": 28,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q1025966"
-  ],
-  "sites": [
-   "www.pattanicity.go.th"
   ]
  },
  {
@@ -4193,21 +3421,6 @@
   ]
  },
  {
-  "id": "Q1183",
-  "name": "Puerto Rico",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "United States",
-  "sitelinks": 222,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q1183"
-  ],
-  "sites": [
-   "pr.gov"
-  ]
- },
- {
   "id": "Q691029",
   "name": "Pull&Bear",
   "segment": "big",
@@ -4220,21 +3433,6 @@
   ],
   "sites": [
    "www.pullandbear.com"
-  ]
- },
- {
-  "id": "Q176",
-  "name": "Quebec",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Canada",
-  "sitelinks": 202,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q176"
-  ],
-  "sites": [
-   "www.quebec.ca"
   ]
  },
  {
@@ -4333,21 +3531,6 @@
   ]
  },
  {
-  "id": "Q16086",
-  "name": "Rheinberg",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Germany",
-  "sitelinks": 51,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q16086"
-  ],
-  "sites": [
-   "www.rheinberg.de"
-  ]
- },
- {
   "id": "Q689240",
   "name": "Richemont",
   "segment": "big",
@@ -4441,22 +3624,6 @@
   ]
  },
  {
-  "id": "Q548574",
-  "name": "Ronchin",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 44,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q548574"
-  ],
-  "sites": [
-   "www.ville-ronchin.info",
-   "www.ville-ronchin.fr"
-  ]
- },
- {
   "id": "Q3442791",
   "name": "Ross Dress for Less",
   "segment": "big",
@@ -4469,36 +3636,6 @@
   ],
   "sites": [
    "www.rossstores.com"
-  ]
- },
- {
-  "id": "Q478105",
-  "name": "Rungis",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 43,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q478105"
-  ],
-  "sites": [
-   "www.rungis.fr"
-  ]
- },
- {
-  "id": "Q17070",
-  "name": "Réunion",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 182,
-  "sources": [
-   "wikipedia:List_of_supermarket_chains",
-   "https://www.wikidata.org/wiki/Q17070"
-  ],
-  "sites": [
-   "www.regionreunion.com"
   ]
  },
  {
@@ -4544,21 +3681,6 @@
   ],
   "sites": [
    "www.sainsburys.co.uk"
-  ]
- },
- {
-  "id": "Q234719",
-  "name": "Sainte-Geneviève-des-Bois",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 56,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q234719"
-  ],
-  "sites": [
-   "www.sgdb91.com"
   ]
  },
  {
@@ -4696,21 +3818,6 @@
   ],
   "sites": [
    "www.sears.com"
-  ]
- },
- {
-  "id": "Q12753",
-  "name": "Seine-et-Marne",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 101,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q12753"
-  ],
-  "sites": [
-   "seine-et-marne.fr"
   ]
  },
  {
@@ -4880,21 +3987,6 @@
   ]
  },
  {
-  "id": "Q109010",
-  "name": "Solna Municipality",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Sweden",
-  "sitelinks": 64,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q109010"
-  ],
-  "sites": [
-   "www.solna.se"
-  ]
- },
- {
   "id": "Q2035375",
   "name": "Sonae",
   "segment": "big",
@@ -4962,36 +4054,6 @@
   ]
  },
  {
-  "id": "Q3498168",
-  "name": "Stellarton",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Canada",
-  "sitelinks": 16,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q3498168"
-  ],
-  "sites": [
-   "www.stellarton.ca"
-  ]
- },
- {
-  "id": "Q11462",
-  "name": "Surabaya",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Indonesia, Dutch East Indies",
-  "sitelinks": 123,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q11462"
-  ],
-  "sites": [
-   "www.surabaya.go.id"
-  ]
- },
- {
   "id": "Q10730152",
   "name": "Søstrene Grene",
   "segment": "big",
@@ -5054,21 +4116,6 @@
   ]
  },
  {
-  "id": "Q10127",
-  "name": "Tangerang",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Indonesia",
-  "sitelinks": 71,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q10127"
-  ],
-  "sites": [
-   "www.tangerangkota.go.id"
-  ]
- },
- {
   "id": "Q2117484",
   "name": "Taobao",
   "segment": "big",
@@ -5096,21 +4143,6 @@
   ],
   "sites": [
    "www.target.com"
-  ]
- },
- {
-  "id": "Q3616",
-  "name": "Tehran",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Iran, Qajar Iran, Pahlavi Iran",
-  "sitelinks": 240,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q3616"
-  ],
-  "sites": [
-   "www.tehran.ir"
   ]
  },
  {
@@ -5180,36 +4212,6 @@
   ]
  },
  {
-  "id": "Q1199207",
-  "name": "The New Zealand Herald",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "New Zealand",
-  "sitelinks": 28,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q1199207"
-  ],
-  "sites": [
-   "www.nzherald.co.nz"
-  ]
- },
- {
-  "id": "Q1016574",
-  "name": "Timaru",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "New Zealand",
-  "sitelinks": 34,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q1016574"
-  ],
-  "sites": [
-   "www.timaru.govt.nz"
-  ]
- },
- {
   "id": "Q12521890",
   "name": "Tokopedia",
   "segment": "big",
@@ -5222,21 +4224,6 @@
   ],
   "sites": [
    "www.tokopedia.com"
-  ]
- },
- {
-  "id": "Q1067299",
-  "name": "Toronto Star",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Canada",
-  "sitelinks": 36,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q1067299"
-  ],
-  "sites": [
-   "www.thestar.com"
   ]
  },
  {
@@ -5316,36 +4303,6 @@
   ]
  },
  {
-  "id": "Q5489",
-  "name": "Troyes",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 104,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q5489"
-  ],
-  "sites": [
-   "www.ville-troyes.fr"
-  ]
- },
- {
-  "id": "Q270704",
-  "name": "Třebíč",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Duchy of Bohemia, Kingdom of Bohemia, Austrian Empire, Austria–Hungary, Czechosl",
-  "sitelinks": 61,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q270704"
-  ],
-  "sites": [
-   "www.trebic.cz"
-  ]
- },
- {
   "id": "Q7877165",
   "name": "Udemy",
   "segment": "big",
@@ -5391,21 +4348,6 @@
   ]
  },
  {
-  "id": "Q8818",
-  "name": "Valencia",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Spain, Crown of Aragon",
-  "sitelinks": 169,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q8818"
-  ],
-  "sites": [
-   "www.valencia.es"
-  ]
- },
- {
   "id": "Q919641",
   "name": "Verizon",
   "segment": "big",
@@ -5418,67 +4360,6 @@
   ],
   "sites": [
    "www.verizon.com"
-  ]
- },
- {
-  "id": "Q1741",
-  "name": "Vienna",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Austria, First Republic of Austria, Austria–Hungary, Republic of German-Austria,",
-  "sitelinks": 294,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q1741"
-  ],
-  "sites": [
-   "www.wien.gv.at",
-   "www.wien.at"
-  ]
- },
- {
-  "id": "Q191135",
-  "name": "Vila Nova de Gaia",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Portugal",
-  "sitelinks": 74,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q191135"
-  ],
-  "sites": [
-   "www.cm-gaia.pt"
-  ]
- },
- {
-  "id": "Q43295",
-  "name": "Villeneuve-d'Ascq",
-  "segment": "big",
-  "category": "General retail",
-  "country": "France",
-  "sitelinks": 99,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q43295"
-  ],
-  "sites": [
-   "www.villeneuvedascq.fr"
-  ]
- },
- {
-  "id": "Q1458819",
-  "name": "Villiers-en-Bière",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 34,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q1458819"
-  ],
-  "sites": [
-   "www.mairievilliersenbiere.fr"
   ]
  },
  {
@@ -5529,36 +4410,6 @@
   ]
  },
  {
-  "id": "Q10084",
-  "name": "Vlissingen",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Netherlands",
-  "sitelinks": 67,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q10084"
-  ],
-  "sites": [
-   "www.vlissingen.nl"
-  ]
- },
- {
-  "id": "Q745038",
-  "name": "Waalwijk",
-  "segment": "big",
-  "category": "General retail",
-  "country": "Netherlands",
-  "sitelinks": 52,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q745038"
-  ],
-  "sites": [
-   "www.waalwijk.nl"
-  ]
- },
- {
   "id": "Q771734",
   "name": "Waitrose & Partners",
   "segment": "big",
@@ -5601,21 +4452,6 @@
   ],
   "sites": [
    "www.walgreensbootsalliance.com"
-  ]
- },
- {
-  "id": "Q231",
-  "name": "Wallonia",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "Belgium",
-  "sitelinks": 118,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q231"
-  ],
-  "sites": [
-   "www.wallonie.be"
   ]
  },
  {
@@ -5663,22 +4499,6 @@
   ]
  },
  {
-  "id": "Q648266",
-  "name": "Wayback Machine",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "United States",
-  "sitelinks": 120,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q648266"
-  ],
-  "sites": [
-   "web.archive.org",
-   "archive.org"
-  ]
- },
- {
   "id": "Q706247",
   "name": "Wellcome",
   "segment": "big",
@@ -5694,21 +4514,6 @@
   ]
  },
  {
-  "id": "Q19789",
-  "name": "Welwyn Garden City",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United Kingdom",
-  "sitelinks": 36,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q19789"
-  ],
-  "sites": [
-   "www.welhat.gov.uk"
-  ]
- },
- {
   "id": "Q908144",
   "name": "Wesfarmers",
   "segment": "big",
@@ -5721,21 +4526,6 @@
   ],
   "sites": [
    "www.wesfarmers.com.au"
-  ]
- },
- {
-  "id": "Q386170",
-  "name": "Westborough",
-  "segment": "big",
-  "category": "General retail",
-  "country": "United States",
-  "sitelinks": 30,
-  "sources": [
-   "wikipedia:List_of_largest_retail_companies",
-   "https://www.wikidata.org/wiki/Q386170"
-  ],
-  "sites": [
-   "www.town.westborough.ma.us"
   ]
  },
  {
@@ -5892,21 +4682,6 @@
   ]
  },
  {
-  "id": "Q10305",
-  "name": "Zaragoza",
-  "segment": "big",
-  "category": "Department stores",
-  "country": "Spain",
-  "sitelinks": 155,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q10305"
-  ],
-  "sites": [
-   "www.zaragoza.es"
-  ]
- },
- {
   "id": "Q845330",
   "name": "Zellers",
   "segment": "big",
@@ -5934,36 +4709,6 @@
   ],
   "sites": [
    "www.ahlens.se"
-  ]
- },
- {
-  "id": "Q290880",
-  "name": "Étrembières",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 41,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q290880"
-  ],
-  "sites": [
-   "www.etrembieres.fr"
-  ]
- },
- {
-  "id": "Q13917",
-  "name": "Île-de-France",
-  "segment": "big",
-  "category": "Grocery & hypermarkets",
-  "country": "France",
-  "sitelinks": 146,
-  "sources": [
-   "wikipedia:List_of_hypermarkets",
-   "https://www.wikidata.org/wiki/Q13917"
-  ],
-  "sites": [
-   "www.iledefrance.fr"
   ]
  },
  {
@@ -6041,21 +4786,6 @@
   ],
   "sites": [
    "99ranch.com"
-  ]
- },
- {
-  "id": "Q12621301",
-  "name": "A Twosome Place",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "",
-  "sitelinks": 4,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q12621301"
-  ],
-  "sites": [
-   "www.twosome.co.kr"
   ]
  },
  {
@@ -6919,21 +5649,6 @@
   ]
  },
  {
-  "id": "Q15831707",
-  "name": "Big Echo",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "Japan",
-  "sitelinks": 4,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q15831707"
-  ],
-  "sites": [
-   "big-echo.jp"
-  ]
- },
- {
   "id": "Q4906646",
   "name": "Big W",
   "segment": "other",
@@ -7067,21 +5782,6 @@
   ],
   "sites": [
    "www.bol.com"
-  ]
- },
- {
-  "id": "Q23048055",
-  "name": "Bonifacio Global City",
-  "segment": "other",
-  "category": "Department stores",
-  "country": "Philippines",
-  "sitelinks": 7,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q23048055"
-  ],
-  "sites": [
-   "www.fbdcorp.com"
   ]
  },
  {
@@ -7787,21 +6487,6 @@
   ]
  },
  {
-  "id": "Q60867333",
-  "name": "Coffee Island",
-  "segment": "other",
-  "category": "Grocery & hypermarkets",
-  "country": "",
-  "sitelinks": 3,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q60867333"
-  ],
-  "sites": [
-   "www.coffeeisland.gr"
-  ]
- },
- {
   "id": "Q1107215",
   "name": "Coin",
   "segment": "other",
@@ -7845,21 +6530,6 @@
   "sites": [
    "www.colruyt.fr",
    "www.colruyt.be"
-  ]
- },
- {
-  "id": "Q120997937",
-  "name": "Compose Coffee",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "South Korea",
-  "sitelinks": 3,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q120997937"
-  ],
-  "sites": [
-   "composecoffee.com"
   ]
  },
  {
@@ -8359,21 +7029,6 @@
   ]
  },
  {
-  "id": "Q5297245",
-  "name": "Doors Open Ottawa",
-  "segment": "other",
-  "category": "Department stores",
-  "country": "Canada",
-  "sitelinks": 2,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q5297245"
-  ],
-  "sites": [
-   "ottawa.ca"
-  ]
- },
- {
   "id": "Q2052213",
   "name": "Douglas Holding",
   "segment": "other",
@@ -8499,21 +7154,6 @@
   ]
  },
  {
-  "id": "Q12611298",
-  "name": "Ediya Coffee",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "South Korea",
-  "sitelinks": 6,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q12611298"
-  ],
-  "sites": [
-   "www.ediya.com"
-  ]
- },
- {
   "id": "Q30638435",
   "name": "EG Group",
   "segment": "other",
@@ -8526,21 +7166,6 @@
   ],
   "sites": [
    "www.eurogarages.com"
-  ]
- },
- {
-  "id": "Q909209",
-  "name": "El Comercio",
-  "segment": "other",
-  "category": "Department stores",
-  "country": "Ecuador",
-  "sitelinks": 9,
-  "sources": [
-   "wikipedia:List_of_department_stores_by_country",
-   "https://www.wikidata.org/wiki/Q909209"
-  ],
-  "sites": [
-   "elcomercio.com"
   ]
  },
  {
@@ -8935,21 +7560,6 @@
   ],
   "sites": [
    "www.fiorucci.it"
-  ]
- },
- {
-  "id": "Q127120",
-  "name": "Fitness First",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "United Kingdom",
-  "sitelinks": 4,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q127120"
-  ],
-  "sites": [
-   "www.dwfitnessfirst.com"
   ]
  },
  {
@@ -10858,21 +9468,6 @@
   ]
  },
  {
-  "id": "Q56393853",
-  "name": "KOI Thé",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "",
-  "sitelinks": 3,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q56393853"
-  ],
-  "sites": [
-   "www.koithe.com"
-  ]
- },
- {
   "id": "Q4575870",
   "name": "Komplett",
   "segment": "other",
@@ -11893,21 +10488,6 @@
   "sites": [
    "tempocentar.com",
    "megamaxi.rs"
-  ]
- },
- {
-  "id": "Q120998343",
-  "name": "Mega MGC Coffee",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "South Korea",
-  "sitelinks": 5,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q120998343"
-  ],
-  "sites": [
-   "www.mega-mgccoffee.com"
   ]
  },
  {
@@ -13613,21 +12193,6 @@
   ],
   "sites": [
    "www.rainbowfoods.com"
-  ]
- },
- {
-  "id": "Q17058977",
-  "name": "Rakuten TV",
-  "segment": "other",
-  "category": "Online retail & marketplaces",
-  "country": "Spain",
-  "sitelinks": 9,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q17058977"
-  ],
-  "sites": [
-   "tv.rakuten.co.jp"
   ]
  },
  {
@@ -15739,21 +14304,6 @@
   ]
  },
  {
-  "id": "Q12521502",
-  "name": "Timezone",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "Australia",
-  "sitelinks": 4,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q12521502"
-  ],
-  "sites": [
-   "www.timezonegames.com"
-  ]
- },
- {
   "id": "Q7808101",
   "name": "Tinex",
   "segment": "other",
@@ -16411,21 +14961,6 @@
   ],
   "sites": [
    "wildoats.com"
-  ]
- },
- {
-  "id": "Q28220231",
-  "name": "Wildwood Kitchen",
-  "segment": "other",
-  "category": "Other / unclassified",
-  "country": "United Kingdom",
-  "sitelinks": 3,
-  "sources": [
-   "wikidata:sparql",
-   "https://www.wikidata.org/wiki/Q28220231"
-  ],
-  "sites": [
-   "www.wildwoodkitchen.co.uk"
   ]
  },
  {

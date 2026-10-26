@@ -38,7 +38,9 @@ class Seo(unittest.TestCase):
     def test_every_page_one_h1_unique_title_valid_ld(self):
         ts=collections.Counter()
         for f in glob.glob(os.path.join(DIST,'**','*.html'),recursive=True):
-            h=open(f).read(); self.assertEqual(len(re.findall(r'<h1[ >]',h)),1,f); lds(h)
+            h=open(f).read()
+            if 'http-equiv="refresh"' in h: continue  # redirect stub for an old store URL (tests/test_store_pages.py)
+            self.assertEqual(len(re.findall(r'<h1[ >]',h)),1,f); lds(h)
             ts[re.search(r'<title>(.*?)</title>',h).group(1)]+=1
         self.assertEqual([t for t,n in ts.items() if n>1],[])
     def test_no_official_anywhere(self):

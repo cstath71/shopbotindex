@@ -18,7 +18,9 @@ class Site(unittest.TestCase):
     def test_every_store_page_has_watch_under_result(self):
         fs=glob.glob(os.path.join(DIST,'store','*.html')); self.assertGreater(len(fs),2000)
         for f in fs:
-            h=open(f).read(); m=re.search(r'name="watch" value="([^"]+)"',h); self.assertTrue(m,f)
+            h=open(f).read()
+            if 'http-equiv="refresh"' in h: continue  # redirect stub for an old store URL
+            m=re.search(r'name="watch" value="([^"]+)"',h); self.assertTrue(m,f)
             self.assertLess(h.index('What this means.'),h.index('id="watch"'),f); self.assertLess(h.index('id="watch"'),h.index('<h2>Websites checked'),f)
     def test_forms_post_to_function_with_honeypot(self):
         for p in ('index.html','stores.html','store/ikea.html'):

@@ -1,10 +1,13 @@
 """Fetch retailer candidates from Wikipedia list pages, resolve to Wikidata items (own websites, industry, country).
 Writes data/seeds/wikipedia_lists.json. Usage: python3 scripts/wiki_seeds.py"""
-import json, os, time, urllib.request, urllib.parse
+import json, os, sys, time, urllib.request, urllib.parse
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); OUT=os.path.join(ROOT,'data','seeds','wikipedia_lists.json')
 UA='ShopBotIndexBot/1.0 (+https://shopbotindex.com/methodology.html)'
 PAGES=['List_of_largest_retail_companies','List_of_department_stores_by_country','List_of_supermarket_chains','List_of_hypermarkets','List_of_online_marketplaces']
 EXCL={'Q5','Q6256','Q515','Q1549591','Q3624078','Q4167410','Q13406463','Q35657','Q7275','Q486972','Q1637706','Q2221906','Q11424','Q5119','Q82794','Q1093829'}
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from nonshops import CLASSES as NON_SHOP_CLASSES, IDS as NON_SHOPS  # places, newspapers, licences... (config/non_shops.json)
+EXCL=EXCL|NON_SHOP_CLASSES
 def get(url):
     for i in range(3):
         try:
@@ -33,7 +36,7 @@ for i in range(0,len(T),50):
                 out.append(v['id'] if isinstance(v,dict) and 'id' in v else v)
             return out
         p31=set(vals('P31'))
-        if p31 & EXCL: continue
+        if p31 & EXCL or q in NON_SHOPS: continue
         sites=vals('P856')
         if not sites: continue
         if vals('P576'): continue  # dissolved

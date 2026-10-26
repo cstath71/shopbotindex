@@ -1,6 +1,6 @@
 """Build the ShopBot Index static site from data/latest.json + data/channels.json -> ./dist
 Usage: python3 scripts/build.py"""
-import json, os, re, html, glob, shutil, collections
+import json, os, re, html, glob, shutil, collections, unicodedata
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.environ.get('SBI_DATA_DIR') or os.path.join(ROOT,'data'); DIST=os.environ.get('SBI_DIST_DIR') or os.path.join(ROOT,'dist')  # env overrides for dry-run previews
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 NAME='ShopBot Index'
@@ -11,10 +11,15 @@ FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe
 DEFDESC='What online stores tell AI shopping agents: a weekly public crawl of Shopify stores, big retailers and other online stores for UCP profiles, the machine-readable profile AI shopping agents read, plus agent tools, AI rules in robots.txt, AI guidance files and product data.'
 E=lambda s: html.escape(str(s if s is not None else ''))
 D=json.load(open(os.path.join(DATA,'latest.json'))); CH=json.load(open(os.path.join(DATA,'channels.json')))
-RET=D['retailers']; SITES=D['sites']; DAY=D['crawl_date']
+from nonshops import IDS as NON_SHOPS  # places, newspapers, restaurants etc. (config/non_shops.json) are not shops: no page, not counted
+RET=[r for r in D['retailers'] if r['id'] not in NON_SHOPS]; SITES=[s for s in D['sites'] if s['rid'] not in NON_SHOPS]; DAY=D['crawl_date']
 SITES_BY=collections.defaultdict(list)
 for s in SITES: SITES_BY[s['rid']].append(s)
-def slug(s): return re.sub(r'[^a-z0-9]+','-',s.lower()).strip('-')
+_TRANS=str.maketrans({'ß':'ss','Æ':'AE','æ':'ae','Ø':'O','ø':'o','Œ':'OE','œ':'oe','Ł':'L','ł':'l','Đ':'D','đ':'d','ı':'i','Þ':'Th','þ':'th','Ð':'D','ð':'d'})
+def slug(s):  # accented letters become plain ASCII (Bière -> biere), instead of being dropped (bi-re)
+    t=''.join(c for c in unicodedata.normalize('NFKD',str(s).translate(_TRANS)) if not unicodedata.combining(c))
+    return re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-')
+def slug_v1(s): return re.sub(r'[^a-z0-9]+','-',s.lower()).strip('-')  # pre-27 Oct 2026 slugs, kept only to redirect old URLs
 SEG={'shopify':'Shopify stores','big':'Big retailers','other':'Other retailers & marketplaces'}
 SEGDESC={'shopify':'Stores from public lists of Shopify stores.','big':"Retailers on Wikipedia's List of largest retail companies, or with Wikipedia articles in 10+ languages.",
  'other':'Other retail chains, department stores, supermarkets, hypermarkets and online marketplaces listed on Wikipedia or Wikidata.'}
@@ -140,13 +145,17 @@ def primary(r):
     ss=SITES_BY[r['id']]
     if r['segment']=='shopify' and '.' in r['id']: return bare(r['id'].lower())
     return bare(host(ss[0])) if ss else ''
-_nc=collections.Counter(slug(r['name']) or 'store' for r in RET); SLUG={}; _used=set()
-for r in sorted(RET,key=lambda r:r['id']):
-    b=slug(r['name']) or 'store'
-    if _nc[b]>1 and primary(r) and slug(primary(r))!=b: b=b+'-'+slug(primary(r))
-    x=b; i=2
-    while x in _used: x=f'{b}-{i}'; i+=1
-    _used.add(x); SLUG[r['id']]=x
+def make_slugs(fn):
+    nc=collections.Counter(fn(r['name']) or 'store' for r in RET); out={}; used=set()
+    for r in sorted(RET,key=lambda r:r['id']):
+        b=fn(r['name']) or 'store'
+        if nc[b]>1 and primary(r) and fn(primary(r))!=b: b=b+'-'+fn(primary(r))
+        x=b; i=2
+        while x in used: x=f'{b}-{i}'; i+=1
+        used.add(x); out[r['id']]=x
+    return out
+SLUG=make_slugs(slug)
+_new=set(SLUG.values()); OLD_SLUG={k:v for k,v in make_slugs(slug_v1).items() if v!=SLUG[k] and v not in _new}  # old URL -> redirect stub
 STATUS_SHORT={'ucp':'Yes: UCP profile found','no_ucp':'No UCP profile found','couldnt_check':"Couldn't check"}
 LOOK={}
 for r in RET:
@@ -315,7 +324,7 @@ def readiness(r):
         t='Publishes a UCP profile at <code>/.well-known/ucp</code>'
         if capl: t+=f' declaring {len(capl)} capabilit{"y" if len(capl)==1 else "ies"}'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')
         ucpt=(('yes','Found'),t+'.')
-    elif st=='no_ucp': ucpt=(('no','Not found'),'No UCP profile found at <code>/.well-known/ucp</code>.')
+    elif st=='no_ucp': ucpt=(('no','No profile'),'No UCP profile found at <code>/.well-known/ucp</code>.')
     else: ucpt=(('warn',"Couldn't check"),"Couldn't check: our request for the profile was refused or failed.")
     extra=(' Also publishes an Agentic Commerce Protocol (ACP) discovery document at <code>/.well-known/acp.json</code>.' if sg.get('acp') else '')+(' Also publishes an AI catalog at <code>/.well-known/ai-catalog.json</code>.' if sg.get('ai_catalog') else '')
     rows.append(('UCP profile',ucpt[0],ucpt[1]+extra))
@@ -323,7 +332,7 @@ def readiness(r):
     if ms=='answered': mrow=(('yes','Answered'),f'The MCP endpoint named in its UCP profile answered our read-only tools list request with {len(tl)} tool{"s" if len(tl)!=1 else ""}: '+', '.join(f'<code>{E(t)}</code>' for t in tl)+'. We never call the tools.')
     elif ms=='no_tools': mrow=(('no','No tools list'),"Its UCP profile names an MCP endpoint, but it didn't return a tools list to our request.")
     elif st=='ucp' and ms=='none_declared': mrow=(('no','None declared'),'Its UCP profile declares no MCP endpoint.')
-    elif st=='no_ucp': mrow=(('no','None found'),'No UCP profile, so no MCP endpoint to check. We only look for one in a UCP profile.')
+    elif st=='no_ucp': mrow=(('no','No endpoint'),'No UCP profile, so no MCP endpoint to check. We only look for one in a UCP profile.')
     else: mrow=(('warn','Not checked'),'Not checked this week.')
     rows.append(('Agent tools (MCP)',)+mrow)
     rb=sg.get('robots',{})
@@ -356,14 +365,40 @@ def readiness(r):
     intro=f'Public signals we checked on {DAY}, besides the UCP profile. They show what the store publishes for AI agents; none of them says whether a particular AI agent can or can\'t buy here.'
     return f'<h2 id="readiness">Supporting signals</h2><p>{intro} <a href="../methodology.html#signals">What each signal means</a>.</p><div class="tw nomax"><table><tr><th>Signal</th><th>Result</th><th>Details</th></tr>{tr}</table></div>{note}'
 # ---- store pages ----
+SEG1={'shopify':'a Shopify store','big':'a big retailer','other':'a retailer or marketplace'}
 def store_desc(r):
     d=primary(r); nm=r['name']; who=nm if nm.lower()==d else f'{nm} ({d})' if d else nm
+    intro=f"{who} is {SEG1[r['segment']]} we track, listed under {r['category']}"+(f" in {r['country']}" if r.get('country') else '')+'.'
     if r['status']=='ucp':
         k=len(r['capabilities']); ck=' including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else ''
-        return f"Yes. In ShopBot Index's crawl of {DAY}, {who} published a UCP profile at /.well-known/ucp declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}: the machine-readable profile AI shopping agents read."
-    if r['status']=='no_ucp': return f"No UCP profile found. In ShopBot Index's crawl of {DAY}, we found no UCP profile at /.well-known/ucp for {who}. That doesn't mean AI agents can't shop there."
-    return f"Unknown. In ShopBot Index's crawl of {DAY}, we couldn't check {who}: every request for its UCP profile was refused or failed. That is not the same as no profile."
+        return f"{intro} In ShopBot Index's crawl of {DAY}, it publishes a UCP profile, the profile AI shopping agents read, at /.well-known/ucp, declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}."
+    if r['status']=='no_ucp':
+        ss=SITES_BY[r['id']]; n=sum(1 for x in ss if x.get('status') in ('no_ucp','not_json','json_without_ucp'))
+        reached='its website' if len(ss)==1 else f'{n} of its {len(ss)} websites' if n<len(ss) else f'its {len(ss)} websites'
+        return f"{intro} In ShopBot Index's crawl of {DAY}, we reached {reached} but found no UCP profile, the profile AI shopping agents read, at /.well-known/ucp. That doesn't mean AI agents can't shop there."
+    return f"{intro} In ShopBot Index's crawl of {DAY}, we couldn't check whether it publishes a UCP profile: every request was refused or failed. That is not the same as no profile."
 PILL={'ucp':'yes','no_ucp':'no','couldnt_check':'warn'}
+HIST=[]  # (date, {id: (status, n capabilities)}) from every saved weekly crawl, oldest first
+for _f in sorted(glob.glob(os.path.join(DATA,'crawl-*.json'))):
+    _d=json.load(open(_f))
+    if 'retailers' in _d and _d.get('crawl_date')!=DAY: HIST.append((_d['crawl_date'],{x['id']:(x['status'],len(x.get('capabilities') or [])) for x in _d['retailers']}))
+HIST.append((DAY,{x['id']:(x['status'],len(x.get('capabilities') or [])) for x in RET}))
+def history(r):
+    rows=[(d,m[r['id']]) for d,m in HIST if r['id'] in m]
+    tr=''.join(f'<tr><td>{E(d)}</td><td><span class="pill {PILL[st]}">{E(STL[st])}</span></td><td class="hide-sm">{(str(k)+" capabilit"+("y" if k==1 else "ies")) if st=="ucp" else ""}</td></tr>' for d,(st,k) in reversed(rows))
+    first=f'We have tracked it in every weekly crawl since {E(rows[0][0])}.' if len(rows)>1 else f'Our crawl of {E(DAY)} is the first that included it.'
+    return f'<h2>Weekly results</h2><p>{first} Each Monday\'s crawl adds a row.</p><div class="tw nomax"><table><tr><th>Crawl</th><th>UCP profile</th><th class="hide-sm">Declared</th></tr>{tr}</table></div>'
+BYCAT=collections.defaultdict(list)
+for _r in RET: BYCAT[_r['category']].append(_r)
+def related(r):
+    pool=[x for x in BYCAT[r['category']] if x['id']!=r['id']]; c=r.get('country') or ''
+    same=[x for x in pool if c and x.get('country')==c]
+    key=lambda x:({'ucp':0,'no_ucp':1,'couldnt_check':2}[x['status']],-x.get('sitelinks',0),x['name'].lower())
+    if len(same)>=4: pick=sorted(same,key=key)[:8]; where=f' in {c}'
+    else: pick=sorted(pool,key=key)[:8]; where=''
+    if not pick: return ''
+    li=''.join(f'<li><a href="{SLUG[x["id"]]}.html">{E(x["name"])}</a> <span class="pill {PILL[x["status"]]}">{E(STL[x["status"]])}</span></li>' for x in pick)
+    return f'<h2>Other stores in {E(r["category"])}{E(where)}</h2><ul>{li}</ul><p><a href="../categories/{slug(r["category"])}.html">All {len(BYCAT[r["category"]])} stores in {E(r["category"])}</a></p>'
 for r in RET:
     u=SLUG[r['id']]; d=primary(r); ss=SITES_BY[r['id']]; st=r['status']
     sites=''.join(f'<tr><td><a href="https://{E(host(x))}/.well-known/ucp" rel="nofollow noopener" target="_blank">{E(host(x))}</a></td><td><span class="pill {"yes" if x.get("status")=="ucp" else "warn" if x.get("status") in ("blocked","error","robots_disallow") else "no"}">{E(SITEST.get(x.get("status","error"),x.get("status")))}</span></td><td class="hide-sm">{E(x.get("http_status") or "")}</td></tr>' for x in ss)
@@ -383,11 +418,17 @@ for r in RET:
 <h2>Websites checked ({len(ss)})</h2><p>We fetched <code>/.well-known/ucp</code> on each site on {DAY}.</p><div class="tw nomax"><table><tr><th>Website</th><th>Result</th><th class="hide-sm">HTTP</th></tr>{sites}</table></div>
 {caps}
 {readiness(r)}
+{history(r)}
 <h2>About this store in the index</h2><ul><li>Segment: <a href="../segments/{r["segment"]}.html">{E(SEG[r["segment"]])}</a></li><li>Category: <a href="../categories/{slug(r["category"])}.html">{E(r["category"])}</a></li>{f'<li>Country: {E(r["country"])}</li>' if r["country"] else ''}<li>Last checked: {DAY} (re-checked every week)</li></ul>
+{related(r)}
 {badge}
 <p>Run this store and think the result is wrong, or want it removed? Email {MAILTO} with the domain; we re-check it in the next weekly crawl and never change a result by hand. <a href="../methodology.html">How we measure</a>.</p>
 {checkbox("../",title="Check another store")}{signup("../")}'''
     page(f'store/{u}.html',f'{r["name"]}: UCP profile and AI-agent signals | {NAME}',body,store_desc(r),ogimg='og-store.png',ogtype='article',head=f'<script type="application/ld+json">{jsonld}</script>')
+# old URLs of stores whose slug changed (accented letters used to be dropped): redirect stubs, kept out of the sitemap
+for _id,_o in OLD_SLUG.items():
+    _u=f'{SITE}/store/{SLUG[_id]}.html'
+    open(os.path.join(DIST,'store',f'{_o}.html'),'w').write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>{E(NM[_id]["name"])} | {NAME}</title><link rel="canonical" href="{_u}"><meta http-equiv="refresh" content="0; url={SLUG[_id]}.html"><script>location.replace("{SLUG[_id]}.html")</script></head><body><p>This page moved to <a href="{SLUG[_id]}.html">{_u}</a>.</p></body></html>')
 # ---- check + badge pages, lookup JSON, badge SVGs ----
 page('check.html',f'Check your store: what does it tell AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the machine-readable profile AI shopping agents read. We track {len(RET)} retailers and stores. No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>). Each store's page also lists its supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</p>
 {checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: what does it tell AI shopping agents? Its UCP profile and supporting signals from our weekly crawl of {len(RET)} retailers and stores.')
@@ -397,6 +438,7 @@ page('badge.html',f'"UCP profile found" badge for your store | {NAME}',f'''<h1>A
 json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,separators=(',',':'))
 os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
 for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
+for _id,_o in OLD_SLUG.items(): open(os.path.join(DIST,'badge',_o+'.svg'),'w').write(_B[NM[_id]['status']=='ucp'])  # badges already pasted on sites under the old slug keep working
 # ---- methodology ----
 import importlib.util as _ilu
 _sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.py')); _cm=_ilu.module_from_spec(_sp); _sp.loader.exec_module(_cm)
