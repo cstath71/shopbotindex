@@ -266,7 +266,7 @@ CHGTITLE='What changed: stores that started or stopped publishing a UCP profile'
 if CHG:
     pv=_dlong(CHG['previous']); cu=_dlong(DAY); nT=len(RET); nU=sum(1 for r in RET if r['status']=='ucp')
     SL=lambda i: f'<a href="store/{SLUG[i]}.html">{E(NM[i]["name"])}</a> <small>({E(SEG[NM[i]["segment"]])})</small>'
-    def L(ids,why,empty): return '<ul>'+''.join(f'<li>{SL(i)}: {why}</li>' for i in ids)+'</ul>' if ids else f'<p>{empty}</p>'
+    def L(ids,why,empty): return '<ul>'+''.join(f'<li>{SL(i)}: {why(i) if callable(why) else why}</li>' for i in ids)+'</ul>' if ids else f'<p>{empty}</p>'
     n=lambda k: len(CHG[k])
     pl=lambda k,one,many: (one if n(k)==1 else many).format(n=n(k))
     intro=(f'<p class="lede">Between our crawls of {pv} and {cu}, {pl("joined","{n} retailer or store","{n} retailers and stores")} started publishing a UCP profile, the profile AI shopping agents read, '
@@ -277,12 +277,18 @@ if CHG:
            f'Stores added to our list are shown as newly tracked, not as joining. Details are in the <a href="methodology.html#changes">methodology</a>.</p>')
     cc=''.join(f'<li><a href="store/{SLUG[x["id"]]}.html">{E(NM[x["id"]]["name"])}</a>: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""}{"; " if x["added"] and x["removed"] else ""}{"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
     cs,H=_hist()
+    def joined_why(i):
+        # wording follows what each crawl actually saw: checked without a profile, couldn't check, or had one in an earlier crawl and is back
+        if PR[i]['status']=='couldnt_check': return f"we couldn&#39;t check it on {pv}; it publishes a profile now."
+        had=[c['crawl_date'] for c in cs if c['crawl_date']<CHG['previous'] and any(r['id']==i and r['status']=='ucp' for r in c['retailers'])]
+        if had: return f"UCP profile found on {_dlong(had[-1])}, none found on {pv}; it publishes one again on {cu}."
+        return f"no UCP profile found on {pv}, profile found on {cu}."
     if len(H)>1:
         hist='<h2>Earlier comparisons</h2><div class="tw"><table><tr><th>Crawls compared</th><th>Joined</th><th>Left</th><th>Had a profile, now couldn\'t check</th><th>With a UCP profile</th></tr>'+''.join(f'<tr><td>{_dlong(a)} → {_dlong(b)}</td><td>{j}</td><td>{l}</td><td>{u}</td><td>{t}</td></tr>' for a,b,j,l,u,t in reversed(H))+'</table></div>'
     else:
         hist=f'<h2>Earlier comparisons</h2><p>None yet. Our crawl of {_dlong(cs[0]["crawl_date"])} is the first one saved in this format, so this is the first comparison. Each new crawl adds a row here.</p>'
     body=f'''<h1>{CHGTITLE}</h1>{intro}
-<h2>Joined: newly publishing a UCP profile ({n("joined")})</h2>{L(CHG["joined"],f"no UCP profile found on {pv}, profile found on {cu}.",f"No store started publishing a UCP profile between {pv} and {cu}.")}
+<h2>Joined: newly publishing a UCP profile ({n("joined")})</h2>{L(CHG["joined"],joined_why,f"No store started publishing a UCP profile between {pv} and {cu}.")}
 <h2>Left: profile no longer found ({n("left")})</h2>{L(CHG["left"],f"UCP profile found on {pv}, none found on {cu}.",f"No store stopped publishing a UCP profile between {pv} and {cu}.")}
 <h2>Had a profile, now couldn't check ({n("now_unreachable")})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"],f"UCP profile found on {pv}; on {cu} the site blocked us or was unreachable.",f"Every store that had a UCP profile on {pv} could be checked again on {cu}.")}
 <h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else f"<p>No store changed its declared capabilities between these two crawls.</p>"}
