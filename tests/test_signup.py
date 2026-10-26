@@ -31,6 +31,16 @@ class Site(unittest.TestCase):
         self.assertIn("we don't know whether it publishes a UCP profile",h); self.assertIn('for-stores.html',R('check.html')); self.assertIn('/for-stores.html',R('sitemap.xml'))
         t=re.sub(r'<script.*?</script>','',h,flags=re.S).lower(); self.assertNotIn('official',t); self.assertNotIn('can buy',t); self.assertNotIn("agents can't buy",t)
         L=json.load(open(os.path.join(DIST,'stores.json'))); self.assertEqual(L['ikea.com'][3],'Q54078')
+    def test_data_feed_draft(self):
+        # waitlist page: prices labelled as estimates, no payment links, wording rules
+        h=R('data-feed.html'); t=re.sub(r'<script.*?</script>','',h,flags=re.S).lower()
+        self.assertIn('pricing (estimate, not final)',t); self.assertEqual(t.count('(estimate)'),2); self.assertIn('data feed waitlist',t)
+        for w in ('stripe','checkout.','buy.','paypal','official','can buy',"agents can't buy"): self.assertNotIn(w,t)
+    def test_owner_and_feed_pages_linked_and_in_sitemap(self):
+        sm=R('sitemap.xml')
+        for f in ('for-stores.html','data-feed.html'):
+            self.assertIn('/'+f+'</loc>',sm,f)
+            for p in ('index.html','stores.html','store/ikea.html'): self.assertIn(f,R(p).split('<footer')[1],(f,p))
     def test_forms_post_to_function_with_honeypot(self):
         for p in ('index.html','stores.html','store/ikea.html'):
             h=R(p)
