@@ -22,6 +22,9 @@ class Site(unittest.TestCase):
             if 'http-equiv="refresh"' in h: continue  # redirect stub for an old store URL
             m=re.search(r'name="watch" value="([^"]+)"',h); self.assertTrue(m,f)
             self.assertLess(h.index('What this means.'),h.index('id="watch"'),f); self.assertLess(h.index('id="watch"'),h.index('<h2>Websites checked'),f)
+    def test_check_result_offers_watch(self):
+        # the store lookup result links to that store's watch form
+        for f in ('check.html','index.html'): self.assertIn(".html#watch\"><b>Watch '",R(f),f)
     def test_forms_post_to_function_with_honeypot(self):
         for p in ('index.html','stores.html','store/ikea.html'):
             h=R(p)
