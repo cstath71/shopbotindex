@@ -1,15 +1,719 @@
 {
- "previous": "2026-10-17",
- "current": "2026-10-19",
+ "previous": "2026-10-19",
+ "current": "2026-10-26",
  "joined": [
-  "naturalheroes.nl"
+  "Q1181484",
+  "Q54078",
+  "Q43452713",
+  "aristavault.com",
+  "atticsalt.in",
+  "explorewatersports.in",
+  "eyewearlabs.com"
  ],
- "left": [
-  "Q54078"
- ],
+ "left": [],
  "now_unreachable": [
-  "Q3210329"
+  "Q6711827",
+  "fashionistamna.com",
+  "mantheory.in",
+  "oziva.in"
  ],
  "newly_tracked": [],
- "capability_changes": []
+ "capability_changes": [
+  {
+   "id": "Q837851",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q5318687",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q5674252",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q2820820",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q1736294",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q1559593",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q7140896",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q22921009",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q7641808",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q48802134",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "Q7996831",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "1hairstop.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "abovethecloudsstore.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "amongstfew.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "bajaao.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "bbcicecream.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "bearkomplex.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "bikenbiker.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "borgioli.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "bowsandarrowsberkeley.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "bumsonthesaddle.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "burnrubbersneakers.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "capitalfashion.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "capsuletoronto.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "carplus.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "cncpts.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "concrete.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "courtsidesneakers.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "creme321.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "dizcover.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "duroflexworld.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "featuresneakerboutique.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "ficegallery.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "freshragsfl.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "gathershop.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "highsandlows.net.au",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "hippe-dingen.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "hotoveli.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "justdon.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "kimirica.shop",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "krishnadasmusic.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "lessoneseven.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "likelihood.us",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "livpure.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "livpuresleep.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "londonrag.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "louen.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "machusonline.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "manorphx.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "marketplace.mainstreet.co.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "minishopmadrid.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "nameg.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "noirfonce.eu",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "notre-shop.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "nrml.ca",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "pegador.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "possen.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "powersports.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "ragecoffee.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "renarts.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "rockcitykicks.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "rustygold.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "shoegallerymiami.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "shop.extrabutterny.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "shop.havenshop.ca",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "skateboardsamsterdam.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "sneakerpolitics.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "soleclassics.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "solefly.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "solestop.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "stay-rooted.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "supertails.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "theclosetinc.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "thedarksideinitiative.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "thegoodpeople.nl",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "themomstore.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "thesurestore.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "tilfi.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "urbanindustry.co.uk",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "urbanmonkey.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "usgstore.com.au",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "vahdamteas.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "vedix.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "wishatl.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "xech.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "zestpics.com",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  },
+  {
+   "id": "zouk.co.in",
+   "added": [
+    "dev.ucp.common.location.lookup",
+    "dev.ucp.common.location.search"
+   ],
+   "removed": []
+  }
+ ]
 }
