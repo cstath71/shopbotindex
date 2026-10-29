@@ -1,7 +1,7 @@
 """Fetch each seed store's UCP business profile from /.well-known/ucp (UCP spec: https://ucp.dev/specification/overview/ ,
 'Discovery: Fetch business profile from /.well-known/ucp'). Polite: honours robots.txt, one request at a time per host,
 small global concurrency, timeouts, honest User-Agent. Writes data/crawl-YYYY-MM-DD.json and data/latest.json.
-Phase 1 (unchanged headline metric): robots.txt + /.well-known/ucp for every site.
+Phase 1 (unchanged headline metric): robots.txt + /.well-known/ucp for every site. Blocked UCP responses record challenge=true when the response is a bot-protection challenge page; retailers with status couldnt_check also get couldnt_check_reason (robots_disallow|challenge|blocked|error).
 Phase 2 (agent-readiness signals, scripts/signals.py): runs after phase 1 within a time budget (env SBI_SIGNALS_BUDGET seconds,
 default 5400); sites not reached in time are recorded as not checked. SBI_SIGNALS=0 skips phase 2 entirely.
 Phase 3 (record-only agent discovery files, scripts/agent_files.py): poppy.json, A2A agent card, ai-catalog.json in sites[].agent_files,
@@ -20,16 +20,36 @@ ROBOTS_TXT={}
 TIMEOUT=10; WORKERS=12; WORKERS2=16; PAUSE=0.25; MAXBYTES=512*1024  # WORKERS2: phase 2 (still one request at a time per site)
 CTX=ssl.create_default_context()
 def fetch(url):
+    """Returns (status, content_type_or_error, final_url, body, headers_dict).
+    headers_dict is empty on transport errors. On HTTPError we keep the body (up to MAXBYTES) so
+    challenge pages can be classified; status is the HTTP code."""
     req=urllib.request.Request(url,headers={'User-Agent':UA,'Accept':'application/json'})
     try:
         with urllib.request.urlopen(req,timeout=TIMEOUT,context=CTX) as r:
-            return r.status, r.headers.get('Content-Type',''), r.geturl(), r.read(MAXBYTES)
+            hdrs={k.lower():v for k,v in r.headers.items()}
+            return r.status, r.headers.get('Content-Type',''), r.geturl(), r.read(MAXBYTES), hdrs
     except urllib.error.HTTPError as e:
-        return e.code, e.headers.get('Content-Type','') if e.headers else '', url, b''
+        try: body=e.read(MAXBYTES) if e.fp else b''
+        except Exception: body=b''
+        hdrs={k.lower():v for k,v in (e.headers.items() if e.headers else [])}
+        return e.code, e.headers.get('Content-Type','') if e.headers else '', url, body, hdrs
     except Exception as e:
-        return None, type(e).__name__+': '+str(e)[:120], url, b''
+        return None, type(e).__name__+': '+str(e)[:120], url, b'', {}
+def is_challenge(status, headers, body):
+    """True when the response looks like a bot-protection challenge page (not a plain 403).
+    Uses the Cloudflare cf-mitigated header when present, else a short allow-list of body markers.
+    Never guesses from status alone: a bare 403 is blocked, not challenge."""
+    if not status: return False
+    h=headers or {}
+    if h.get('cf-mitigated')=='challenge': return True
+    if status not in (401,403,429,503): return False
+    text=(body or b'')[:8192].decode('utf-8','ignore').lower()
+    markers=('cf-browser-verification','challenge-platform','just a moment','attention required',
+             'cdn-cgi/challenge','_cf_chl','cf-challenge','enable javascript and cookies to continue',
+             'checking your browser before accessing')
+    return any(m in text for m in markers)
 def robots_ok(base):
-    st,ct,_,body=fetch(base+'/robots.txt')
+    st,ct,_,body,_hdrs=fetch(base+'/robots.txt')
     if st!=200 or not body: return True, st
     ROBOTS_TXT[base]=body.decode('utf-8','ignore')
     rp=urllib.robotparser.RobotFileParser(); rp.parse(body.decode('utf-8','ignore').splitlines())
@@ -70,7 +90,7 @@ def crawl_one(seed):
             out['note']='primary host unreachable'; continue
         if not ok:
             out.update(status='robots_disallow',host=h); return out
-        st,ct,final,body=fetch(base+'/.well-known/ucp')
+        st,ct,final,body,hdrs=fetch(base+'/.well-known/ucp')
         out.update(host=h,http_status=st,content_type=ct if st else '',final_url=final)
         if st is None:
             out['status']='error'; out['error']=ct
@@ -83,9 +103,24 @@ def crawl_one(seed):
             if s: out.update(status='ucp',ucp=s)
             else: out['status']='json_without_ucp'
             return out
-        out['status']='blocked' if st in (401,403,429,451) else 'no_ucp'
+        if st in (401,403,429,451):
+            out['status']='blocked'
+            out['challenge']=bool(is_challenge(st,hdrs,body))  # challenge page vs plain refuse; false when unclear
+            return out
+        out['status']='no_ucp'
         return out
     return out
+def couldnt_check_reason(sites):
+    """Split the couldn't-check bucket for the weekly summary: robots.txt disallow vs 403/challenge vs other.
+    One primary reason per retailer (first match): robots_disallow if every site was disallowed;
+    challenge if any site was a challenge page; blocked if any site returned 401/403/429/451;
+    error otherwise (timeout, TLS, DNS)."""
+    sts=[x.get('status') for x in sites]
+    if sts and all(s=='robots_disallow' for s in sts): return 'robots_disallow'
+    if any(x.get('status')=='blocked' and x.get('challenge') for x in sites): return 'challenge'
+    if any(x.get('status')=='blocked' for x in sites): return 'blocked'
+    if any(x.get('status')=='robots_disallow' for x in sites): return 'robots_disallow'
+    return 'error'
 def aggregate(seed,sites):
     """Retailer-level status: ucp if any site has a profile; no_ucp if at least one site answered without one;
     couldnt_check if every site refused, timed out or was disallowed by robots.txt."""
@@ -96,10 +131,12 @@ def aggregate(seed,sites):
     caps=sorted({c for x in sites if x.get('status')=='ucp' for c in x['ucp']['capabilities']})
     ph=sorted({c for x in sites if x.get('status')=='ucp' for c in x['ucp']['payment_handlers']})
     plat=sorted({x['ucp']['platform_hint'] or 'Other / not identified' for x in sites if x.get('status')=='ucp'})
-    return dict(id=seed['id'],status=status,sites_checked=len(sites),sites_with_ucp=st.count('ucp'),capabilities=caps,payment_handlers=ph,platforms=plat,signals=SIG.rollup(sites))
+    out=dict(id=seed['id'],status=status,sites_checked=len(sites),sites_with_ucp=st.count('ucp'),capabilities=caps,payment_handlers=ph,platforms=plat,signals=SIG.rollup(sites))
+    if status=='couldnt_check': out['couldnt_check_reason']=couldnt_check_reason(sites)
+    return out
 def agent_profile():
     """Our own UCP agent profile (published by build.py); fall back to Shopify's documented example until ours is live."""
-    st,ct,_,body=fetch(AGENT_PROFILE)
+    st,ct,_,body,_hdrs=fetch(AGENT_PROFILE)
     try:
         if st==200 and 'json' in ct.lower() and isinstance(json.loads(body).get('ucp'),dict): return AGENT_PROFILE  # Shopify rejects non-JSON content types
     except Exception: pass
@@ -123,6 +160,8 @@ def phase2(res,budget):
                 checked=sum(1 for r in res if (r.get('signals') or {}).get('checked')),not_checked_budget=sum(1 for r in res if (r.get('signals') or {}).get('reason')=='time budget reached'))
 def main():
     seeds=json.load(open(os.path.join(DATA,'seeds.json')))
+    from nonshops import IDS as NON_SHOPS  # config/non_shops.json: never crawl places, newspapers, restaurants etc.
+    seeds=[s for s in seeds if s['id'] not in NON_SHOPS]
     if '--every' in sys.argv: seeds=seeds[::int(sys.argv[sys.argv.index('--every')+1])]
     if '--limit' in sys.argv: seeds=seeds[:int(sys.argv[sys.argv.index('--limit')+1])]
     out_dir=sys.argv[sys.argv.index('--out')+1] if '--out' in sys.argv else DATA
@@ -155,5 +194,5 @@ def main():
              timing=dict(phase1_seconds=p1,phase2=p2,agent_files=p3),retailers=retailers,sites=res)
     os.makedirs(out_dir,exist_ok=True)
     for fn in (f'crawl-{day}.json','latest.json'): json.dump(doc,open(os.path.join(out_dir,fn),'w'),ensure_ascii=False,separators=(',',':'))
-    print('done',round(time.time()-t0),'s sites:',collections.Counter(r.get('status') for r in res),'retailers:',collections.Counter((r['segment'],r['status']) for r in retailers))
+    cc=collections.Counter(r.get('couldnt_check_reason') for r in retailers if r['status']=='couldnt_check'); print('done',round(time.time()-t0),'s sites:',collections.Counter(r.get('status') for r in res),'retailers:',collections.Counter((r['segment'],r['status']) for r in retailers),'couldnt_check_split:',dict(cc),'site_challenges:',sum(1 for r in res if r.get('challenge')))
 if __name__=='__main__': main()

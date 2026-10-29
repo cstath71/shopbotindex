@@ -1,0 +1,70 @@
+name: Weekly crawl
+# Monday crawl of every tracked store (scripts/crawl.py: UCP pass, agent-readiness signals, agent discovery files),
+# then build.py and the tests. Commits data/ + dist/ to main only when they changed, then starts the Pages deploy.
+# Crawl only: no newsletter, no watch alerts (scripts/watch_alerts.py), no IndexNow, no posts, no email.
+# GitHub emails the repo owner when a run fails.
+on:
+  schedule:
+    - cron: '15 4 * * 1'   # Monday 04:15 UTC = 05:15 Zurich in winter (CET), 06:15 in summer (CEST); before the old 07:00 box run
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: crawl, build and test, upload the results as an artifact, but do not commit or push'
+        type: boolean
+        default: false
+permissions:
+  contents: write   # commit the crawl
+  actions: write    # start pages.yml (pushes made with GITHUB_TOKEN do not trigger push workflows)
+concurrency:
+  group: weekly-crawl
+  cancel-in-progress: false
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180   # real run ~61 min; budgets cap it at ~12 + 75 + 20 min
+    env:
+      TZ: Europe/Zurich
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Crawl (stdlib only)
+        run: python3 scripts/crawl.py 2>&1 | tee crawl.log
+      - name: Build
+        run: python3 scripts/build.py 2>&1 | tee -a crawl.log
+      - name: Tests
+        run: python3 -m unittest discover -s tests
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Weekly crawl $(date +%F) (dry run: $DRY_RUN)"
+            echo '```'
+            grep -E '^(phase|agent files|done|built)' crawl.log || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-crawl-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            crawl.log
+            data/crawl-*.json
+            data/changes-latest.json
+            data/slugs-latest.json
+      - name: Commit and push if changed
+        if: env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A data dist
+          if git diff --cached --quiet; then echo "No changes to publish."; exit 0; fi
+          git -c user.name=cstath71 -c user.email=227154513+cstath71@users.noreply.github.com commit -q -m "Weekly crawl $(date +%F)"
+          git pull -q --rebase origin main
+          git push -q origin HEAD:main
+          echo "Pushed weekly crawl $(date +%F)."
+          gh workflow run pages.yml --ref main

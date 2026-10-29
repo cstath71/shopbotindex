@@ -24,6 +24,18 @@ Public lists of stores that run on Shopify:
 - Each host is used once overall (leading `www.` ignored). myshopify.com and support/help/blog/store/dtc subdomains are skipped.
 - `pilot-crawl-2026-10-17.json` is the first crawl in the old per-site format, kept for reference and ignored by the weekly diff.
 
+## Entries left out: not online shops
+Some Wikipedia list entries resolve to Wikidata items that are not shops: towns, cities and regions (a hypermarket's location linked
+from List_of_hypermarkets, for example), newspapers, a software licence, a web archive, an event, restaurants and cafés, and services
+such as streaming, gyms, karaoke and arcades. They are listed with the reason in `config/non_shops.json` and left out of
+`data/seeds.json`, the crawl and the site (`scripts/nonshops.py`). Their Wikidata classes are also skipped by `scripts/wiki_seeds.py`
+when the Wikipedia seeds are refreshed.
+
+## Manual additions (`additions-YYYY-MM-DD.json`)
+Stores added outside the Wikipedia/Wikidata/Shopify lists, tagged with `added` so the weekly comparison treats them as newly tracked. `scripts/seeds.py` appends every `additions-*.json` after the main sources.
+
+- `additions-2026-10-29.json`: JENNi (`shop.jennipro.com`), segment `other`. UCP profile verified 2026-10-29 at `https://shop.jennipro.com/.well-known/ucp`.
+
 ## Added on 2 Nov 2026 (`additions-2026-11-02.json`, 674 stores, tagged `added: 2026-11-02`)
 Prepared 19 Oct 2026, frozen in the repo; `scripts/seeds.py` appends every `additions-YYYY-MM-DD.json` after the sources above with the same rules
 (one entry per retailer, each host once overall, up to 8 sites, myshopify.com skipped). Each entry was new by registrable domain (Public Suffix List)

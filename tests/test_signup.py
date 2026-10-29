@@ -18,8 +18,29 @@ class Site(unittest.TestCase):
     def test_every_store_page_has_watch_under_result(self):
         fs=glob.glob(os.path.join(DIST,'store','*.html')); self.assertGreater(len(fs),2000)
         for f in fs:
-            h=open(f).read(); m=re.search(r'name="watch" value="([^"]+)"',h); self.assertTrue(m,f)
+            h=open(f).read()
+            if 'http-equiv="refresh"' in h: continue  # redirect stub for an old store URL
+            m=re.search(r'name="watch" value="([^"]+)"',h); self.assertTrue(m,f)
             self.assertLess(h.index('What this means.'),h.index('id="watch"'),f); self.assertLess(h.index('id="watch"'),h.index('<h2>Websites checked'),f)
+    def test_check_result_offers_watch(self):
+        # the store lookup result links to that store's watch form
+        for f in ('check.html','index.html'): self.assertIn(".html#watch\"><b>Watch '",R(f),f)
+    def test_store_owner_page(self):
+        # for-stores.html: lookup with an inline watch form; wording rules; linked from check.html; in the sitemap
+        h=R('for-stores.html'); self.assertIn('data-watch',h); self.assertIn('window.sbiSub',h); self.assertIn("doesn't mean AI agents can't shop",h)
+        self.assertIn("we don't know whether it publishes a UCP profile",h); self.assertIn('for-stores.html',R('check.html')); self.assertIn('/for-stores.html',R('sitemap.xml'))
+        t=re.sub(r'<script.*?</script>','',h,flags=re.S).lower(); self.assertNotIn('official',t); self.assertNotIn('can buy',t); self.assertNotIn("agents can't buy",t)
+        L=json.load(open(os.path.join(DIST,'stores.json'))); self.assertEqual(L['ikea.com'][3],'Q54078')
+    def test_data_feed_draft(self):
+        # waitlist page: prices labelled as estimates, no payment links, wording rules
+        h=R('data-feed.html'); t=re.sub(r'<script.*?</script>','',h,flags=re.S).lower()
+        self.assertIn('pricing (estimate, not final)',t); self.assertEqual(t.count('(estimate)'),2); self.assertIn('data feed waitlist',t)
+        for w in ('stripe','checkout.','buy.','paypal','official','can buy',"agents can't buy"): self.assertNotIn(w,t)
+    def test_owner_and_feed_pages_linked_and_in_sitemap(self):
+        sm=R('sitemap.xml')
+        for f in ('for-stores.html','data-feed.html'):
+            self.assertIn('/'+f+'</loc>',sm,f)
+            for p in ('index.html','stores.html','store/ikea.html'): self.assertIn(f,R(p).split('<footer')[1],(f,p))
     def test_forms_post_to_function_with_honeypot(self):
         for p in ('index.html','stores.html','store/ikea.html'):
             h=R(p)

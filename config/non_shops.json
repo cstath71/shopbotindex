@@ -1,0 +1,492 @@
+{
+ "about": "Entries from Wikipedia/Wikidata seed lists that are not online shops (places, newspapers, restaurants and cafés, services and other non-shops). They are left out of data/seeds.json, the crawl and the site. 'classes' are Wikidata P31 classes (towns, municipalities, regions, newspapers, licences...) that scripts/wiki_seeds.py skips on future refreshes.",
+ "items": {
+  "Q12621301": {
+   "name": "A Twosome Place",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q3113": {
+   "name": "Allier",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q4740856": {
+   "name": "Amazon Prime Video",
+   "why": "a service (streaming, gym, karaoke or arcade), not a shop"
+  },
+  "Q1202476": {
+   "name": "Ampang Jaya",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q996161": {
+   "name": "Arteixo",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q272228": {
+   "name": "Auderghem",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q14182": {
+   "name": "Banjarmasin",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q81856": {
+   "name": "Beaverton",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q171545": {
+   "name": "Belfort",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q69836": {
+   "name": "Bellevue",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q64": {
+   "name": "Berlin",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q15831707": {
+   "name": "Big Echo",
+   "why": "a service (streaming, gym, karaoke or arcade), not a shop"
+  },
+  "Q675232": {
+   "name": "Bondoufle",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q23048055": {
+   "name": "Bonifacio Global City",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q240": {
+   "name": "Brussels-Capital Region",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q499873": {
+   "name": "Burgwedel",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q47822": {
+   "name": "Bury",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q212793": {
+   "name": "Charenton-le-Pont",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q217057": {
+   "name": "Clonmel",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q60867333": {
+   "name": "Coffee Island",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q120997937": {
+   "name": "Compose Coffee",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q380987": {
+   "name": "Coquelles",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1130247": {
+   "name": "Coraopolis",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q14112": {
+   "name": "Corsica",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q239091": {
+   "name": "Croix",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q287895": {
+   "name": "Deerfield",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q131478": {
+   "name": "Der Spiegel",
+   "why": "a newspaper or magazine"
+  },
+  "Q5297245": {
+   "name": "Doors Open Ottawa",
+   "why": "an annual event"
+  },
+  "Q837109": {
+   "name": "Dublin",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q12611298": {
+   "name": "Ediya Coffee",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q909209": {
+   "name": "El Comercio",
+   "why": "a newspaper or magazine"
+  },
+  "Q14641": {
+   "name": "Emmen",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q127120": {
+   "name": "Fitness First",
+   "why": "a service (streaming, gym, karaoke or arcade), not a shop"
+  },
+  "Q264645": {
+   "name": "Floridsdorf",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q3769": {
+   "name": "French Guiana",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q36378": {
+   "name": "Fribourg",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q12273": {
+   "name": "Gijón",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q22169": {
+   "name": "GNU Free Documentation License",
+   "why": "a software licence"
+  },
+  "Q22395": {
+   "name": "Grosbliederstroff",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q16635": {
+   "name": "Guam",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q9676": {
+   "name": "Isle of Man",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q193877": {
+   "name": "Ivry-sur-Seine",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q3630": {
+   "name": "Jakarta",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q56393853": {
+   "name": "KOI Thé",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q1161356": {
+   "name": "Lacroix-Saint-Ouen",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1020014": {
+   "name": "Lancing",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q325946": {
+   "name": "Landerneau",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q207154": {
+   "name": "Langon",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q14484": {
+   "name": "Las Condes",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q597": {
+   "name": "Lisbon",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q2807": {
+   "name": "Madrid",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q240504": {
+   "name": "Makó",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q185221": {
+   "name": "Malacca",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q17054": {
+   "name": "Martinique",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q121157": {
+   "name": "Mashhad",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q17063": {
+   "name": "Mayotte",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q120998343": {
+   "name": "Mega MGC Coffee",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q340": {
+   "name": "Montreal",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q2027955": {
+   "name": "Mooresville",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q488708": {
+   "name": "Neckarsulm",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1952": {
+   "name": "Nova Scotia",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q14317": {
+   "name": "Oviedo",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1025966": {
+   "name": "Pattani",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1183": {
+   "name": "Puerto Rico",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q176": {
+   "name": "Quebec",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q17058977": {
+   "name": "Rakuten TV",
+   "why": "a service (streaming, gym, karaoke or arcade), not a shop"
+  },
+  "Q16086": {
+   "name": "Rheinberg",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q548574": {
+   "name": "Ronchin",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q478105": {
+   "name": "Rungis",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q17070": {
+   "name": "Réunion",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q234719": {
+   "name": "Sainte-Geneviève-des-Bois",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q12753": {
+   "name": "Seine-et-Marne",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q109010": {
+   "name": "Solna Municipality",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q3498168": {
+   "name": "Stellarton",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q11462": {
+   "name": "Surabaya",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q10127": {
+   "name": "Tangerang",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q3616": {
+   "name": "Tehran",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1199207": {
+   "name": "The New Zealand Herald",
+   "why": "a newspaper or magazine"
+  },
+  "Q1016574": {
+   "name": "Timaru",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q12521502": {
+   "name": "Timezone",
+   "why": "a service (streaming, gym, karaoke or arcade), not a shop"
+  },
+  "Q1067299": {
+   "name": "Toronto Star",
+   "why": "a newspaper or magazine"
+  },
+  "Q5489": {
+   "name": "Troyes",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q270704": {
+   "name": "Třebíč",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q8818": {
+   "name": "Valencia",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1741": {
+   "name": "Vienna",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q191135": {
+   "name": "Vila Nova de Gaia",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q43295": {
+   "name": "Villeneuve-d'Ascq",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q1458819": {
+   "name": "Villiers-en-Bière",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q10084": {
+   "name": "Vlissingen",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q745038": {
+   "name": "Waalwijk",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q231": {
+   "name": "Wallonia",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q648266": {
+   "name": "Wayback Machine",
+   "why": "a web archive"
+  },
+  "Q19789": {
+   "name": "Welwyn Garden City",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q386170": {
+   "name": "Westborough",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q28220231": {
+   "name": "Wildwood Kitchen",
+   "why": "a restaurant, café or drinks chain"
+  },
+  "Q10305": {
+   "name": "Zaragoza",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q290880": {
+   "name": "Étrembières",
+   "why": "a place (town, city or region), not a shop"
+  },
+  "Q13917": {
+   "name": "Île-de-France",
+   "why": "a place (town, city or region), not a shop"
+  }
+ },
+ "classes": [
+  "Q532",
+  "Q3957",
+  "Q5098",
+  "Q6465",
+  "Q11032",
+  "Q23442",
+  "Q36784",
+  "Q41298",
+  "Q70208",
+  "Q83057",
+  "Q127448",
+  "Q133442",
+  "Q161243",
+  "Q171441",
+  "Q185086",
+  "Q202216",
+  "Q261543",
+  "Q262882",
+  "Q462778",
+  "Q484170",
+  "Q493522",
+  "Q609591",
+  "Q660088",
+  "Q667509",
+  "Q707813",
+  "Q719487",
+  "Q777120",
+  "Q783733",
+  "Q871419",
+  "Q1048835",
+  "Q1110794",
+  "Q1115575",
+  "Q1139274",
+  "Q1187811",
+  "Q1221156",
+  "Q1307779",
+  "Q1352230",
+  "Q1656682",
+  "Q1840161",
+  "Q2039348",
+  "Q2074737",
+  "Q2276925",
+  "Q3199141",
+  "Q3337001",
+  "Q3502482",
+  "Q3750285",
+  "Q5055981",
+  "Q5153359",
+  "Q5975031",
+  "Q6433861",
+  "Q7252696",
+  "Q7819319",
+  "Q7841907",
+  "Q7897276",
+  "Q8452914",
+  "Q10270157",
+  "Q11183787",
+  "Q11828004",
+  "Q13025342",
+  "Q13217644",
+  "Q13218357",
+  "Q13218690",
+  "Q13539802",
+  "Q15063586",
+  "Q15127012",
+  "Q15239622",
+  "Q15647906",
+  "Q15974307",
+  "Q15978299",
+  "Q17320423",
+  "Q19943591",
+  "Q22923920",
+  "Q25412763",
+  "Q27676414",
+  "Q27676416",
+  "Q30047053",
+  "Q42744322",
+  "Q51929311",
+  "Q54935504",
+  "Q54935786",
+  "Q56557504",
+  "Q59341087",
+  "Q63440326",
+  "Q67123843",
+  "Q67925073",
+  "Q104782082",
+  "Q110071217",
+  "Q114401982",
+  "Q116621859",
+  "Q123754112",
+  "Q132680629",
+  "Q133997300",
+  "Q137890005"
+ ]
+}

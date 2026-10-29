@@ -1,20 +1,25 @@
 """Build the ShopBot Index static site from data/latest.json + data/channels.json -> ./dist
 Usage: python3 scripts/build.py"""
-import json, os, re, html, glob, shutil, collections
+import json, os, re, html, glob, shutil, collections, unicodedata
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA=os.environ.get('SBI_DATA_DIR') or os.path.join(ROOT,'data'); DIST=os.environ.get('SBI_DIST_DIR') or os.path.join(ROOT,'dist')  # env overrides for dry-run previews
 SITE=os.environ.get('SBI_SITE','https://shopbotindex.com').rstrip('/')
 NAME='ShopBot Index'
-OGV='3'  # cache-buster for og.png/og-store.png (rendered by scripts/og_images.py); bump when the cards change so X/LinkedIn refetch
+OGV='4'  # cache-buster for og.png/og-store.png (rendered by scripts/og_images.py); bump when the cards change so X/LinkedIn refetch
 CONTACT='hello@shopbotindex.com'
 MAILTO=f'<a href="mailto:{CONTACT}">{CONTACT}</a>'
 FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
-DEFDESC='What online stores tell AI shopping agents: a weekly public crawl of Shopify stores, big retailers and other online stores, checking whether each one publishes a UCP profile, the machine-readable profile AI shopping agents read.'
+DEFDESC='What online stores tell AI shopping agents: a weekly public crawl of Shopify stores, big retailers and other online stores for UCP profiles, the machine-readable profile AI shopping agents read, plus agent tools, AI rules in robots.txt, AI guidance files and product data.'
 E=lambda s: html.escape(str(s if s is not None else ''))
 D=json.load(open(os.path.join(DATA,'latest.json'))); CH=json.load(open(os.path.join(DATA,'channels.json')))
-RET=D['retailers']; SITES=D['sites']; DAY=D['crawl_date']
+from nonshops import IDS as NON_SHOPS  # places, newspapers, restaurants etc. (config/non_shops.json) are not shops: no page, not counted
+RET=[r for r in D['retailers'] if r['id'] not in NON_SHOPS]; SITES=[s for s in D['sites'] if s['rid'] not in NON_SHOPS]; DAY=D['crawl_date']
 SITES_BY=collections.defaultdict(list)
 for s in SITES: SITES_BY[s['rid']].append(s)
-def slug(s): return re.sub(r'[^a-z0-9]+','-',s.lower()).strip('-')
+_TRANS=str.maketrans({'ß':'ss','Æ':'AE','æ':'ae','Ø':'O','ø':'o','Œ':'OE','œ':'oe','Ł':'L','ł':'l','Đ':'D','đ':'d','ı':'i','Þ':'Th','þ':'th','Ð':'D','ð':'d'})
+def slug(s):  # accented letters become plain ASCII (Bière -> biere), instead of being dropped (bi-re)
+    t=''.join(c for c in unicodedata.normalize('NFKD',str(s).translate(_TRANS)) if not unicodedata.combining(c))
+    return re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-')
+def slug_v1(s): return re.sub(r'[^a-z0-9]+','-',s.lower()).strip('-')  # pre-27 Oct 2026 slugs, kept only to redirect old URLs
 SEG={'shopify':'Shopify stores','big':'Big retailers','other':'Other retailers & marketplaces'}
 SEGDESC={'shopify':'Stores from public lists of Shopify stores.','big':"Retailers on Wikipedia's List of largest retail companies, or with Wikipedia articles in 10+ languages.",
  'other':'Other retail chains, department stores, supermarkets, hypermarkets and online marketplaces listed on Wikipedia or Wikidata.'}
@@ -56,8 +61,8 @@ def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
 <link rel="icon" href="{pre}favicon.ico" sizes="any"><link rel="icon" href="{pre}favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="{pre}apple-touch-icon.png">
 <meta name='impact-site-verification' value='b2e40b89-8d32-4fba-b983-f02842d65c9f'>
 <meta name='impact-site-verification' value='644adb49-a10b-4e51-b34b-6674b6917c9f'>
-<link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre}index.html"><img src="{pre}logo-32.png" srcset="{pre}logo-64.png 2x, {pre}logo-96.png 3x" width="32" height="32" alt="">{NAME}</a>{nav}</div></header>
-<main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer>{sticky_bar(pre) if path not in NOBAR_PAGES else ''}{VISIT_JS}</body></html>'''
+<link rel="stylesheet" href="{pre}style.css"></head><body><header><div class="w"><a class="brand" href="{pre or './'}"><img src="{pre}logo-32.png" srcset="{pre}logo-64.png 2x, {pre}logo-96.png 3x" width="32" height="32" alt="">{NAME}</a>{nav}</div></header>
+<main><div class="w">{body}</div></main><footer><div class="w">{NAME}: the weekly index of what online stores tell AI shopping agents · Crawl of {DAY} · <a href="{pre}methodology.html">How we measure</a> · <a href="{pre}for-stores.html">For store owners</a> · <a href="{pre}data-feed.html">Data feed waitlist</a> · <a href="{pre}privacy.html">Privacy</a> · <a href="{pre}terms.html">Terms</a> · <a href="{pre}about.html">About</a> · <a href="https://x.com/ShopBotIndex" rel="me noopener">Follow on X</a> · Contact: {MAILTO} · Independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</div></footer>{sticky_bar(pre) if path not in NOBAR_PAGES else ''}{VISIT_JS}</body></html>'''
     fp=os.path.join(DIST,path); os.makedirs(os.path.dirname(fp),exist_ok=True); open(fp,'w').write(full); PAGES.append(path)
 def bars(counter,total,namef=lambda x:x,link=None,label='Stores'):
     rows=''.join(f'<tr><td>{(f"<a href=\"{link(k)}\">{E(namef(k))}</a>") if link else E(namef(k))}</td><td>{v}</td><td>{pct(v,total)}</td><td class="hide-sm" style="width:35%"><div class="bar"><i style="width:{100*v/max(total,1):.1f}%"></i></div></td></tr>' for k,v in counter.most_common())
@@ -100,7 +105,7 @@ var io=new IntersectionObserver(function(es){{es.forEach(function(e){{e.isInters
 window.addEventListener('scroll',function(){{var p=window.scrollY>window.innerHeight*0.6;if(p!=past){{past=p;upd()}}}},{{passive:true}})}})();</script>'''
 # cookie-free visit counter (Supabase function sbi-hit): sends only the path, the referrer's domain and utm tags (?ref= counts as utm_source);
 # nothing is sent if the browser has Do Not Track or Global Privacy Control on, or the page isn't on shopbotindex.com
-VISIT_JS='''<script>(function(){try{var n=navigator,w=window,h=location.hostname;if(n.doNotTrack=='1'||w.doNotTrack=='1'||n.msDoNotTrack=='1'||n.globalPrivacyControl===true)return;if(h!='shopbotindex.com'&&h!='www.shopbotindex.com')return;
+VISIT_JS='''<script>(function(){try{var n=navigator,w=window,h=location.hostname;if(n.doNotTrack=='1'||w.doNotTrack=='1'||n.msDoNotTrack=='1'||n.globalPrivacyControl===true)return;if(h!='shopbotindex.com'&&h!='www.shopbotindex.com')return;if(n.webdriver||/bot|crawl|spider|slurp|headless|lighthouse/i.test(n.userAgent||''))return;
 var q=new URLSearchParams(location.search),r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(e){}
 var b=JSON.stringify({p:location.pathname,r:r,s:q.get('utm_source')||q.get('ref')||'',m:q.get('utm_medium')||'',c:q.get('utm_campaign')||''}),u='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-hit';
 if(n.sendBeacon)n.sendBeacon(u,new Blob([b],{type:'text/plain'}));else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}})();</script>'''
@@ -145,19 +150,23 @@ def primary(r):
     ss=SITES_BY[r['id']]
     if r['segment']=='shopify' and '.' in r['id']: return bare(r['id'].lower())
     return bare(host(ss[0])) if ss else ''
-_nc=collections.Counter(slug(r['name']) or 'store' for r in RET); SLUG={}; _used=set()
-for r in sorted(RET,key=lambda r:r['id']):
-    b=slug(r['name']) or 'store'
-    if _nc[b]>1 and primary(r) and slug(primary(r))!=b: b=b+'-'+slug(primary(r))
-    x=b; i=2
-    while x in _used: x=f'{b}-{i}'; i+=1
-    _used.add(x); SLUG[r['id']]=x
+def make_slugs(fn):
+    nc=collections.Counter(fn(r['name']) or 'store' for r in RET); out={}; used=set()
+    for r in sorted(RET,key=lambda r:r['id']):
+        b=fn(r['name']) or 'store'
+        if nc[b]>1 and primary(r) and fn(primary(r))!=b: b=b+'-'+fn(primary(r))
+        x=b; i=2
+        while x in used: x=f'{b}-{i}'; i+=1
+        used.add(x); out[r['id']]=x
+    return out
+SLUG=make_slugs(slug)
+_new=set(SLUG.values()); OLD_SLUG={k:v for k,v in make_slugs(slug_v1).items() if v!=SLUG[k] and v not in _new}  # old URL -> redirect stub
 STATUS_SHORT={'ucp':'Yes: UCP profile found','no_ucp':'No UCP profile found','couldnt_check':"Couldn't check"}
 LOOK={}
 for r in RET:
     for x in SITES_BY[r['id']]:
-        LOOK.setdefault(bare(host(x)),[SLUG[r['id']],r['name'],r['status']])
-    if primary(r): LOOK.setdefault(primary(r),[SLUG[r['id']],r['name'],r['status']])
+        LOOK.setdefault(bare(host(x)),[SLUG[r['id']],r['name'],r['status'],r['id']])
+    if primary(r): LOOK.setdefault(primary(r),[SLUG[r['id']],r['name'],r['status'],r['id']])
 CHECK_JS='''<script>if(!window.sbiCheck){window.sbiCheck=function(f){const root=f.getAttribute('data-root'),out=f.parentNode.querySelector('.ck-out'),badge=f.hasAttribute('data-badge');
 let d=f.querySelector('input').value.trim().toLowerCase().replace(/^[a-z]+:\\/\\//,'').split(/[\\/?#]/)[0].split('@').pop().replace(/:\\d+$/,'').replace(/\\.$/,'');if(d.startsWith('www.'))d=d.slice(4);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -166,14 +175,16 @@ out.textContent='Looking up…';
 const go=L=>{let k=d,hit=null;while(k.indexOf('.')>0){if(L[k]){hit=L[k];break}k=k.slice(k.indexOf('.')+1)}
 if(!hit){const m='mailto:hello@shopbotindex.com?subject='+encodeURIComponent('Please add my store: '+d);out.innerHTML='<b>'+esc(d)+'</b> isn\\'t in the index yet. We only report stores our weekly crawl has checked, so we can\\'t say whether it publishes a UCP profile. <a href="'+m+'">Ask us to add it</a> and we\\'ll include it in a future crawl.';return}
 const st=hit[2],cls=st=='ucp'?'yes':st=='couldnt_check'?'warn':'no',lbl={ucp:'Yes: UCP profile found',no_ucp:'No UCP profile found',couldnt_check:"Couldn't check (blocked or unreachable)"}[st];
-let h='<b>'+esc(hit[1])+'</b> <span class="pill '+cls+'">'+lbl+'</span> in our latest crawl.'+(st=='no_ucp'?' That means no UCP profile was found, not that AI agents can\\'t shop there.':'')+' <a href="'+root+'store/'+hit[0]+'.html">See the full result →</a>';
+let h='<b>'+esc(hit[1])+'</b> <span class="pill '+cls+'">'+lbl+'</span> in our latest crawl.'+(st=='no_ucp'?' That means no UCP profile was found, not that AI agents can\\'t shop there.':'')+' <a href="'+root+'store/'+hit[0]+'.html">See the full result →</a>'+'<div class="ck-watch" style="margin-top:.5rem"><a href="'+root+'store/'+hit[0]+'.html#watch"><b>Watch '+esc(hit[1])+'</b>: get an email if it starts or stops publishing a UCP profile →</a></div>';
+if(f.hasAttribute('data-watch')&&hit[3]){const nm=esc(hit[1]);h=h.split('<div class="ck-watch"')[0]+'<div class="nl-top watch" style="margin-top:.8rem"><p><b>Watch '+nm+'.</b> Email me if '+nm+' starts or stops publishing a UCP profile.</p><form class="nl" action="'+f.getAttribute('data-action')+'" method="post" onsubmit="return sbiSub(this)" data-ok-watch="Thanks! We\\'ll email you if '+nm+' starts or stops publishing a UCP profile, plus the Monday email."><input type="email" name="email" placeholder="you@store.com" required maxlength="254" aria-label="Email address"><input type="hidden" name="watch" value="'+esc(hit[3])+'">'+f.getAttribute('data-hp')+'<button type="submit">Watch this store</button></form><small class="nl-msg" aria-live="polite">Free. You\\'ll also get the Monday email. Unsubscribe or stop the alerts anytime. <a href="'+root+'privacy.html">Privacy</a></small></div>'}
 if(badge){h+=st=='ucp'?'<div style="margin-top:.8rem"><img src="'+root+'badge/'+hit[0]+'.svg" alt="UCP profile found · ShopBot Index" height="20"></div><p>Copy this HTML onto your site:</p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">'+esc('<a href="https://shopbotindex.com/store/'+hit[0]+'.html" title="'+hit[1]+' on ShopBot Index"><img src="https://shopbotindex.com/badge/'+hit[0]+'.svg" alt="UCP profile found · ShopBot Index" height="20"></a>')+'</textarea>':'<p class="muted">The badge is only for stores where our latest crawl found a UCP profile.</p>'}
 out.innerHTML=h};
 if(window.sbiLook)go(window.sbiLook);else fetch(root+'stores.json').then(r=>r.json()).then(L=>{window.sbiLook=L;go(L)}).catch(()=>{out.textContent='Could not load the store list. Please try again.'});return false;}}</script>'''
-def checkbox(pre='',badge=False,title='Check your store'):
-    return f'''<div class="box ck"><b>{title}</b> Does your store publish the profile AI shopping agents read (a UCP profile)? Look it up in our latest crawl ({DAY}).
-<form class="ckf" data-root="{pre}"{' data-badge' if badge else ''} onsubmit="return sbiCheck(this)" style="margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.5rem"><input type="text" name="d" placeholder="yourstore.com" required maxlength="253" aria-label="Store domain" autocapitalize="off" spellcheck="false" style="padding:.5rem;border:1px solid #cdd5dd;border-radius:6px;min-width:220px;flex:1"> <button type="submit" style="padding:.5rem 1rem;border:0;border-radius:6px;background:#0f1f2e;color:#fff;font-weight:600">Check</button></form>
-<div class="ck-out" aria-live="polite" style="margin-top:.6rem"></div>{CHECK_JS}</div>'''
+CHECK_JS=CHECK_JS.replace("'+f.getAttribute('data-action')+'",FORM_ACTION).replace("'+f.getAttribute('data-hp')+'",HONEYPOT)  # inline watch form (data-watch) posts like every other form
+def checkbox(pre='',badge=False,title='Check your store',watch=False):
+    return f'''<div class="box ck"><b>{title}</b> Does your store publish a UCP profile, and what else does it tell AI shopping agents? Look it up in our latest crawl ({DAY}).
+<form class="ckf" data-root="{pre}"{' data-badge' if badge else ''}{' data-watch' if watch else ''} onsubmit="return sbiCheck(this)" style="margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.5rem"><input type="text" name="d" placeholder="yourstore.com" required maxlength="253" aria-label="Store domain" autocapitalize="off" spellcheck="false" style="padding:.5rem;border:1px solid #cdd5dd;border-radius:6px;min-width:220px;flex:1"> <button type="submit" style="padding:.5rem 1rem;border:0;border-radius:6px;background:#0f1f2e;color:#fff;font-weight:600">Check</button></form>
+<div class="ck-out" aria-live="polite" style="margin-top:.6rem"></div>{CHECK_JS}{SIGNUP_JS if watch else ''}</div>'''
 def badge_svg(ok):
     l,r=('UCP profile found','ShopBot Index') if ok else ('ShopBot Index','view listing')
     lw=round(len(l)*6.6)+12; rw=round(len(r)*6.6)+12; W=lw+rw; lc='#16a34a' if ok else '#555'; rc='#0f172a' if ok else '#9ca3af'
@@ -185,7 +196,7 @@ def snippet(r):
 # ---- home ----
 nsites=len(SITES); nsites_u=sum(1 for s in SITES if s.get('status')=='ucp')
 # list growth notes for the methodology (real counts from data/seeds.json before/after; shown from that crawl on)
-LIST_GROWTH=[('2026-11-02','On 2 Nov 2026 the list grew from 2,276 to 2,950 retailers and stores (2,656 to 3,400 websites), adding stores from public Wikipedia, Wikidata and Shopify-store lists; week-on-week changes compare only stores tracked in both weeks, and shares are of the stores on our list.')]
+LIST_GROWTH=[('2026-11-02','On 2 Nov 2026 the list grew from 2,179 to 2,854 retailers and stores (2,549 to 3,294 websites), adding stores from public Wikipedia, Wikidata and Shopify-store lists (and dropping entries later listed as not online shops); week-on-week changes compare only stores tracked in both weeks, and shares are of the stores on our list.')]
 def same_store_txt(pre=''):
     if not CHG or not CHG['newly_tracked']: return ''
     ss=CHG['same_store']; nt=len(CHG['newly_tracked'])
@@ -194,13 +205,14 @@ def same_store_txt(pre=''):
             f'and not counted as joining. <a href="{pre}changes.html#new">See them →</a></p>')
 joined_txt=same_store_txt()+(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
 home=f'''<h1>What online stores tell AI shopping agents</h1>
-<p class="lede">Every week we check {len(RET)} retailers and stores ({nsites} websites) to see whether they publish the profile AI shopping agents read. It's called a <a href="https://ucp.dev/">UCP</a> profile. No profile doesn't mean AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">How we measure</a>.</p>
+<p class="lede">Every week we check {len(RET)} retailers and stores ({nsites} websites) to see whether they publish the profile AI shopping agents read. It's called a <a href="https://ucp.dev/">UCP</a> profile. We also record four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. No profile doesn't mean AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">How we measure</a>.</p>
 {segcards()}{joined_txt}
 {checkbox()}
 <div class="stats"><div class="stat"><b>{len(U)}</b><span>retailers/stores with a UCP profile on at least one site</span></div>
 <div class="stat"><b>{PLATC.get("Shopify",0)}</b><span>of them run it on Shopify</span></div>
 <div class="stat"><b>{len(NONSHOP)}</b><span>on other platforms</span></div>
 <div class="stat"><b>{sum(1 for r in RET if r["status"]=="couldnt_check")}</b><span>couldn't be checked (blocked/unreachable)</span></div></div>
+{"" if DAY!="2026-10-26" else '<p class="muted">Of those 627 on 26 October 2026: 77 robots.txt disallow, 240 refused (401/403/429/451), 303 timeout or connection error, 7 mixed. <a href="methodology.html#couldnt-check">How we split that</a>.</p>'}
 <h2>Big retailers with a UCP profile ({len(BIGU)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({r['sites_with_ucp']} of {r['sites_checked']} sites{', '+E('/'.join(r['platforms'])) if r['platforms'] else ''})</small></li>" for r in BIGU)+"</ul>" if BIGU else "<p>None found in this crawl.</p>"}
 <h2>UCP profiles not on Shopify ({len(NONSHOP)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({E(SEG[r['segment']])})</small></li>" for r in NONSHOP)+"</ul>" if NONSHOP else "<p>None found.</p>"}
 <p><a href="stores.html"><b>Browse all {len(RET)} stores →</b></a></p>
@@ -259,17 +271,57 @@ for c in CATS:
 li=''.join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{E(c["feature"])}<br><small>{E(c["how"])} · {E(c["region"])}</small></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td>{E(c["date"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"])}</a></td></tr>' for c in CH['channels'])
 page('assistants.html',f'AI assistants and the retailers they name | {NAME}',f'<h1>AI assistants and the retailers they name</h1><p class="lede">{E(CH["note"])} Last checked {E(CH["checked_on"])}.</p><div class="tw nomax"><table><tr><th>Assistant</th><th>Feature</th><th>Retailers named</th><th>Date</th><th>Source</th></tr>{li}</table></div>')
 # ---- changes ----
+def _dlong(d): x=_dt.date.fromisoformat(d); return f'{x.day} {x.strftime("%B")} {x.year}'
+import datetime as _dt
+def _hist():
+    # every comparison our saved crawls allow (consecutive crawl-*.json files in the current format); nothing is typed in by hand
+    cs=[]
+    for f in sorted(glob.glob(os.path.join(DATA,'crawl-*.json'))):
+        d=json.load(open(f))
+        if 'retailers' in d: cs.append(d)
+    out=[]
+    for a,b in zip(cs,cs[1:]):
+        A={r['id']:r['status'] for r in a['retailers']}
+        j=sum(1 for r in b['retailers'] if r['status']=='ucp' and r['id'] in A and A[r['id']]!='ucp')
+        l=sum(1 for r in b['retailers'] if A.get(r['id'])=='ucp' and r['status']=='no_ucp')
+        u=sum(1 for r in b['retailers'] if A.get(r['id'])=='ucp' and r['status']=='couldnt_check')
+        out.append((a['crawl_date'],b['crawl_date'],j,l,u,sum(1 for r in b['retailers'] if r['status']=='ucp')))
+    return cs,out
+CHGTITLE='What changed: stores that started or stopped publishing a UCP profile'
 if CHG:
-    L=lambda ids: '<ul>'+''.join(f'<li>{E(NM[i]["name"])} <small>({E(SEG[NM[i]["segment"]])})</small></li>' for i in ids)+'</ul>' if ids else '<p class="muted">None.</p>'
-    cc=''.join(f'<li>{E(NM[x["id"]]["name"])}: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""} {"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
-    body=f'''<h1>What changed</h1><p class="lede">Crawl of {DAY} compared with {E(CHG["previous"])}. Joined, left and capability changes compare only the {CHG["same_store"]["n"]} retailers and stores tracked in both crawls.</p>{same_store_txt()}
-<h2>Joined: newly publishing UCP ({len(CHG["joined"])})</h2>{L(CHG["joined"])}<h2>Left: profile no longer found ({len(CHG["left"])})</h2>{L(CHG["left"])}
-<h2>Had a profile, now couldn't check ({len(CHG["now_unreachable"])})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"])}
-<h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else "<p class='muted'>None.</p>"}
-<h2 id="new">Newly tracked ({len(CHG["newly_tracked"])})</h2><p class="muted">Added to our list this week; not counted as joining.</p>{L(CHG["newly_tracked"])}'''
+    pv=_dlong(CHG['previous']); cu=_dlong(DAY); nT=len(RET); nU=sum(1 for r in RET if r['status']=='ucp')
+    SL=lambda i: f'<a href="store/{SLUG[i]}.html">{E(NM[i]["name"])}</a> <small>({E(SEG[NM[i]["segment"]])})</small>'
+    def L(ids,why,empty): return '<ul>'+''.join(f'<li>{SL(i)}: {why(i) if callable(why) else why}</li>' for i in ids)+'</ul>' if ids else f'<p>{empty}</p>'
+    n=lambda k: len(CHG[k])
+    pl=lambda k,one,many: (one if n(k)==1 else many).format(n=n(k))
+    intro=(f'<p class="lede">Between our crawls of {pv} and {cu}, {pl("joined","{n} retailer or store","{n} retailers and stores")} started publishing a UCP profile, the profile AI shopping agents read, '
+           f'and {n("left")} stopped. Of the stores that had a profile, {n("now_unreachable")} couldn&#39;t be checked this time, so '
+           f'{"it is" if n("now_unreachable")==1 else "they are"} not counted as leaving. In the crawl of {cu}, {nU} of the {nT} retailers and stores we track publish a UCP profile.</p>'
+           f'<p>How we count: each crawl is compared, store by store, with the previous one. <b>Joined</b> means a store we already tracked now has a UCP profile at <code>/.well-known/ucp</code> after the previous crawl found none or couldn\'t check it. '
+           f'<b>Left</b> means a store had a profile in the previous crawl and its website answered this time without one. <b>Couldn\'t check</b> means the website blocked our crawler or was unreachable, so we don\'t know, and we never count that as leaving. '
+           f'Stores added to our list are shown as newly tracked, not as joining. Details are in the <a href="methodology.html#changes">methodology</a>.</p>')
+    cc=''.join(f'<li><a href="store/{SLUG[x["id"]]}.html">{E(NM[x["id"]]["name"])}</a>: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""}{"; " if x["added"] and x["removed"] else ""}{"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
+    cs,H=_hist()
+    def joined_why(i):
+        # wording follows what each crawl actually saw: checked without a profile, couldn't check, or had one in an earlier crawl and is back
+        if PR[i]['status']=='couldnt_check': return f"we couldn&#39;t check it on {pv}; it publishes a profile now."
+        had=[c['crawl_date'] for c in cs if c['crawl_date']<CHG['previous'] and any(r['id']==i and r['status']=='ucp' for r in c['retailers'])]
+        if had: return f"UCP profile found on {_dlong(had[-1])}, none found on {pv}; it publishes one again on {cu}."
+        return f"no UCP profile found on {pv}, profile found on {cu}."
+    if len(H)>1:
+        hist='<h2>Earlier comparisons</h2><div class="tw"><table><tr><th>Crawls compared</th><th>Joined</th><th>Left</th><th>Had a profile, now couldn\'t check</th><th>With a UCP profile</th></tr>'+''.join(f'<tr><td>{_dlong(a)} → {_dlong(b)}</td><td>{j}</td><td>{l}</td><td>{u}</td><td>{t}</td></tr>' for a,b,j,l,u,t in reversed(H))+'</table></div>'
+    else:
+        hist=f'<h2>Earlier comparisons</h2><p>None yet. Our crawl of {_dlong(cs[0]["crawl_date"])} is the first one saved in this format, so this is the first comparison. Each new crawl adds a row here.</p>'
+    body=f'''<h1>{CHGTITLE}</h1>{intro}{same_store_txt()}
+<h2>Joined: newly publishing a UCP profile ({n("joined")})</h2>{L(CHG["joined"],joined_why,f"No store started publishing a UCP profile between {pv} and {cu}.")}
+<h2>Left: profile no longer found ({n("left")})</h2>{L(CHG["left"],f"UCP profile found on {pv}, none found on {cu}.",f"No store stopped publishing a UCP profile between {pv} and {cu}.")}
+<h2>Had a profile, now couldn't check ({n("now_unreachable")})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"],f"UCP profile found on {pv}; on {cu} the site blocked us or was unreachable.",f"Every store that had a UCP profile on {pv} could be checked again on {cu}.")}
+<h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else f"<p>No store changed its declared capabilities between these two crawls.</p>"}
+<h2 id="new">Newly tracked ({n("newly_tracked")})</h2><p class="muted">Added to our list this time; not counted as joining.</p>{L(CHG["newly_tracked"],"added to our list for this crawl.",f"No stores were added to our list between {pv} and {cu}; we tracked the same {nT} both times.")}
+{hist}'''
 else:
-    body=f'<h1>What changed</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing UCP), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
-page('changes.html',f'What changed | {NAME}',body+signup())
+    body=f'<h1>{CHGTITLE}</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing a UCP profile), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
+page('changes.html',f'What changed: stores that started or stopped publishing a UCP profile | {NAME}',body+signup())
 # ---- agent-readiness signals (phase 2 of the crawl) ----
 import datetime as _dt; _nd=_dt.date.fromisoformat(DAY)+_dt.timedelta(days=7-_dt.date.fromisoformat(DAY).weekday()); NEXTCRAWL=f'{_nd.day} {_nd.strftime("%B")} {_nd.year}'  # next Monday after the crawl
 HAS_SIG=any((r.get('signals') or {}).get('checked') for r in RET)
@@ -288,19 +340,19 @@ def readiness(r):
         t='Publishes a UCP profile at <code>/.well-known/ucp</code>'
         if capl: t+=f' declaring {len(capl)} capabilit{"y" if len(capl)==1 else "ies"}'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')
         ucpt=(('yes','Found'),t+'.')
-    elif st=='no_ucp': ucpt=(('no','Not found'),'No UCP profile found at <code>/.well-known/ucp</code>.')
+    elif st=='no_ucp': ucpt=(('no','No profile'),'No UCP profile found at <code>/.well-known/ucp</code>.')
     else: ucpt=(('warn',"Couldn't check"),"Couldn't check: our request for the profile was refused or failed.")
     extra=(' Also publishes an Agentic Commerce Protocol (ACP) discovery document at <code>/.well-known/acp.json</code>.' if sg.get('acp') else '')+(' Also publishes an AI catalog at <code>/.well-known/ai-catalog.json</code>.' if sg.get('ai_catalog') else '')
-    rows.append(('Agent checkout profile (UCP)',ucpt[0],ucpt[1]+extra))
+    rows.append(('UCP profile',ucpt[0],ucpt[1]+extra))
     m=sg.get('mcp',{}); ms=m.get('state','not_checked'); tl=m.get('tools',[])
     if ms=='answered': mrow=(('yes','Answered'),f'The MCP endpoint named in its UCP profile answered our read-only tools list request with {len(tl)} tool{"s" if len(tl)!=1 else ""}: '+', '.join(f'<code>{E(t)}</code>' for t in tl)+'. We never call the tools.')
     elif ms=='no_tools': mrow=(('no','No tools list'),"Its UCP profile names an MCP endpoint, but it didn't return a tools list to our request.")
     elif st=='ucp' and ms=='none_declared': mrow=(('no','None declared'),'Its UCP profile declares no MCP endpoint.')
-    elif st=='no_ucp': mrow=(('no','None found'),'No UCP profile, so no MCP endpoint to check. We only look for one in a UCP profile.')
+    elif st=='no_ucp': mrow=(('no','No endpoint'),'No UCP profile, so no MCP endpoint to check. We only look for one in a UCP profile.')
     else: mrow=(('warn','Not checked'),'Not checked this week.')
-    rows.append(('Agent tools (MCP endpoint)',)+mrow)
+    rows.append(('Agent tools (MCP)',)+mrow)
     rb=sg.get('robots',{})
-    if not rb.get('present'): rows.append(('AI-agent rules in robots.txt',('warn','Not checked'),"We couldn't read a robots.txt for this site."))
+    if not rb.get('present'): rows.append(('AI rules (robots.txt)',('warn','Not checked'),"We couldn't read a robots.txt for this site."))
     else:
         sp=rb.get('specific',{})
         if sp:
@@ -313,10 +365,10 @@ def readiness(r):
         if rb.get('wildcard') in ('blocked','mostly_blocked'): txt+=' Its general rule (<code>User-agent: *</code>) '+RSTATE[rb['wildcard']].replace(' it',' them')+' for all crawlers.'
         if rb.get('content_signal'): txt+=' Content signals: '+'; '.join(f'<code>{E(c)}</code>' for c in rb['content_signal'])+'.'
         txt+=" <small class=\"muted\">robots.txt states the site's wishes. OpenAI, Perplexity and Google say agents acting on a user's request may not follow it; Anthropic says Claude-User does.</small>"
-        rows.append(('AI-agent rules in robots.txt',state,txt))
+        rows.append(('AI rules (robots.txt)',state,txt))
     g=[x for x,k in (('<code>/llms.txt</code>','llms_txt'),('<code>/agents.md</code>','agents_md')) if sg.get(k)]
     gs=sg.get('guide_state','found' if g else 'not_found')
-    rows.append(('Guidance for AI assistants',('yes','Found') if g else ('no','Not found') if gs=='not_found' else ('warn','Not checked'),('Publishes '+' and '.join(g)+'.') if g else 'No <code>/llms.txt</code> or <code>/agents.md</code> found.' if gs=='not_found' else "Not checked: our requests for these files were refused or failed."))
+    rows.append(('AI guidance files',('yes','Found') if g else ('no','Not found') if gs=='not_found' else ('warn','Not checked'),('Publishes '+' and '.join(g)+'.') if g else 'No <code>/llms.txt</code> or <code>/agents.md</code> found.' if gs=='not_found' else "Not checked: our requests for these files were refused or failed."))
     pr=sg.get('product',{}); ps=pr.get('state','not_checked')
     pt={'full':'A product page we checked has schema.org Product markup with price, currency and availability.','partial':'A product page we checked has schema.org Product markup, but not all of price, currency and availability.',
         'none':'We found no schema.org Product markup on the page we checked.'}.get(ps,"Not checked: we couldn't reach a product page.")
@@ -329,14 +381,40 @@ def readiness(r):
     intro=f'Public signals we checked on {DAY}, besides the UCP profile. They show what the store publishes for AI agents; none of them says whether a particular AI agent can or can\'t buy here.'
     return f'<h2 id="readiness">Supporting signals</h2><p>{intro} <a href="../methodology.html#signals">What each signal means</a>.</p><div class="tw nomax"><table><tr><th>Signal</th><th>Result</th><th>Details</th></tr>{tr}</table></div>{note}'
 # ---- store pages ----
+SEG1={'shopify':'a Shopify store','big':'a big retailer','other':'a retailer or marketplace'}
 def store_desc(r):
     d=primary(r); nm=r['name']; who=nm if nm.lower()==d else f'{nm} ({d})' if d else nm
+    intro=f"{who} is {SEG1[r['segment']]} we track, listed under {r['category']}"+(f" in {r['country']}" if r.get('country') else '')+'.'
     if r['status']=='ucp':
         k=len(r['capabilities']); ck=' including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else ''
-        return f"Yes. In ShopBot Index's crawl of {DAY}, {who} published a UCP profile at /.well-known/ucp declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}: the machine-readable profile AI shopping agents read."
-    if r['status']=='no_ucp': return f"No UCP profile found. In ShopBot Index's crawl of {DAY}, we found no UCP profile at /.well-known/ucp for {who}. That doesn't mean AI agents can't shop there."
-    return f"Unknown. In ShopBot Index's crawl of {DAY}, we couldn't check {who}: every request for its UCP profile was refused or failed. That is not the same as no profile."
+        return f"{intro} In ShopBot Index's crawl of {DAY}, it publishes a UCP profile, the profile AI shopping agents read, at /.well-known/ucp, declaring {k} capabilit{'y' if k==1 else 'ies'}{ck}."
+    if r['status']=='no_ucp':
+        ss=SITES_BY[r['id']]; n=sum(1 for x in ss if x.get('status') in ('no_ucp','not_json','json_without_ucp'))
+        reached='its website' if len(ss)==1 else f'{n} of its {len(ss)} websites' if n<len(ss) else f'its {len(ss)} websites'
+        return f"{intro} In ShopBot Index's crawl of {DAY}, we reached {reached} but found no UCP profile, the profile AI shopping agents read, at /.well-known/ucp. That doesn't mean AI agents can't shop there."
+    return f"{intro} In ShopBot Index's crawl of {DAY}, we couldn't check whether it publishes a UCP profile: every request was refused or failed. That is not the same as no profile."
 PILL={'ucp':'yes','no_ucp':'no','couldnt_check':'warn'}
+HIST=[]  # (date, {id: (status, n capabilities)}) from every saved weekly crawl, oldest first
+for _f in sorted(glob.glob(os.path.join(DATA,'crawl-*.json'))):
+    _d=json.load(open(_f))
+    if 'retailers' in _d and _d.get('crawl_date')!=DAY: HIST.append((_d['crawl_date'],{x['id']:(x['status'],len(x.get('capabilities') or [])) for x in _d['retailers']}))
+HIST.append((DAY,{x['id']:(x['status'],len(x.get('capabilities') or [])) for x in RET}))
+def history(r):
+    rows=[(d,m[r['id']]) for d,m in HIST if r['id'] in m]
+    tr=''.join(f'<tr><td>{E(d)}</td><td><span class="pill {PILL[st]}">{E(STL[st])}</span></td><td class="hide-sm">{(str(k)+" capabilit"+("y" if k==1 else "ies")) if st=="ucp" else ""}</td></tr>' for d,(st,k) in reversed(rows))
+    first=f'We have tracked it in every weekly crawl since {E(rows[0][0])}.' if len(rows)>1 else f'Our crawl of {E(DAY)} is the first that included it.'
+    return f'<h2>Weekly results</h2><p>{first} Each Monday\'s crawl adds a row.</p><div class="tw nomax"><table><tr><th>Crawl</th><th>UCP profile</th><th class="hide-sm">Declared</th></tr>{tr}</table></div>'
+BYCAT=collections.defaultdict(list)
+for _r in RET: BYCAT[_r['category']].append(_r)
+def related(r):
+    pool=[x for x in BYCAT[r['category']] if x['id']!=r['id']]; c=r.get('country') or ''
+    same=[x for x in pool if c and x.get('country')==c]
+    key=lambda x:({'ucp':0,'no_ucp':1,'couldnt_check':2}[x['status']],-x.get('sitelinks',0),x['name'].lower())
+    if len(same)>=4: pick=sorted(same,key=key)[:8]; where=f' in {c}'
+    else: pick=sorted(pool,key=key)[:8]; where=''
+    if not pick: return ''
+    li=''.join(f'<li><a href="{SLUG[x["id"]]}.html">{E(x["name"])}</a> <span class="pill {PILL[x["status"]]}">{E(STL[x["status"]])}</span></li>' for x in pick)
+    return f'<h2>Other stores in {E(r["category"])}{E(where)}</h2><ul>{li}</ul><p><a href="../categories/{slug(r["category"])}.html">All {len(BYCAT[r["category"]])} stores in {E(r["category"])}</a></p>'
 for r in RET:
     u=SLUG[r['id']]; d=primary(r); ss=SITES_BY[r['id']]; st=r['status']
     sites=''.join(f'<tr><td><a href="https://{E(host(x))}/.well-known/ucp" rel="nofollow noopener" target="_blank">{E(host(x))}</a></td><td><span class="pill {"yes" if x.get("status")=="ucp" else "warn" if x.get("status") in ("blocked","error","robots_disallow") else "no"}">{E(SITEST.get(x.get("status","error"),x.get("status")))}</span></td><td class="hide-sm">{E(x.get("http_status") or "")}</td></tr>' for x in ss)
@@ -344,7 +422,7 @@ for r in RET:
           +('<h3>Payment handlers</h3><ul>'+''.join(f'<li>{E(phn(x))} <small><code>{E(x)}</code></small></li>' for x in r['payment_handlers'])+'</ul>' if r['payment_handlers'] else '')
           +(f'<p>Platform: {E(" / ".join(r["platforms"]))}</p>' if r['platforms'] else '')) if st=='ucp' else ''
     meaning={'ucp':'AI shopping agents that use the Universal Commerce Protocol can read this store\'s profile to see what it supports'+(', including checkout' if 'dev.ucp.shopping.checkout' in r['capabilities'] else '')+'. It doesn\'t guarantee that a given assistant buys from it; that depends on the assistant.',
-             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. That only means we found no UCP profile. AI agents may still be able to shop here, for example through a normal web browser, or through channels we can\'t see from outside, such as product feeds shared privately with AI assistants.',
+             'no_ucp':'At least one of its websites answered our request, but none published a UCP profile. AI agents may still be able to shop here, for example through a normal web browser, or through channels we can\'t see from outside, such as product feeds shared privately with AI assistants. The supporting signals below show what else the store tells AI agents.',
              'couldnt_check':'Every website we tried refused our request, timed out or disallowed it in robots.txt. We never try to get around that, so we don\'t know whether it publishes a profile. It is excluded from adoption rates.'}[st]
     badge=(f'<h2>Badge for this store</h2><p>{E(r["name"])} can show that it publishes a UCP profile. Paste this HTML on the site; it links back to this page.</p><p><img src="../badge/{u}.svg" alt="UCP profile found · ShopBot Index" height="20"></p><textarea readonly rows="3" style="width:100%;font-family:monospace;font-size:.85rem" onclick="this.select()">{E(snippet(r))}</textarea><p class="muted"><a href="../badge.html">About the badge</a>. If a later crawl stops finding the profile, the badge turns into a neutral grey "view listing" link.</p>') if st=='ucp' else ''
     jsonld=json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":NAME,"item":SITE+"/"},{"@type":"ListItem","position":2,"name":"All stores","item":SITE+"/stores.html"},{"@type":"ListItem","position":3,"name":r['name'],"item":f"{SITE}/store/{u}.html"}]},ensure_ascii=False).replace('</','<\\/')
@@ -356,20 +434,52 @@ for r in RET:
 <h2>Websites checked ({len(ss)})</h2><p>We fetched <code>/.well-known/ucp</code> on each site on {DAY}.</p><div class="tw nomax"><table><tr><th>Website</th><th>Result</th><th class="hide-sm">HTTP</th></tr>{sites}</table></div>
 {caps}
 {readiness(r)}
+{history(r)}
 <h2>About this store in the index</h2><ul><li>Segment: <a href="../segments/{r["segment"]}.html">{E(SEG[r["segment"]])}</a></li><li>Category: <a href="../categories/{slug(r["category"])}.html">{E(r["category"])}</a></li>{f'<li>Country: {E(r["country"])}</li>' if r["country"] else ''}<li>Last checked: {DAY} (re-checked every week)</li></ul>
+{related(r)}
 {badge}
 <p>Run this store and think the result is wrong, or want it removed? Email {MAILTO} with the domain; we re-check it in the next weekly crawl and never change a result by hand. <a href="../methodology.html">How we measure</a>.</p>
 {checkbox("../",title="Check another store")}{signup("../")}'''
-    page(f'store/{u}.html',f'{r["name"]}: what it tells AI shopping agents (UCP profile) | {NAME}',body,store_desc(r),ogimg='og-store.png',ogtype='article',head=f'<script type="application/ld+json">{jsonld}</script>')
+    page(f'store/{u}.html',f'{r["name"]}: UCP profile and AI-agent signals | {NAME}',body,store_desc(r),ogimg='og-store.png',ogtype='article',head=f'<script type="application/ld+json">{jsonld}</script>')
+# old URLs of stores whose slug changed (accented letters used to be dropped): redirect stubs, kept out of the sitemap
+for _id,_o in OLD_SLUG.items():
+    _u=f'{SITE}/store/{SLUG[_id]}.html'
+    open(os.path.join(DIST,'store',f'{_o}.html'),'w').write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>{E(NM[_id]["name"])} | {NAME}</title><link rel="canonical" href="{_u}"><meta http-equiv="refresh" content="0; url={SLUG[_id]}.html"><script>location.replace("{SLUG[_id]}.html")</script></head><body><p>This page moved to <a href="{SLUG[_id]}.html">{_u}</a>.</p></body></html>')
+_ncc=sum(1 for r in RET if r['status']=='couldnt_check')
+# ---- store-owner landing: look up your store, then watch it ----
+page('for-stores.html',f'For store owners: what does your store tell AI shopping agents? | {NAME}',f'''<h1>For store owners: what does your store tell AI shopping agents?</h1><p class="lede">Every Monday we check {len(RET)} retailers and stores for a UCP profile, the profile AI shopping agents read, published at <code>/.well-known/ucp</code>. Look up your store, then watch it: we'll email you when your result changes.</p>
+{checkbox(title="Look up your store",watch=True)}
+<h2>What your result means</h2><div class="tw nomax"><table><tr><th>Result</th><th>What it means</th><th>What you can do</th></tr>
+<tr><td><span class="pill yes">UCP profile found</span></td><td>Your store publishes a UCP profile at <code>/.well-known/ucp</code>. Your store page lists the capabilities the profile declares.</td><td>Watch your store so you hear if a later crawl stops finding it. Show a <a href="badge.html">badge</a> on your site.</td></tr>
+<tr><td><span class="pill no">No UCP profile found</span></td><td>Our crawler reached your site but found no UCP profile at <code>/.well-known/ucp</code>. That doesn't mean AI agents can't shop at your store; it only means we found no profile.</td><td>Read the <a href="https://ucp.dev/specification/overview/">UCP specification</a> or your ecommerce platform's documentation. Watch your store: we'll email you when a crawl finds a profile.</td></tr>
+<tr><td><span class="pill warn">Couldn't check</span></td><td>Your site blocked our crawler or didn't answer, so we don't know whether it publishes a UCP profile. We don't count it either way.</td><td>Our crawler identifies itself as <code>ShopBotIndexBot/1.0</code> and honours robots.txt (<a href="methodology.html#crawler">details</a>). We try again every Monday.</td></tr>
+<tr><td>Not in the index</td><td>Our weekly crawl hasn't checked your store, so we can't say anything about it.</td><td><a href="mailto:{CONTACT}?subject=Please%20add%20my%20store">Ask us to add it</a> and we'll include it in a future crawl.</td></tr></table></div>
+<h2>Why watch your store</h2><ul><li>We email you when our weekly crawl finds that your store started or stopped publishing a UCP profile.</li><li>You also get the Monday email: which stores started or stopped publishing a UCP profile.</li><li>Free. Unsubscribe or stop the alerts anytime. We only store what's needed to send the emails (<a href="privacy.html">privacy</a>).</li></ul>
+<h2>What else we record</h2><p>Each store page also lists four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. None of them says whether a particular AI agent can or can't buy at your store. <a href="methodology.html#meaning">What each signal means</a>.</p>
+<h2>From our latest crawl ({DAY})</h2><ul><li>{len(U)} of the {len(RET)-_ncc} retailers and stores we could check publish a UCP profile; {PLATC.get("Shopify",0)} of them run it on Shopify.</li><li>We couldn't check {_ncc} of the {len(RET)} we track (blocked or unreachable), so they aren't counted.</li><li><a href="changes.html">What changed this week</a> · <a href="stores.html">All stores</a></li></ul>
+<p>Think your result is wrong, or want your store removed? Email {MAILTO} with the domain; we re-check it in the next weekly crawl and never change a result by hand.</p>{signup()}''',f'Look up your store in the ShopBot Index weekly crawl, see whether it publishes a UCP profile, the profile AI shopping agents read, and get an email when your result changes.')
+# ---- planned data feed: waitlist and estimated pricing (no payment links) ----
+_ncc=sum(1 for r in RET if r['status']=='couldnt_check')
+page('data-feed.html',f'ShopBot Index data feed: join the waitlist | {NAME}',f'''<h1>The ShopBot Index data feed (planned)</h1><p class="lede">We're planning a weekly data feed of everything our crawl records: which online stores publish a UCP profile, the profile AI shopping agents read, what each profile declares, and which stores started or stopped publishing one. Join the waitlist to tell us what you need. Nothing is for sale yet and we won't charge anyone from this page.</p>
+<div class="box"><b>Join the waitlist.</b> Email <a href="mailto:{CONTACT}?subject=Data%20feed%20waitlist&amp;body=Company%3A%0AWhat%20you%20would%20use%20the%20data%20for%3A%0AFormat%20you%20need%20(CSV%2C%20JSON%2C%20API)%3A%0AStores%20or%20segments%20you%20care%20about%3A">{CONTACT}</a> with the subject "Data feed waitlist", and tell us what you'd use it for. We'll reply personally, and only about the feed.</div>
+<h2>What the feed would include</h2><ul><li>Every retailer and store we track ({len(RET)} in our latest crawl, {len(SITES)} websites), with segment (Shopify stores, big retailers, other retailers &amp; marketplaces), category and platform where we can tell.</li><li>Each website's result: UCP profile found, no UCP profile found, or couldn't check, with the HTTP status we got.</li><li>What each UCP profile declares: capabilities such as checkout, payment handlers, and the MCP endpoint if it names one.</li><li>The four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</li><li>Weekly changes: which stores started or stopped publishing a UCP profile, newly tracked stores and stores we could no longer reach.</li><li>The weekly history for every store since our first crawl on 17 October 2026.</li></ul>
+<h2>Who it's for</h2><ul><li>Agencies and apps that sell to online stores and want to know which stores already publish a UCP profile.</li><li>Teams building AI shopping agents that need a list of stores with a UCP profile and what each declares.</li><li>Analysts following how online stores adopt the Universal Commerce Protocol.</li></ul>
+<h2>Pricing (estimate, not final)</h2><div class="tw nomax"><table><tr><th>Plan</th><th>What you'd get</th><th>Estimated price</th></tr>
+<tr><td>Weekly CSV</td><td>The full table as CSV after each Monday crawl</td><td>about $49 a month (estimate)</td></tr>
+<tr><td>Weekly JSON + changes</td><td>Full JSON with everything above, plus the weekly change list</td><td>about $99 a month (estimate)</td></tr></table></div>
+<p class="muted">These prices are estimates to help us plan. They may change before launch, and nothing is charged until you agree to a final price.</p>
+<h2>What stays free</h2><p>Every store's result stays free on this site: the <a href="stores.html">all-stores table</a>, each store's page, <a href="check.html">Check your store</a>, watch alerts and the Monday email. The feed is for people who need the whole dataset in bulk, every week.</p>
+<h2>From our latest crawl ({DAY})</h2><ul><li>{len(U)} of the {len(RET)-_ncc} retailers and stores we could check publish a UCP profile.</li><li>We couldn't check {_ncc} of the {len(RET)} we track (blocked or unreachable), so they aren't counted.</li><li>A store with no UCP profile found isn't a store AI agents can't shop at; it's a store where we found no profile. <a href="methodology.html#meaning">How we measure</a>.</li></ul>{signup()}''',f'A planned weekly data feed of which online stores publish a UCP profile, the profile AI shopping agents read, what each declares and what changed. Join the waitlist; estimated pricing.')
 # ---- check + badge pages, lookup JSON, badge SVGs ----
-page('check.html',f'Check your store: what does it tell AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the machine-readable profile AI shopping agents read. We track {len(RET)} retailers and stores. No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>).</p>
-{checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: does it publish the profile AI shopping agents read (a UCP profile)? Results from our weekly crawl of {len(RET)} retailers and stores.')
-page('badge.html',f'"UCP profile found" badge for your store | {NAME}',f'''<h1>A "UCP profile found" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page.</p>
+page('check.html',f'Check your store: what does it tell AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the machine-readable profile AI shopping agents read. We track {len(RET)} retailers and stores. No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>). Each store's page also lists its supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</p>
+{checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li><li>Run a store? <a href="for-stores.html">See what your result means and watch your store</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: what does it tell AI shopping agents? Its UCP profile and supporting signals from our weekly crawl of {len(RET)} retailers and stores.')
+page('badge.html',f'"UCP profile found" badge for your store | {NAME}',f'''<h1>A "UCP profile found" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page. The badge covers the UCP profile only. Supporting signals are listed on each store's page and don't affect the badge.</p>
 <p><img src="badge/{SLUG[U[0]["id"]] if U else ""}.svg" alt="UCP profile found · ShopBot Index" height="20"> <small class="muted">(example)</small></p>
 {checkbox(badge=True,title="Get your badge")}<h2>Rules</h2><ul><li>The badge is only offered for stores where our latest crawl found a profile at <code>/.well-known/ucp</code>.</li><li>Each badge is served from shopbotindex.com and is regenerated every week. If a later crawl no longer finds the profile, it turns into a neutral grey "ShopBot Index · view listing" badge.</li><li>No tracking: the badge is a plain SVG image, with no scripts or cookies.</li></ul>{signup()}''','Stores that publish a UCP profile can embed a free "UCP profile found · ShopBot Index" badge linking to their result page.')
 json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,separators=(',',':'))
 os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
 for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
+for _id,_o in OLD_SLUG.items(): open(os.path.join(DIST,'badge',_o+'.svg'),'w').write(_B[NM[_id]['status']=='ucp'])  # badges already pasted on sites under the old slug keep working
 # ---- methodology ----
 import importlib.util as _ilu
 _sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.py')); _cm=_ilu.module_from_spec(_sp); _sp.loader.exec_module(_cm)
@@ -377,10 +487,10 @@ CRAWL_UA=_cm.UA
 UA_NOTE='' if D.get('user_agent')==CRAWL_UA else f' <small class="muted">(The crawl of {DAY} still used the earlier User-Agent <code>{E(D.get("user_agent",""))}</code>, which read only <code>/robots.txt</code> and <code>/.well-known/ucp</code>.)</small>'
 SIGMETH=f'''<h2 id="signals">1b. Supporting signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score.</p>
 <div class="tw nomax"><table><tr><th>Signal</th><th>How we check</th><th>What it means</th><th>What it doesn't mean</th></tr>
-<tr><td><b>Agent checkout profile (UCP)</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
-<tr><td><b>Agent tools (MCP endpoint)</b></td><td>If the UCP profile names an MCP endpoint, we send one read-only JSON-RPC <code>tools/list</code> request, identifying ourselves with our <a href="ucp/agent-profile.json">agent profile</a>. We never call a tool.</td><td>The endpoint is live and lists tools (for example catalog search, cart, checkout) right now.</td><td>That a purchase completes without the buyer; checkouts may hand the buyer back to the store's own checkout page.</td></tr>
-<tr><td><b>AI-agent rules in robots.txt</b></td><td>Groups in <code>/robots.txt</code> that name <code>ChatGPT-User</code>, <code>Claude-User</code>, <code>Perplexity-User</code>, <code>Google-Agent</code>, <code>OAI-SearchBot</code>, <code>Claude-SearchBot</code>, <code>PerplexityBot</code>, <code>GPTBot</code>, <code>ClaudeBot</code> or <code>Google-Extended</code>, plus <code>Content-Signal</code> lines. Tokens from <a href="https://developers.openai.com/api/docs/bots">OpenAI</a>, <a href="https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler">Anthropic</a>, <a href="https://docs.perplexity.ai/docs/resources/perplexity-crawlers">Perplexity</a> and <a href="https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers">Google</a>.</td><td>The site's stated wishes for each kind of AI agent: user-requested, search or training.</td><td>A technical block or permission. OpenAI, Perplexity and Google say their user-requested agents may not follow robots.txt; Anthropic says its bots do.</td></tr>
-<tr><td><b>Guidance for AI assistants</b></td><td><code>/llms.txt</code> and <code>/agents.md</code> (Markdown files, not web pages)</td><td>The site publishes instructions for AI assistants. On Shopify these are generated by the platform.</td><td>That assistants read them; <a href="https://llmstxt.org/">llms.txt</a> is a community proposal, not a formal standard.</td></tr>
+<tr><td><b>UCP profile</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
+<tr><td><b>Agent tools (MCP)</b></td><td>If the UCP profile names an MCP endpoint, we send one read-only JSON-RPC <code>tools/list</code> request, identifying ourselves with our <a href="ucp/agent-profile.json">agent profile</a>. We never call a tool.</td><td>The endpoint is live and lists tools (for example catalog search, cart, checkout) right now.</td><td>That a purchase completes without the buyer; checkouts may hand the buyer back to the store's own checkout page.</td></tr>
+<tr><td><b>AI rules (robots.txt)</b></td><td>Groups in <code>/robots.txt</code> that name <code>ChatGPT-User</code>, <code>Claude-User</code>, <code>Perplexity-User</code>, <code>Google-Agent</code>, <code>OAI-SearchBot</code>, <code>Claude-SearchBot</code>, <code>PerplexityBot</code>, <code>GPTBot</code>, <code>ClaudeBot</code> or <code>Google-Extended</code>, plus <code>Content-Signal</code> lines. Tokens from <a href="https://developers.openai.com/api/docs/bots">OpenAI</a>, <a href="https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler">Anthropic</a>, <a href="https://docs.perplexity.ai/docs/resources/perplexity-crawlers">Perplexity</a> and <a href="https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers">Google</a>.</td><td>The site's stated wishes for each kind of AI agent: user-requested, search or training.</td><td>A technical block or permission. OpenAI, Perplexity and Google say their user-requested agents may not follow robots.txt; Anthropic says its bots do.</td></tr>
+<tr><td><b>AI guidance files</b></td><td><code>/llms.txt</code> and <code>/agents.md</code> (Markdown files, not web pages)</td><td>The site publishes instructions for AI assistants. On Shopify these are generated by the platform.</td><td>That assistants read them; <a href="https://llmstxt.org/">llms.txt</a> is a community proposal, not a formal standard.</td></tr>
 <tr><td><b>Product data</b></td><td>One page that looks like a product page, found via a link on the home page or, failing that, at most two sitemap files. We look for <a href="https://schema.org/Product">schema.org Product</a> markup with an Offer that has price, currency and availability.</td><td>Product facts are machine-readable on the page.</td><td>Anything about checkout. "Not checked" means we couldn't reach a product page, often because of bot protection or pages built by scripts.</td></tr></table></div>
 <p>We also record, without a public column until a store first publishes one, two newer discovery files: the <a href="https://github.com/agentic-commerce-protocol/agentic-commerce-protocol">Agentic Commerce Protocol</a> discovery document at <code>/.well-known/acp.json</code> and the MCP <a href="https://modelcontextprotocol.io/seps/2127-mcp-server-cards">AI catalog</a> at <code>/.well-known/ai-catalog.json</code>.</p>
 <p>We also read <code>/.well-known/poppy.json</code> (<a href="https://personalagentprotocol.org/docs/spec">Personal Agent Protocol</a>), <code>/.well-known/agent-card.json</code> and <code>/.well-known/agent.json</code> (<a href="https://a2a-protocol.org/latest/topics/agent-discovery/">A2A agent card</a>), and <code>ai-catalog.json</code> above, record-only: no public column, and they never change a store's results.</p>
@@ -405,15 +515,16 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check
 <h2>2. Who we track: three segments, side by side</h2><ul>{"".join(f"<li><b>{SEG[k]}</b> ({sum(1 for r in RET if r['segment']==k)}): {SEGDESC[k]}</li>" for k in SEG)}</ul>
 <p>Sources: Wikipedia list pages (largest retail companies, department stores by country, supermarket chains, hypermarkets, online marketplaces) resolved to Wikidata for each retailer's own websites; Wikidata queries for retail chains and e-commerce companies; and public GitHub lists of Shopify stores (<a href="https://github.com/ihof/shopify">ihof/shopify</a>, <a href="https://github.com/dipinarora9/Shopify-Domains-Scraper">dipinarora9/Shopify-Domains-Scraper</a>, first 900 of <a href="https://github.com/TeamDukaan/performance">TeamDukaan/performance</a>). This is not a random sample of all stores; shares are shares of our list.</p>
 <h2>3. One retailer, many country sites</h2><p>When a retailer's Wikidata entry lists several of its own websites (for example one per country), we check up to 8 of them and show them as children of one retailer. A retailer counts as publishing UCP if at least one of its sites does.</p>
-<h2>4. "Couldn't check" is not "no"</h2><p>Many large retailers use bot protection that refuses automated requests. We never try to get around it. A retailer is <b>couldn't check</b> when every one of its sites refused us (401/403/429), timed out, failed TLS/DNS, or disallowed the path in robots.txt. These are shown separately and <b>excluded</b> from adoption rates. A retailer is <b>no UCP profile</b> only when at least one of its sites answered and had no profile.</p>
+<h2 id="couldnt-check">4. "Couldn't check" is not "no"</h2><p>Many large retailers use bot protection that refuses automated requests. We never try to get around it. A retailer is <b>couldn't check</b> when every one of its sites refused us (401/403/429/451), timed out, failed TLS/DNS, or disallowed the path in robots.txt. These are shown separately and <b>excluded</b> from adoption rates. A retailer is <b>no UCP profile</b> only when at least one of its sites answered and had no profile. A store we couldn't check is never described as having no profile.</p>
+<p>In the <b>26 October 2026</b> crawl, of the <b>627</b> retailers and stores we couldn't check: <b>77</b> were disallowed by robots.txt on every site we tried, <b>240</b> refused the request (HTTP 401, 403, 429 or 451), <b>303</b> timed out or failed to connect (TLS, DNS or timeout), and <b>7</b> were a mix of those. That split is about why our crawler got no answer; it does not say what AI shopping agents see at those stores. From the next weekly crawl we record the same split automatically.</p>
 {CRAWLMETH}
 <h2>6. Site-level results this crawl ({nsites} websites)</h2><ul>{"".join(f"<li>{E(SITEST.get(k,k))}: {v}</li>" for k,v in SC.most_common())}</ul>
 <h2>7. Platform</h2><p>"Shopify" means the profile's endpoints or extensions reference Shopify. Anything else is shown as another platform. We can only identify a platform for stores that publish a profile.</p>
-<h2>8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).{''.join(' '+g for d,g in LIST_GROWTH if DAY>=d)}</p>
+<h2 id="changes">8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).{''.join(' '+g for d,g in LIST_GROWTH if DAY>=d)}</p>
 <h2>9. AI assistants table</h2><p>Only company announcements and help-centre pages, linked per row. We don't test those integrations.</p>
 <h2 id="contact">10. Add, remove or correct a store</h2><p>Run a store or retailer that should be added, removed or corrected, or think a result is wrong? Email {MAILTO} with the store's domain. We re-check it in the next weekly crawl and never change a result by hand.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)
-page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index is the weekly index of what online stores tell AI shopping agents. Our headline measure is whether a store publishes a Universal Commerce Protocol (UCP) profile, the machine-readable profile AI shopping agents read. We cover Shopify stores, big retailers and other online stores.</p>
+page('about.html',f'About | {NAME}','''<h1>About</h1><p class="lede">ShopBot Index is the weekly index of what online stores tell AI shopping agents. Our headline measure is whether a store publishes a Universal Commerce Protocol (UCP) profile, the machine-readable profile AI shopping agents read. Alongside it we record four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. We cover Shopify stores, big retailers and other online stores.</p>
 <p>It is run by Gus, an experienced enterprise software consultant, as an independent project. It is not affiliated with Google, Shopify, OpenAI, Microsoft, Perplexity, PayPal or any retailer listed.</p>
 <p>All figures come from our own public crawl or from linked sources. Shopify trial links on this site (like the <a href="'''+E(AFF_URL)+'''" rel="sponsored noopener" target="_blank">Shopify free trial</a>) are affiliate links: '''+E(AFF_DISC)+''' That never changes a store's result.</p><p>Contact: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a> (including stores that want to be added, removed or corrected; see the <a href="methodology.html#contact">methodology</a>).</p>'''+signup())
 page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short version: we only store what's needed to send you the weekly email.</p>
@@ -426,10 +537,17 @@ page('privacy.html',f'Privacy | {NAME}','''<h1>Privacy</h1><p class="lede">Short
 <h2>Affiliate links</h2><p>Shopify trial links on this site are affiliate links run through Impact; when you click one, Shopify and Impact may set their own cookies to attribute a trial. '''+E(AFF_DISC)+'''</p>
 <h2>Our crawler</h2><p>ShopBot Index reads a short, fixed list of public files and pages on the stores it tracks (robots.txt, the UCP profile, a few agent-related files, the home page and one product page; full list in the methodology), respects robots.txt, and identifies itself honestly. See the <a href="methodology.html">methodology</a>.</p>
 <p>Questions about your data: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
+page('terms.html',f'Terms of use | {NAME}','''<h1>Terms of use</h1><p class="lede">Short version: link to us and quote our findings with credit; ask before copying the data in bulk.</p>
+<h2>Copyright</h2><p>Copyright © 2026 ShopBot Index. All rights reserved. This covers the site's text, its data and the way the data is compiled and presented.</p>
+<h2>What you may do</h2><ul><li>Link to any page on this site.</li><li>Quote individual findings, such as one store's result or a headline figure, with credit to ShopBot Index and a link to <a href="https://shopbotindex.com/">shopbotindex.com</a>.</li></ul>
+<h2>What needs our written permission</h2><p>Copying, scraping or republishing the dataset or large parts of it, in any form. To ask, write to <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p>
+<h2>About the data</h2><p>The data comes from automated crawls and is provided as is. It may contain errors. Each result is a snapshot of what a store's website published when we checked it. It says nothing about whether AI agents can buy at that store. If you think a result is wrong, see the <a href="methodology.html#contact">methodology</a> for how to ask us to re-check it.</p>
+<h2>Names and trademarks</h2><p>Store names and trademarks belong to their owners. ShopBot Index is independent; not affiliated with Google, Shopify, OpenAI, Microsoft or any retailer listed.</p>
+<p>Questions: <a href="mailto:hello@shopbotindex.com">hello@shopbotindex.com</a>.</p><p class="muted">Last updated: October 2026.</p>''')
 # ---- "stop alerts" page for watch alerts (linked from each alert email; not in the sitemap) ----
 UNWATCH_JS='''<script>(function(){var o=document.getElementById('uw'),t=new URLSearchParams(location.search).get('t')||'';if(!/^[0-9a-f-]{36}$/i.test(t)){o.textContent='This link is incomplete. Copy the whole link from the email, or write to hello@shopbotindex.com.';return}
 fetch('''+json.dumps(FORM_ACTION)+''',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'unwatch',token:t})}).then(r=>r.json()).then(j=>{o.textContent=j.ok?(j.removed?"Done. You won't get alerts for this store any more. The Monday email is unchanged; it has its own unsubscribe link.":"These alerts were already stopped."):"Something went wrong. Please try again, or write to hello@shopbotindex.com."}).catch(()=>{o.textContent='Network error. Please try again.'})})();</script>'''
-page('unwatch.html',f'Stop store alerts | {NAME}',f'<h1>Stop alerts for a store</h1><p class="lede" id="uw" aria-live="polite">Stopping the alerts…</p>{UNWATCH_JS}',head='<meta name="robots" content="noindex">'); PAGES.remove('unwatch.html')
+page('unwatch.html',f'Stop store alerts | {NAME}',f'<h1>Stop alerts for a store</h1><p class="lede" id="uw" aria-live="polite">Stopping the alerts…</p>{UNWATCH_JS}','Stop the email alerts for one store you watch on ShopBot Index. The Monday email is unchanged; it has its own unsubscribe link.',head='<meta name="robots" content="noindex">'); PAGES.remove('unwatch.html')
 json.dump({r['id']:[SLUG[r['id']],r['name'],r['status']] for r in RET},open(os.path.join(DATA,'slugs-latest.json'),'w'),ensure_ascii=False,separators=(',',':'))  # for scripts/watch_alerts.py; not committed (.gitignore)
 os.makedirs(os.path.join(DIST,'ucp'),exist_ok=True)
 _V='2026-08-25'; _cap=lambda: [{'version':_V}]

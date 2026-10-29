@@ -7,6 +7,7 @@ Multi-country sites of one retailer (several of its own websites on its Wikidata
 Stores added later come from frozen data/seeds/additions-YYYY-MM-DD.json files and carry added='YYYY-MM-DD'.
 Usage: python3 scripts/seeds.py"""
 import json, os, re, csv, urllib.parse, collections
+from nonshops import IDS as NON_SHOPS  # places, newspapers, restaurants etc. (config/non_shops.json)
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); S=os.path.join(ROOT,'data','seeds')
 TEAMDUKAAN_LIMIT=900; MAX_SITES=8; BIG_SITELINKS=10
 def host(u):
@@ -40,7 +41,9 @@ def add_sites(rid,hosts):
 # 1) Wikipedia list pages resolved via Wikidata
 W=json.load(open(os.path.join(S,'wikipedia_lists.json')))
 for it in sorted(W['items'],key=lambda x:-x['sitelinks']):
-    rid=it['qid']; big=it['list_page']=='List_of_largest_retail_companies' or it['sitelinks']>=BIG_SITELINKS
+    rid=it['qid']
+    if rid in NON_SHOPS: continue
+    big=it['list_page']=='List_of_largest_retail_companies' or it['sitelinks']>=BIG_SITELINKS
     R[rid]=dict(id=rid,name=it['name'],segment='big' if big else 'other',category=category(it['industry'],it['list_page']),
                 country=', '.join(x for x in it['country'] if x)[:80],sitelinks=it['sitelinks'],
                 sources=[f"wikipedia:{it['list_page']}",f"https://www.wikidata.org/wiki/{rid}"],sites=[])
@@ -51,6 +54,7 @@ for b in json.load(open(os.path.join(S,'wikidata_retail.json')))['results']['bin
     q=b['item']['value'].rsplit('/',1)[-1]; grp[q].append(b['site']['value']); meta[q]=b
 for q,sites in grp.items():
     b=meta[q]; nm=b['itemLabel']['value']
+    if q in NON_SHOPS: continue
     if re.fullmatch(r'Q\d+',nm): continue
     links=int(b['links']['value'])
     if q in R:
