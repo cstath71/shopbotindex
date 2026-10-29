@@ -9113,6 +9113,22 @@
   ]
  },
  {
+  "id": "shop.jennipro.com",
+  "name": "JENNi",
+  "segment": "other",
+  "category": "Online retail & marketplaces",
+  "country": "United States",
+  "sitelinks": 0,
+  "sources": [
+   "https://shop.jennipro.com/.well-known/ucp",
+   "https://www.reddit.com/r/AgentsOfAI/comments/1xifzyy/"
+  ],
+  "sites": [
+   "shop.jennipro.com"
+  ],
+  "added": "2026-10-29"
+ },
+ {
   "id": "Q3178470",
   "name": "Jewel-Osco",
   "segment": "other",
