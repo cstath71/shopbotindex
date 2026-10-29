@@ -1,0 +1,24 @@
+{
+  "added": "2026-10-29",
+  "prepared": "2026-10-29",
+  "count": 1,
+  "note": "JENNi (shop.jennipro.com): non-Shopify store that publishes a UCP profile plus a no-auth MCP server. Verified 2026-10-29 by fetching https://shop.jennipro.com/.well-known/ucp with ShopBotIndexBot (HTTP 200, valid ucp object, platform_hint empty/Other, requires_buyer_approval true). Offered for the crawl in a public r/AgentsOfAI reply. Do not call the MCP beyond a crawl-time tools/list if the profile declares one.",
+  "stores": [
+    {
+      "id": "shop.jennipro.com",
+      "name": "JENNi",
+      "segment": "other",
+      "category": "Online retail & marketplaces",
+      "country": "United States",
+      "sitelinks": 0,
+      "sources": [
+        "https://shop.jennipro.com/.well-known/ucp",
+        "https://www.reddit.com/r/AgentsOfAI/comments/1xifzyy/"
+      ],
+      "sites": [
+        "shop.jennipro.com"
+      ],
+      "added": "2026-10-29"
+    }
+  ]
+}

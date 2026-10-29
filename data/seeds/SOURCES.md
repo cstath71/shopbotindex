@@ -30,3 +30,8 @@ from List_of_hypermarkets, for example), newspapers, a software licence, a web a
 such as streaming, gyms, karaoke and arcades. They are listed with the reason in `config/non_shops.json` and left out of
 `data/seeds.json`, the crawl and the site (`scripts/nonshops.py`). Their Wikidata classes are also skipped by `scripts/wiki_seeds.py`
 when the Wikipedia seeds are refreshed.
+
+## Manual additions (`additions-YYYY-MM-DD.json`)
+Stores added outside the Wikipedia/Wikidata/Shopify lists, tagged with `added` so the weekly comparison treats them as newly tracked. `scripts/seeds.py` appends every `additions-*.json` after the main sources.
+
+- `additions-2026-10-29.json`: JENNi (`shop.jennipro.com`), segment `other`. UCP profile verified 2026-10-29 at `https://shop.jennipro.com/.well-known/ucp`.
