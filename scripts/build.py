@@ -134,11 +134,110 @@ if P:
         newly_tracked=[r['id'] for r in RET if r['id'] not in PR],
         capability_changes=[dict(id=r['id'],added=sorted(set(r['capabilities'])-set(PR[r['id']]['capabilities'])),removed=sorted(set(PR[r['id']]['capabilities'])-set(r['capabilities'])))
                             for r in RET if r['status']=='ucp' and r['id'] in PR and PR[r['id']]['status']=='ucp' and set(r['capabilities'])!=set(PR[r['id']]['capabilities'])])
-    # same-store comparison: week-on-week numbers use only stores tracked in both crawls; stores new to the list are 'newly tracked', never 'joined'
+    # same-store week-on-week: list expansions (e.g. nov2-biglist) must not inflate "joined"
     _both=[r for r in RET if r['id'] in PR]; _sn=segstats(_both); _sp=segstats([PR[r['id']] for r in _both])
-    CHG['same_store']=dict(n=len(_both),ucp=_sn['ucp'],checked=_sn['checked'],ucp_previous=_sp['ucp'],checked_previous=_sp['checked'],
-        by_segment={k:dict(n=len(b),ucp=segstats(b)['ucp'],ucp_previous=segstats([PR[r['id']] for r in b])['ucp']) for k in ('shopify','big','other') for b in [[r for r in _both if r['segment']==k]]})
+    CHG['same_store']=dict(n=len(_both),ucp=_sn['ucp'],checked=_sn['checked'],no=_sn['no'],cc=_sn['cc'],
+        ucp_previous=_sp['ucp'],checked_previous=_sp['checked'],no_previous=_sp['no'],cc_previous=_sp['cc'],
+        by_segment={k:dict(n=len(b),ucp=segstats(b)['ucp'],ucp_previous=segstats([PR[r['id']] for r in b])['ucp'])
+                    for k in ('shopify','big','other') for b in [[r for r in _both if r['segment']==k]]})
     CHG['newly_tracked_by_segment']={k:sum(1 for i in CHG['newly_tracked'] if CR[i]['segment']==k) for k in ('shopify','big','other')}
+    def _cc_split(retailers, sites_by):
+        """Pure site-status buckets + mixed (same cut as the 26 Oct methodology note)."""
+        out=dict(robots_disallow=0,blocked=0,error=0,mixed=0,total=0)
+        for r in retailers:
+            if r['status']!='couldnt_check': continue
+            sts={s.get('status') for s in sites_by.get(r['id'],[])} & {'robots_disallow','blocked','error'}
+            out['total']+=1
+            if sts=={'robots_disallow'}: out['robots_disallow']+=1
+            elif sts=={'blocked'}: out['blocked']+=1
+            elif sts=={'error'}: out['error']+=1
+            else: out['mixed']+=1
+        return out
+    _psites=collections.defaultdict(list)
+    for s in P.get('sites',[]):
+        if s.get('rid') not in NON_SHOPS: _psites[s['rid']].append(s)
+    _prev_ret=[r for r in P['retailers'] if r['id'] not in NON_SHOPS]
+    CHG['couldnt_check_split']=_cc_split(RET, SITES_BY)
+    CHG['couldnt_check_split_previous']=_cc_split(_prev_ret, _psites)
+    CHG['totals']=dict(stores=len(RET),ucp=sum(1 for r in RET if r['status']=='ucp'),no=sum(1 for r in RET if r['status']=='no_ucp'),cc=sum(1 for r in RET if r['status']=='couldnt_check'),
+        stores_previous=len(_prev_ret),ucp_previous=sum(1 for r in _prev_ret if r['status']=='ucp'),no_previous=sum(1 for r in _prev_ret if r['status']=='no_ucp'),cc_previous=sum(1 for r in _prev_ret if r['status']=='couldnt_check'))
+    # ---- supporting-signal week-over-week (beyond UCP) ----
+    # None = not checked that week (never treat as "not found"; never count as gained/lost)
+    def _sig_flags(r, sites_for_r):
+        sg=r.get('signals') or {}
+        out={}
+        if not sg.get('checked'):
+            for k in ('acp','ai_catalog','mcp_declared','mcp_tools','llms_txt','agents_md','robots_ai','product_markup','access_answered'):
+                out[k]=None
+        else:
+            m=sg.get('mcp') or {}
+            ms=m.get('state')
+            rb=sg.get('robots') or {}
+            prod=sg.get('product') or {}
+            acc=sg.get('access') or {}
+            out['acp']=bool(sg.get('acp'))
+            out['ai_catalog']=bool(sg.get('ai_catalog'))
+            out['mcp_declared']=ms in ('no_tools','answered')
+            out['mcp_tools']=ms=='answered' or bool(m.get('tools'))
+            out['llms_txt']=bool(sg.get('llms_txt'))
+            out['agents_md']=bool(sg.get('agents_md'))
+            out['robots_ai']=bool(rb.get('specific'))
+            out['product_markup']=prod.get('state') in ('full','partial')
+            # access: answered vs not; refused/not_checked are not "not found" for shopping
+            if acc.get('state') in ('answered','refused'):
+                out['access_answered']=acc.get('state')=='answered'
+            else:
+                out['access_answered']=None
+        # A2A card: record-only agent_files on sites; valid JSON card only
+        a2a=None
+        saw_a2a=False
+        for s in sites_for_r:
+            af=s.get('agent_files') or {}
+            if not af.get('checked'): continue
+            for key in ('a2a_card','a2a_card_legacy'):
+                v=af.get(key) or {}
+                if v.get('status') in (None,'not fetched'): continue
+                saw_a2a=True
+                if v.get('valid'): a2a=True
+            if a2a: break
+        out['a2a']=a2a if a2a else (False if saw_a2a else None)
+        return out
+    SIG_KEYS=(
+        ('acp','ACP discovery (/.well-known/acp.json)'),
+        ('ai_catalog','AI catalog (/.well-known/ai-catalog.json)'),
+        ('mcp_declared','MCP declared (UCP names an endpoint)'),
+        ('mcp_tools','MCP tools (tools/list answered with tools)'),
+        ('llms_txt','llms.txt'),
+        ('agents_md','agents.md'),
+        ('robots_ai','AI-agent rules in robots.txt'),
+        ('a2a','A2A agent card (valid)'),
+        ('product_markup','Product markup (schema.org Product)'),
+        ('access_answered','Site answered our crawler (access)'),
+    )
+    _psites_all=collections.defaultdict(list)
+    for s in P.get('sites',[]):
+        _psites_all[s['rid']].append(s)
+    signal_changes=[]
+    for key,label in SIG_KEYS:
+        gained=[]; lost=[]; now_n=0; prev_n=0; comparable=0; checked_now=0; checked_prev=0
+        for r in RET:
+            if r['id'] not in PR: continue  # newly tracked handled elsewhere
+            cur=_sig_flags(r, SITES_BY.get(r['id'],[]))
+            prev=_sig_flags(PR[r['id']], _psites_all.get(r['id'],[]))
+            cv,pv=cur.get(key),prev.get(key)
+            if cv is not None: checked_now+=1
+            if pv is not None: checked_prev+=1
+            if cv is True: now_n+=1
+            if pv is True: prev_n+=1
+            if cv is None or pv is None: continue
+            comparable+=1
+            if (not pv) and cv: gained.append(r['id'])
+            if pv and (not cv): lost.append(r['id'])
+        # also count newly tracked with signal found under a separate first_seen list (not "gained")
+        first_seen=[r['id'] for r in RET if r['id'] not in PR and (_sig_flags(r,SITES_BY.get(r['id'],[])).get(key) is True)]
+        signal_changes.append(dict(key=key,label=label,gained=gained,lost=lost,first_seen=first_seen,
+            now=now_n,previous=prev_n,comparable=comparable,checked_now=checked_now,checked_previous=checked_prev))
+    CHG['signal_changes']=signal_changes
     json.dump(CHG,open(os.path.join(DATA,'changes-latest.json'),'w'),indent=1)
 elif os.path.exists(os.path.join(DATA,'changes-latest.json')):
     os.remove(os.path.join(DATA,'changes-latest.json'))  # no previous crawl: drop any stale diff
@@ -198,12 +297,31 @@ nsites=len(SITES); nsites_u=sum(1 for s in SITES if s.get('status')=='ucp')
 # list growth notes for the methodology (real counts from data/seeds.json before/after; shown from that crawl on)
 LIST_GROWTH=[('2026-11-02','On 2 Nov 2026 the list grew from 2,179 to 2,854 retailers and stores (2,549 to 3,294 websites), adding stores from public Wikipedia, Wikidata and Shopify-store lists (and dropping entries later listed as not online shops); week-on-week changes compare only stores tracked in both weeks, and shares are of the stores on our list.')]
 def same_store_txt(pre=''):
-    if not CHG or not CHG['newly_tracked']: return ''
+    if not CHG or not CHG.get('newly_tracked'): return ''
     ss=CHG['same_store']; nt=len(CHG['newly_tracked'])
     return (f'<p><b>Same stores as last week:</b> {ss["ucp"]} of the {ss["n"]} retailers and stores we tracked in both crawls publish a UCP profile '
             f'(last week: {ss["ucp_previous"]}). Joined and left count only these. {nt} {"store is" if nt==1 else "stores are"} newly tracked this week '
             f'and not counted as joining. <a href="{pre}changes.html#new">See them →</a></p>')
 joined_txt=same_store_txt()+(f'<p><b>This week:</b> {len(CHG["joined"])} joined, {len(CHG["left"])} left since {CHG["previous"]}. <a href="changes.html">See who →</a></p>' if CHG else '<p class="muted">Weekly "who joined" starts with the second crawl.</p>')
+_ccn=sum(1 for r in RET if r['status']=='couldnt_check')
+_ccs=(CHG or {}).get('couldnt_check_split')
+if not _ccs:
+    def _cc_split_home(retailers, sites_by):
+        out=dict(robots_disallow=0,blocked=0,error=0,mixed=0,total=0)
+        for r in retailers:
+            if r['status']!='couldnt_check': continue
+            sts={s.get('status') for s in sites_by.get(r['id'],[])} & {'robots_disallow','blocked','error'}
+            out['total']+=1
+            if sts=={'robots_disallow'}: out['robots_disallow']+=1
+            elif sts=={'blocked'}: out['blocked']+=1
+            elif sts=={'error'}: out['error']+=1
+            else: out['mixed']+=1
+        return out
+    _ccs=_cc_split_home(RET, SITES_BY)
+import datetime as _dt_home
+_day_long=f'{_dt_home.date.fromisoformat(DAY).day} {_dt_home.date.fromisoformat(DAY).strftime("%B")} {_dt_home.date.fromisoformat(DAY).year}'
+_cc_note=(f'<p class="muted">Of those {_ccn} on {_day_long}: {_ccs["robots_disallow"]} robots.txt disallow, {_ccs["blocked"]} refused (401/403/429/451), {_ccs["error"]} timeout or connection error, {_ccs["mixed"]} mixed. '
+          f'<a href="methodology.html#couldnt-check">How we split that</a>. That split is about why our crawler got no answer; it does not say what AI shopping agents see.</p>') if _ccn else ''
 home=f'''<h1>What online stores tell AI shopping agents</h1>
 <p class="lede">Every week we check {len(RET)} retailers and stores ({nsites} websites) to see whether they publish the profile AI shopping agents read. It's called a <a href="https://ucp.dev/">UCP</a> profile. We also record four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. No profile doesn't mean AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">How we measure</a>.</p>
 {segcards()}{joined_txt}
@@ -211,8 +329,8 @@ home=f'''<h1>What online stores tell AI shopping agents</h1>
 <div class="stats"><div class="stat"><b>{len(U)}</b><span>retailers/stores with a UCP profile on at least one site</span></div>
 <div class="stat"><b>{PLATC.get("Shopify",0)}</b><span>of them run it on Shopify</span></div>
 <div class="stat"><b>{len(NONSHOP)}</b><span>on other platforms</span></div>
-<div class="stat"><b>{sum(1 for r in RET if r["status"]=="couldnt_check")}</b><span>couldn't be checked (blocked/unreachable)</span></div></div>
-{"" if DAY!="2026-10-26" else '<p class="muted">Of those 627 on 26 October 2026: 77 robots.txt disallow, 240 refused (401/403/429/451), 303 timeout or connection error, 7 mixed. <a href="methodology.html#couldnt-check">How we split that</a>.</p>'}
+<div class="stat"><b>{_ccn}</b><span>couldn't be checked (blocked/unreachable)</span></div></div>
+{_cc_note}
 <h2>Big retailers with a UCP profile ({len(BIGU)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({r['sites_with_ucp']} of {r['sites_checked']} sites{', '+E('/'.join(r['platforms'])) if r['platforms'] else ''})</small></li>" for r in BIGU)+"</ul>" if BIGU else "<p>None found in this crawl.</p>"}
 <h2>UCP profiles not on Shopify ({len(NONSHOP)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({E(SEG[r['segment']])})</small></li>" for r in NONSHOP)+"</ul>" if NONSHOP else "<p>None found.</p>"}
 <p><a href="stores.html"><b>Browse all {len(RET)} stores →</b></a></p>
@@ -294,12 +412,68 @@ if CHG:
     def L(ids,why,empty): return '<ul>'+''.join(f'<li>{SL(i)}: {why(i) if callable(why) else why}</li>' for i in ids)+'</ul>' if ids else f'<p>{empty}</p>'
     n=lambda k: len(CHG[k])
     pl=lambda k,one,many: (one if n(k)==1 else many).format(n=n(k))
+    tot=CHG['totals']; ccs=CHG['couldnt_check_split']; ss=CHG['same_store']
+    same_bit=(f' (same stores tracked both weeks: {ss["ucp"]} of {ss["n"]}, was {ss["ucp_previous"]})' if n('newly_tracked') else '')
     intro=(f'<p class="lede">Between our crawls of {pv} and {cu}, {pl("joined","{n} retailer or store","{n} retailers and stores")} started publishing a UCP profile, the profile AI shopping agents read, '
            f'and {n("left")} stopped. Of the stores that had a profile, {n("now_unreachable")} couldn&#39;t be checked this time, so '
-           f'{"it is" if n("now_unreachable")==1 else "they are"} not counted as leaving. In the crawl of {cu}, {nU} of the {nT} retailers and stores we track publish a UCP profile.</p>'
+           f'{"it is" if n("now_unreachable")==1 else "they are"} not counted as leaving. In the crawl of {cu}, {nU} of the {nT} retailers and stores we track publish a UCP profile{same_bit}.</p>'
            f'<p>How we count: each crawl is compared, store by store, with the previous one. <b>Joined</b> means a store we already tracked now has a UCP profile at <code>/.well-known/ucp</code> after the previous crawl found none or couldn\'t check it. '
            f'<b>Left</b> means a store had a profile in the previous crawl and its website answered this time without one. <b>Couldn\'t check</b> means the website blocked our crawler or was unreachable, so we don\'t know, and we never count that as leaving. '
            f'Stores added to our list are shown as newly tracked, not as joining. Details are in the <a href="methodology.html#changes">methodology</a>.</p>')
+    totals_tbl=(f'<h2 id="totals">Totals before and after</h2><div class="tw"><table><tr><th></th><th>{pv}</th><th>{cu}</th></tr>'
+                f'<tr><td>Retailers and stores tracked</td><td>{tot["stores_previous"]}</td><td>{tot["stores"]}</td></tr>'
+                f'<tr><td>Publish a UCP profile</td><td>{tot["ucp_previous"]}</td><td>{tot["ucp"]}</td></tr>'
+                f'<tr><td>No UCP profile found</td><td>{tot["no_previous"]}</td><td>{tot["no"]}</td></tr>'
+                f'<tr><td>Couldn\'t check</td><td>{tot["cc_previous"]}</td><td>{tot["cc"]}</td></tr></table></div>'
+                f'<p class="muted">"No UCP profile found" means we got an answer without a profile, not that AI shopping agents can\'t shop there. Couldn\'t-check stores are never described as having no profile.</p>')
+    split_tbl=(f'<h2 id="couldnt-split">Couldn\'t check this week: split by reason ({ccs["total"]})</h2>'
+               f'<p class="muted">Why our crawler got no answer. This does not say what AI shopping agents see at those stores.</p>'
+               f'<div class="tw"><table><tr><th>Reason</th><th>Stores</th></tr>'
+               f'<tr><td>robots.txt disallow on every site we tried</td><td>{ccs["robots_disallow"]}</td></tr>'
+               f'<tr><td>Refused (HTTP 401, 403, 429 or 451)</td><td>{ccs["blocked"]}</td></tr>'
+               f'<tr><td>Timeout, TLS or DNS error</td><td>{ccs["error"]}</td></tr>'
+               f'<tr><td>Mixed (more than one of the above across sites)</td><td>{ccs["mixed"]}</td></tr></table></div>')
+
+    # supporting signals beyond UCP
+    def _sig_row(sc):
+        g,l=len(sc['gained']),len(sc['lost'])
+        note=''
+        if sc['comparable']==0 and sc['checked_now']:
+            note=' <small class="muted">(first week we checked this signal for these stores; gained/lost start next crawl)</small>'
+        return (f'<tr><td>{E(sc["label"])}</td><td>{sc["previous"]}</td><td>{sc["now"]}</td>'
+                f'<td>{g}</td><td>{l}</td><td>{sc["comparable"]}</td></tr>')
+    sig_rows=''.join(_sig_row(sc) for sc in CHG.get('signal_changes') or [])
+    signals_tbl=(f'<h2 id="signals-changed">Supporting signals: what changed ({pv} → {cu})</h2>'
+                 f'<p class="muted">Week-over-week for every public signal we record besides the UCP profile. '
+                 f'<b>Gained</b> / <b>lost</b> count only stores we already tracked and where we checked that signal in <em>both</em> crawls. '
+                 f'Not found does not mean AI shopping agents can\'t shop there. Couldn\'t check is never described as not found. '
+                 f'A refused crawler is not a claim that agents are blocked. Details: <a href="methodology.html#signals">methodology</a>.</p>'
+                 f'<div class="tw"><table><tr><th>Signal</th><th>{pv}</th><th>{cu}</th><th>Gained</th><th>Lost</th><th>Comparable stores</th></tr>'
+                 f'{sig_rows}</table></div>')
+    # per-signal short lists (cap length so page stays readable)
+    def _sig_list(ids, empty):
+        if not ids: return f'<p class="muted">{empty}</p>'
+        show=ids[:40]; more=len(ids)-len(show)
+        ul='<ul>'+''.join(f'<li>{SL(i)}</li>' for i in show)+'</ul>'
+        return ul+(f'<p class="muted">…and {more} more.</p>' if more else '')
+    sig_detail_parts=[]
+    for sc in CHG.get('signal_changes') or []:
+        if not sc['gained'] and not sc['lost'] and not sc['first_seen']:
+            continue
+        parts=[f'<h3>{E(sc["label"])}</h3>']
+        if sc['gained']:
+            parts.append(f'<p><b>Newly found ({len(sc["gained"])})</b> — already tracked; we found this signal this week after not finding it last week.</p>')
+            parts.append(_sig_list(sc['gained'],''))
+        if sc['lost']:
+            parts.append(f'<p><b>No longer found ({len(sc["lost"])})</b> — we got an answer without this signal. Not the same as couldn\'t check.</p>')
+            parts.append(_sig_list(sc['lost'],''))
+        if sc['first_seen']:
+            parts.append(f'<p class="muted"><b>Newly tracked with this signal ({len(sc["first_seen"])})</b> — added to our list this week; not counted as gained.</p>')
+            parts.append(_sig_list(sc['first_seen'],''))
+        sig_detail_parts.append(''.join(parts))
+    signals_detail=(''.join(sig_detail_parts) if sig_detail_parts
+                    else '<p class="muted">No supporting-signal gained/lost pairs between these two crawls (or this is the first crawl that checked them).</p>')
+
     cc=''.join(f'<li><a href="store/{SLUG[x["id"]]}.html">{E(NM[x["id"]]["name"])}</a>: {"added "+", ".join(capn(a) for a in x["added"]) if x["added"] else ""}{"; " if x["added"] and x["removed"] else ""}{"removed "+", ".join(capn(a) for a in x["removed"]) if x["removed"] else ""}</li>' for x in CHG['capability_changes'])
     cs,H=_hist()
     def joined_why(i):
@@ -308,20 +482,29 @@ if CHG:
         had=[c['crawl_date'] for c in cs if c['crawl_date']<CHG['previous'] and any(r['id']==i and r['status']=='ucp' for r in c['retailers'])]
         if had: return f"UCP profile found on {_dlong(had[-1])}, none found on {pv}; it publishes one again on {cu}."
         return f"no UCP profile found on {pv}, profile found on {cu}."
+    def unreach_why(i):
+        sts={s.get('status') for s in SITES_BY.get(i,[])} & {'robots_disallow','blocked','error'}
+        if sts=={'robots_disallow'}: why='robots.txt disallowed our check'
+        elif sts=={'blocked'}: why='the site refused our request (401/403/429/451)'
+        elif sts=={'error'}: why='the site timed out or failed to connect'
+        elif len(sts)>1: why='a mix of refusals, timeouts or robots.txt disallow'
+        else: why='the site blocked us or was unreachable'
+        return f"UCP profile found on {pv}; on {cu} {why}. Not counted as leaving, and not described as having no profile."
     if len(H)>1:
         hist='<h2>Earlier comparisons</h2><div class="tw"><table><tr><th>Crawls compared</th><th>Joined</th><th>Left</th><th>Had a profile, now couldn\'t check</th><th>With a UCP profile</th></tr>'+''.join(f'<tr><td>{_dlong(a)} → {_dlong(b)}</td><td>{j}</td><td>{l}</td><td>{u}</td><td>{t}</td></tr>' for a,b,j,l,u,t in reversed(H))+'</table></div>'
     else:
         hist=f'<h2>Earlier comparisons</h2><p>None yet. Our crawl of {_dlong(cs[0]["crawl_date"])} is the first one saved in this format, so this is the first comparison. Each new crawl adds a row here.</p>'
-    body=f'''<h1>{CHGTITLE}</h1>{intro}{same_store_txt()}
+    body=f'''<h1>{CHGTITLE}</h1>{intro}{same_store_txt()}{totals_tbl}{split_tbl}{signals_tbl}{signals_detail}
 <h2>Joined: newly publishing a UCP profile ({n("joined")})</h2>{L(CHG["joined"],joined_why,f"No store started publishing a UCP profile between {pv} and {cu}.")}
 <h2>Left: profile no longer found ({n("left")})</h2>{L(CHG["left"],f"UCP profile found on {pv}, none found on {cu}.",f"No store stopped publishing a UCP profile between {pv} and {cu}.")}
-<h2>Had a profile, now couldn't check ({n("now_unreachable")})</h2><p class="muted">Not counted as leaving: the site blocked us or was unreachable this time.</p>{L(CHG["now_unreachable"],f"UCP profile found on {pv}; on {cu} the site blocked us or was unreachable.",f"Every store that had a UCP profile on {pv} could be checked again on {cu}.")}
+<h2>Had a profile, now couldn't check ({n("now_unreachable")})</h2><p class="muted">Not counted as leaving: our crawler was refused or could not reach the site this time. That is not a claim about what AI shopping agents see.</p>{L(CHG["now_unreachable"],unreach_why,f"Every store that had a UCP profile on {pv} could be checked again on {cu}.")}
 <h2>Capability changes ({len(CHG["capability_changes"])})</h2>{"<ul>"+cc+"</ul>" if cc else f"<p>No store changed its declared capabilities between these two crawls.</p>"}
-<h2 id="new">Newly tracked ({n("newly_tracked")})</h2><p class="muted">Added to our list this time; not counted as joining.</p>{L(CHG["newly_tracked"],"added to our list for this crawl.",f"No stores were added to our list between {pv} and {cu}; we tracked the same {nT} both times.")}
+<h2 id="new">Newly tracked ({n("newly_tracked")})</h2><p class="muted">Added to our list this time; not counted as joining. A store that publishes a UCP profile on first sight still appears here, not under Joined.</p>{L(CHG["newly_tracked"],"added to our list for this crawl.",f"No stores were added to our list between {pv} and {cu}; we tracked the same {nT} both times.")}
 {hist}'''
 else:
     body=f'<h1>{CHGTITLE}</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing a UCP profile), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
 page('changes.html',f'What changed: stores that started or stopped publishing a UCP profile | {NAME}',body+signup())
+
 # ---- agent-readiness signals (phase 2 of the crawl) ----
 import datetime as _dt; _nd=_dt.date.fromisoformat(DAY)+_dt.timedelta(days=7-_dt.date.fromisoformat(DAY).weekday()); NEXTCRAWL=f'{_nd.day} {_nd.strftime("%B")} {_nd.year}'  # next Monday after the crawl
 HAS_SIG=any((r.get('signals') or {}).get('checked') for r in RET)
@@ -520,7 +703,7 @@ meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check
 {CRAWLMETH}
 <h2>6. Site-level results this crawl ({nsites} websites)</h2><ul>{"".join(f"<li>{E(SITEST.get(k,k))}: {v}</li>" for k,v in SC.most_common())}</ul>
 <h2>7. Platform</h2><p>"Shopify" means the profile's endpoints or extensions reference Shopify. Anything else is shown as another platform. We can only identify a platform for stores that publish a profile.</p>
-<h2 id="changes">8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining).{''.join(' '+g for d,g in LIST_GROWTH if DAY>=d)}</p>
+<h2 id="changes">8. Weekly changes</h2><p>Each crawl is saved with its date. The "What changed" page compares retailer-level status with the previous crawl: joined, left, couldn't check this time (not counted as leaving), capability changes, and newly tracked retailers (not counted as joining). Week-on-week joined/left counts use only stores present in both crawls, so a list expansion never counts as "newly publishing a UCP profile." The page also shows totals before and after, the couldn't-check split by reason when site statuses support it, and week-over-week gained/lost counts for supporting signals (ACP, AI catalog, MCP declared/tools, llms.txt, agents.md, AI-agent robots.txt rules, A2A agent card, product markup, and whether the site answered our crawler). Signal gained/lost only counts stores checked for that signal in both crawls.{''.join(' '+g for d,g in LIST_GROWTH if DAY>=d)}</p>
 <h2>9. AI assistants table</h2><p>Only company announcements and help-centre pages, linked per row. We don't test those integrations.</p>
 <h2 id="contact">10. Add, remove or correct a store</h2><p>Run a store or retailer that should be added, removed or corrected, or think a result is wrong? Email {MAILTO} with the store's domain. We re-check it in the next weekly crawl and never change a result by hand.</p>'''
 page('methodology.html',f'Methodology | {NAME}',meth)
