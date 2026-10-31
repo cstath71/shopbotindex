@@ -715,5 +715,184 @@
    ],
    "removed": []
   }
+ ],
+ "same_store": {
+  "n": 2179,
+  "ucp": 773,
+  "checked": 1552,
+  "no": 779,
+  "cc": 627,
+  "ucp_previous": 770,
+  "checked_previous": 1591,
+  "no_previous": 821,
+  "cc_previous": 588,
+  "by_segment": {
+   "shopify": {
+    "n": 1188,
+    "ucp": 713,
+    "ucp_previous": 712
+   },
+   "big": {
+    "n": 297,
+    "ucp": 11,
+    "ucp_previous": 8
+   },
+   "other": {
+    "n": 694,
+    "ucp": 49,
+    "ucp_previous": 50
+   }
+  }
+ },
+ "newly_tracked_by_segment": {
+  "shopify": 0,
+  "big": 0,
+  "other": 0
+ },
+ "couldnt_check_split": {
+  "robots_disallow": 77,
+  "blocked": 240,
+  "error": 303,
+  "mixed": 7,
+  "total": 627
+ },
+ "couldnt_check_split_previous": {
+  "robots_disallow": 78,
+  "blocked": 192,
+  "error": 310,
+  "mixed": 8,
+  "total": 588
+ },
+ "totals": {
+  "stores": 2179,
+  "ucp": 773,
+  "no": 779,
+  "cc": 627,
+  "stores_previous": 2179,
+  "ucp_previous": 770,
+  "no_previous": 821,
+  "cc_previous": 588
+ },
+ "signal_changes": [
+  {
+   "key": "acp",
+   "label": "ACP discovery (/.well-known/acp.json)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 1,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "ai_catalog",
+   "label": "AI catalog (/.well-known/ai-catalog.json)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 2,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "mcp_declared",
+   "label": "MCP declared (UCP names an endpoint)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 767,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "mcp_tools",
+   "label": "MCP tools (tools/list answered with tools)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 6,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "llms_txt",
+   "label": "llms.txt",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 852,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "agents_md",
+   "label": "agents.md",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 753,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "robots_ai",
+   "label": "AI-agent rules in robots.txt",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 135,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "a2a",
+   "label": "A2A agent card (valid)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 1,
+   "previous": 1,
+   "comparable": 1477,
+   "checked_now": 1525,
+   "checked_previous": 1559
+  },
+  {
+   "key": "product_markup",
+   "label": "Product markup (schema.org Product)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 67,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1798,
+   "checked_previous": 0
+  },
+  {
+   "key": "access_answered",
+   "label": "Site answered our crawler (access)",
+   "gained": [],
+   "lost": [],
+   "first_seen": [],
+   "now": 800,
+   "previous": 0,
+   "comparable": 0,
+   "checked_now": 1747,
+   "checked_previous": 0
+  }
  ]
 }
