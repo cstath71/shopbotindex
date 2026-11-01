@@ -4,6 +4,7 @@ Segments (side by side, none primary):
   big     : retailers on Wikipedia's 'List of largest retail companies' OR with Wikipedia articles in >=10 languages
   other   : other retail chains, department stores, supermarkets, hypermarkets and online marketplaces from Wikipedia/Wikidata
 Multi-country sites of one retailer (several of its own websites on its Wikidata item) are kept as children of that retailer.
+Stores added later come from frozen data/seeds/additions-YYYY-MM-DD.json files and carry added='YYYY-MM-DD'.
 Usage: python3 scripts/seeds.py"""
 import json, os, re, csv, urllib.parse, collections
 from nonshops import IDS as NON_SHOPS  # places, newspapers, restaurants etc. (config/non_shops.json)
@@ -77,8 +78,8 @@ with open(os.path.join(S,'teamdukaan_shopify.csv'),newline='',errors='ignore') a
         if not row or row[0].strip().upper()=='URL': continue
         if add_shop(host(row[0]),'https://github.com/TeamDukaan/performance/blob/master/shopify%20stores%20-%20shopify.csv','D2C brands (India)','India'): n+=1
         if n>=TEAMDUKAAN_LIMIT: break
-# 4) Additions with a start date (data/seeds/additions-YYYY-MM-DD.json): new stores tagged 'added'.
-#    Same rules: one entry per retailer, each host used once overall, max 8 sites.
+# 4) Additions with a start date (frozen lists, data/seeds/additions-YYYY-MM-DD.json): new stores tagged 'added' so the weekly
+#    comparison can treat them as newly tracked. Same rules: one entry per retailer, each host used once overall, max 8 sites.
 for fn in sorted(f for f in os.listdir(S) if re.fullmatch(r'additions-\d{4}-\d{2}-\d{2}\.json',f)):
     A=json.load(open(os.path.join(S,fn)))
     for it in A['stores']:

@@ -8,7 +8,7 @@ Safety: it runs after the UCP pass, never edits any existing field, every except
 Politeness: the crawl's own User-Agent identity (product token, link, contact) with a comment that names these files, the crawl's
 timeouts, pause and worker count, one request at a time per website, robots.txt honoured for every URL, and no further requests
 to a website once it refuses us (401/403/429/451) or a connection fails.
-Switch: on by default only when ENABLED_DEFAULT is True; env SBI_AGENT_FILES=1/0 overrides. Budget: SBI_AGENT_FILES_BUDGET seconds (default 1200).
+Switch: on by default only when ENABLED_DEFAULT is True; env SBI_AGENT_FILES=1/0 overrides. Budget: SBI_AGENT_FILES_BUDGET seconds (default 1500).
 Order: UCP sites first, then the rest in a week-dependent order, so a short budget reaches a different subset each week.
 Requests per website: at most 5 (robots.txt only when the crawl didn't already hold it, the 3 agent files, and ai-catalog.json only when
 phase 2 didn't already try it), so with phase 1 (at most 4) and phase 2 (at most 10) a website never gets more than 18 requests a week.
@@ -90,7 +90,7 @@ def run(sites,ua,timeout=10,workers=12,pause=0.25,maxbytes=512*1024,robots_cache
     t0=time.time()
     if not enabled():
         return dict(enabled=False)
-    budget=int(os.environ.get('SBI_AGENT_FILES_BUDGET','1200')) if budget is None else budget
+    budget=int(os.environ.get('SBI_AGENT_FILES_BUDGET','1500')) if budget is None else budget
     deadline=t0+budget; ua=agent_ua(ua); cache=robots_cache or {}
     def one(s):
         if s.get('status') not in ANSWERED or not s.get('host'):

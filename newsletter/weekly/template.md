@@ -8,6 +8,9 @@ The weekly routine drafts the email from `data/changes-latest.json` and the buil
 - **Header line (under the logo / "ShopBot Index"):** `The weekly index of what online stores tell AI shopping agents`
 - **Intro (first paragraph):**
   `This week we checked {n_retailers} retailers and stores ({n_sites} websites) to see whether they publish the profile AI shopping agents read (a UCP profile). {ucp_total} do. No profile doesn't mean AI agents can't shop there.`
+- **When the list grew this week** (`changes-latest.json` → `newly_tracked` not empty, e.g. 2 Nov 2026): add right after the intro
+  `Same stores as last week: {same_store.ucp} of the {same_store.n} retailers and stores we tracked in both crawls publish a UCP profile (last week: {same_store.ucp_previous}). {len(newly_tracked)} stores are newly tracked this week and not counted as joining.`
+  Joined/left only ever come from stores tracked in both crawls. Never call newly tracked stores "joined" or "new adopters".
 - **Body:** joined / left / couldn't check this time / capability changes, as today. Each store links to its `https://shopbotindex.com/store/<slug>.html` page.
 - **Footer:**
   `ShopBot Index: the weekly index of what online stores tell AI shopping agents · https://shopbotindex.com · How we measure: https://shopbotindex.com/methodology.html · Follow on X: https://x.com/ShopBotIndex`
