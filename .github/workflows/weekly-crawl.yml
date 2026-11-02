@@ -4,6 +4,7 @@ name: Weekly crawl
 # Crawl only: no newsletter, no watch alerts (scripts/watch_alerts.py), no IndexNow, no posts, no email.
 # GitHub emails the repo owner when a run fails.
 on:
+  # schedule re-registered 2026-11-02 after missed Monday runs (was added in a follow-up commit; GitHub had never fired event=schedule)
   schedule:
     - cron: '15 4 * * 1'   # Monday 04:15 UTC = 05:15 Zurich in winter (CET), 06:15 in summer (CEST); before the old 07:00 box run
   workflow_dispatch:
