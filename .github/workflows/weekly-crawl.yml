@@ -62,9 +62,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          git config user.name "cstath71"
+          git config user.email "227154513+cstath71@users.noreply.github.com"
           git add -A data dist
           if git diff --cached --quiet; then echo "No changes to publish."; exit 0; fi
-          git -c user.name=cstath71 -c user.email=227154513+cstath71@users.noreply.github.com commit -q -m "Weekly crawl $(date +%F)"
+          git commit -q -m "Weekly crawl $(date +%F)"
           git pull -q --rebase origin main
           git push -q origin HEAD:main
           echo "Pushed weekly crawl $(date +%F)."
