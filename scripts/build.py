@@ -54,7 +54,7 @@ def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     pre='../'*path.count('/')
     if path=='index.html': body=hero(body)
     if path in TOPFORM_PAGES: body=re.sub(r'(<p class="lede">.*?</p>)',lambda m:m.group(1)+signup_slim(pre),body,count=1,flags=re.S)+signup(pre)
-    nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('about.html','About')])
+    nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('guides/','Guides'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
 <meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/{ogimg}?v={OGV}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{E(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ShopBotIndex"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc or DEFDESC)}"><meta name="twitter:image" content="{SITE}/{ogimg}?v={OGV}">{head}
@@ -663,6 +663,57 @@ json.dump(LOOK,open(os.path.join(DIST,'stores.json'),'w'),ensure_ascii=False,sep
 os.makedirs(os.path.join(DIST,'badge'),exist_ok=True); _B={True:badge_svg(True),False:badge_svg(False)}
 for r in RET: open(os.path.join(DIST,'badge',SLUG[r['id']]+'.svg'),'w').write(_B[r['status']=='ucp'])
 for _id,_o in OLD_SLUG.items(): open(os.path.join(DIST,'badge',_o+'.svg'),'w').write(_B[NM[_id]['status']=='ucp'])  # badges already pasted on sites under the old slug keep working
+# ---- guides (approved public copy; one URL, rendered from content/guides) ----
+GUIDE_DATE='2026-11-08'  # publication date of the guide, not the crawl date
+GUIDE_DESC='Understand what a published UCP profile tells you, why unchecked stores stay unknown, and how to read ShopBot Index results without overstating them.'
+def _esc_text(s): return s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+def _inline_md(s):
+    out=[]; pos=0
+    for m in re.finditer(r'`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)',s):
+        out.append(_esc_text(s[pos:m.start()]))
+        if m.group(1) is not None: out.append('<code>'+_esc_text(m.group(1))+'</code>')
+        else: out.append('<a href="%s">%s</a>'%(html.escape(m.group(3),quote=True),_esc_text(m.group(2))))
+        pos=m.end()
+    out.append(_esc_text(s[pos:])); return ''.join(out)
+def _guide_blocks(text):
+    blocks=[]; para=[]; lst=[]
+    def flush_para():
+        nonlocal para
+        if para: blocks.append(('p',' '.join(para))); para=[]
+    def flush_list():
+        nonlocal lst
+        if lst: blocks.append(('ul',lst)); lst=[]
+    for line in text.splitlines():
+        if line.startswith('# '): flush_para(); flush_list(); blocks.append(('h1',line[2:].strip()))
+        elif line.startswith('## '): flush_para(); flush_list(); blocks.append(('h2',line[3:].strip()))
+        elif line.startswith('- '): flush_para(); lst.append(line[2:].strip())
+        elif not line.strip(): flush_para(); flush_list()
+        else: flush_list(); para.append(line.strip())
+    flush_para(); flush_list(); return blocks
+def _guide_html(blocks):
+    out=['<article class="prose">']; first=True
+    for kind,val in blocks:
+        if kind=='h1':
+            out.append(f'<h1>{_inline_md(val)}</h1><p class="muted" id="published">Published <time datetime="{GUIDE_DATE}">8 November 2026</time>.</p>')
+        elif kind=='h2': out.append(f'<h2>{_inline_md(val)}</h2>')
+        elif kind=='p':
+            out.append(f'<p{" class=\"lede\"" if first else ""}>{_inline_md(val)}</p>'); first=False
+        elif kind=='ul': out.append('<ul>'+''.join(f'<li>{_inline_md(i)}</li>' for i in val)+'</ul>')
+    out.append('</article>'); return ''.join(out)
+_guide_src=open(os.path.join(ROOT,'content','guides','what-a-ucp-profile-proves.md'),encoding='utf-8').read()
+_guide_blocks=_guide_blocks(_guide_src)
+GUIDE_TITLE=next(v for k,v in _guide_blocks if k=='h1')
+_guide_path='guides/what-a-ucp-profile-proves/index.html'
+page(_guide_path,f'{GUIDE_TITLE} | {NAME}',_guide_html(_guide_blocks),GUIDE_DESC,ogtype='article')
+page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">Short readings on how to use ShopBot Index results without overstating them.</p>
+<ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
+PAGE_LASTMOD={_guide_path:GUIDE_DATE,'guides/index.html':GUIDE_DATE}
+GUIDE_PAGES={
+ _guide_path:dict(type='Article',headline=GUIDE_TITLE,description=GUIDE_DESC,datePublished=GUIDE_DATE,dateModified=GUIDE_DATE,
+                  crumbs=[(NAME,''),('Guides','guides/'),(GUIDE_TITLE,_guide_path.replace('index.html',''))]),
+ 'guides/index.html':dict(type='WebPage',headline='Guides',description='Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.',
+                          datePublished=GUIDE_DATE,dateModified=GUIDE_DATE,crumbs=[(NAME,''),('Guides','guides/')]),
+}
 # ---- methodology ----
 import importlib.util as _ilu
 _sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.py')); _cm=_ilu.module_from_spec(_sp); _sp.loader.exec_module(_cm)
@@ -692,7 +743,8 @@ CRAWLMETH=f'''<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(
 
 SC=collections.Counter(s.get('status','error') for s in SITES)
 meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check it, and what it does and doesn't mean. UCP profiles are our headline measure; four supporting signals are listed per store. Crawl date: {DAY}.</p>
-<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the machine-readable profile AI shopping agents read, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP profile. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some agent shopping runs through channels we <a href="#cant-see">can't see from outside</a>, such as product feeds shared privately with AI assistants.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>UCP is our headline measure. We also list four supporting signals per store (<a href="#signals">section 1b</a>), but we don't test purchases, and we don't score or rank how well a store works with any assistant.</li></ul></div>
+<div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the machine-readable profile AI shopping agents read, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP profile. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some agent shopping runs through channels we <a href="#cant-see">can't see from outside</a>, such as product feeds shared privately with AI assistants.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>UCP is our headline measure. We also list four supporting signals per store (<a href="#signals">section 1b</a>), but we don't test purchases, and we don't score or rank how well a store works with any assistant.</li></ul>
+<p>Read this in more detail: <a href="guides/what-a-ucp-profile-proves/">What a published UCP profile proves, and what it doesn't</a>.</p></div>
 <h2>1. What we look for</h2><p>The UCP specification says platforms discover a business by fetching its business profile from <code>/.well-known/ucp</code> (<a href="{E(D["spec"])}">UCP specification overview</a>). The profile is JSON with a <code>ucp</code> object: protocol version, services, capabilities and payment handlers. We fetch that path on each website after reading <code>/robots.txt</code>. This is our headline measure. The other things we read are listed in <a href="#signals">section 1b</a> and <a href="#crawler">section 5</a>.</p>
 {SIGMETH}
 <h2>2. Who we track: three segments, side by side</h2><ul>{"".join(f"<li><b>{SEG[k]}</b> ({sum(1 for r in RET if r['segment']==k)}): {SEGDESC[k]}</li>" for k in SEG)}</ul>

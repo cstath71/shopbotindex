@@ -102,6 +102,22 @@ def run(g):
         elif p=='changes.html' and CHG:
             h=_insert_before_bottom_cta(h,faq_html(chg_faq))
             lds=[{"@type":"WebPage","@id":SITE+"/changes.html","url":SITE+"/changes.html","name":g['CHGTITLE'],"dateModified":DAY,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}},faq_ld(chg_faq)]
+        elif p in (g.get('GUIDE_PAGES') or {}):
+            meta=g['GUIDE_PAGES'][p]; url=SITE+'/'+p.replace('index.html','')
+            trail=meta['crumbs']
+            vis='<p class="muted crumbs">'+' › '.join(f'<a href="{(pre+u) or "./"}">{E(n)}</a>' if i<len(trail)-1 else E(n) for i,(n,u) in enumerate(trail))+'</p>'
+            h=h.replace('<h1>',vis+'<h1>',1)
+            crumbs_ld={"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+'/'+u} for i,(n,u) in enumerate(trail)]}
+            if meta['type']=='Article':
+                lds=[{"@type":"Article","@id":url+"#article","headline":meta['headline'],"description":meta['description'],
+                      "datePublished":meta['datePublished'],"dateModified":meta['dateModified'],"inLanguage":"en",
+                      "mainEntityOfPage":{"@type":"WebPage","@id":url},"url":url,
+                      "image":[f"{SITE}/og.png?v={g['OGV']}"],"publisher":{"@id":SITE+"/#org"},"isPartOf":{"@id":SITE+"/#website"}},
+                     ORG,crumbs_ld]
+            else:
+                lds=[{"@type":"WebPage","@id":url,"url":url,"name":meta['headline'],"description":meta['description'],
+                      "datePublished":meta['datePublished'],"dateModified":meta['dateModified'],"inLanguage":"en",
+                      "isPartOf":{"@id":SITE+"/#website"},"publisher":{"@id":SITE+"/#org"}},ORG,crumbs_ld]
         else:
             cl=crumbs(p)
             if cl:
@@ -113,7 +129,8 @@ def run(g):
     # ---- robots.txt, sitemap.xml, llms.txt, llms-full.txt, IndexNow key ----
     rob='User-agent: *\nAllow: /\n\n# Search engines and AI assistants are welcome to crawl and cite this site.\n'+''.join(f'User-agent: {b}\n' for b in AI_BOTS)+'Allow: /\n\n'+f'Sitemap: {SITE}/sitemap.xml\n'
     open(os.path.join(DIST,'robots.txt'),'w').write(rob)
-    open(os.path.join(DIST,'sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{SITE}/{p.replace("index.html","")}</loc><lastmod>{DAY}</lastmod></url>\n' for p in g['PAGES'])+'</urlset>\n')
+    lastmod=g.get('PAGE_LASTMOD') or {}
+    open(os.path.join(DIST,'sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{SITE}/{p.replace("index.html","")}</loc><lastmod>{lastmod.get(p,DAY)}</lastmod></url>\n' for p in g['PAGES'])+'</urlset>\n')
     open(os.path.join(DIST,f'{INDEXNOW_KEY}.txt'),'w').write(INDEXNOW_KEY)
     llms=_llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites)
     open(os.path.join(DIST,'llms.txt'),'w').write(llms)
@@ -141,6 +158,8 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('What changed','changes.html','This week compared with the previous crawl: who started or stopped publishing a UCP profile.'),
            ('Check your store','check.html','Look up any domain in the latest crawl.'),
            ('Methodology','methodology.html','Exactly what we fetch, how, and what the results do and don\'t mean.'),
+           ('Guides','guides/','Short guides on how to read ShopBot Index results.'),
+           ('What a published UCP profile proves','guides/what-a-ucp-profile-proves/','What a published UCP profile tells you, why an unchecked store stays unknown, and how to read the index without overstating a result.'),
            ('AI assistants','assistants.html','Which AI assistants name which retailers, from the companies\' own announcements, with links.'),
            ('About','about.html','Who runs the index and how to contact us.'),
            ('Terms of use','terms.html','All rights reserved. Link to pages and quote individual findings with credit and a link; bulk copying or republishing the data needs written permission.')]
