@@ -2,7 +2,7 @@
 
 Run after python3 scripts/build.py.
 """
-import os, re, json, html, collections, unittest
+import os, re, json, html, collections, unittest, datetime
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST=os.path.join(ROOT,'dist')
 SRC=os.path.join(ROOT,'content','guides','what-a-ucp-profile-proves.md')
@@ -76,7 +76,11 @@ class Guide(unittest.TestCase):
         self.assertEqual(sm.count('what-a-ucp-profile-proves'),1)
         self.assertIn(f'<loc>{URL}</loc><lastmod>2026-11-08</lastmod>',sm)
         self.assertIn('<loc>https://shopbotindex.com/guides/</loc><lastmod>2026-11-08</lastmod>',sm)
-        self.assertIn('<loc>https://shopbotindex.com/</loc><lastmod>2026-11-02</lastmod>',sm)
+        # Home lastmod is the crawl date build.py stamps from data/latest.json (not a fixed Monday).
+        day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
+        self.assertRegex(day,r'^\d{4}-\d{2}-\d{2}$')
+        datetime.date.fromisoformat(day)
+        self.assertIn(f'<loc>https://shopbotindex.com/</loc><lastmod>{day}</lastmod>',sm)
         self.assertNotIn('guides/what-a-ucp-profile-proves.html',sm)
         self.assertNotIn('guides/what-a-ucp-profile-proves/index.html',sm)
         self.assertIn(URL,R('llms.txt'))
