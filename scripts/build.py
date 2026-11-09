@@ -54,7 +54,7 @@ def page(path,title,body,desc='',ogimg='og.png',ogtype='website',head=''):
     pre='../'*path.count('/')
     if path=='index.html': body=hero(body)
     if path in TOPFORM_PAGES: body=re.sub(r'(<p class="lede">.*?</p>)',lambda m:m.group(1)+signup_slim(pre),body,count=1,flags=re.S)+signup(pre)
-    nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('check.html','Check your store'),('methodology.html','Methodology'),('guides/','Guides'),('about.html','About')])
+    nav=''.join(f'<a href="{pre}{h}">{t}</a>' for h,t in [('stores.html','All stores'),('segments/','Segments'),('capabilities/','Capabilities'),('categories/','Categories'),('assistants.html','AI assistants'),('changes.html','What changed'),('signals.html','Beyond UCP'),('check.html','Check your store'),('methodology.html','Methodology'),('guides/','Guides'),('about.html','About')])
     full=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc or DEFDESC)}"><link rel="canonical" href="{SITE}/{path.replace('index.html','')}">
 <meta property="og:type" content="{ogtype}"><meta property="og:site_name" content="{NAME}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or DEFDESC)}"><meta property="og:url" content="{SITE}/{path.replace('index.html','')}"><meta property="og:image" content="{SITE}/{ogimg}?v={OGV}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{E(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ShopBotIndex"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc or DEFDESC)}"><meta name="twitter:image" content="{SITE}/{ogimg}?v={OGV}">{head}
@@ -260,6 +260,17 @@ def make_slugs(fn):
     return out
 SLUG=make_slugs(slug)
 _new=set(SLUG.values()); OLD_SLUG={k:v for k,v in make_slugs(slug_v1).items() if v!=SLUG[k] and v not in _new}  # old URL -> redirect stub
+# ---- beyond UCP: website counts from this crawl, each with its own denominator ----
+import beyond_ucp
+_psites=[s for s in (P.get('sites') or []) if s.get('rid') not in NON_SHOPS] if P else None
+_pret=[r for r in P['retailers'] if r['id'] not in NON_SHOPS] if P else None
+BEYOND=beyond_ucp.report(SITES, RET, DAY, _psites, _pret, (P or {}).get('crawl_date'), slug_for_id=lambda i: SLUG.get(i), site=SITE)
+_bj=os.path.join(DATA,'beyond-ucp-latest.json'); _bm=os.path.join(DATA,'beyond-ucp-latest.md')
+with open(_bj,'w',encoding='utf-8') as _bf:
+    json.dump(beyond_ucp.public_dict(BEYOND), _bf, indent=1, ensure_ascii=False); _bf.write('\n')
+with open(_bm,'w',encoding='utf-8') as _bf: _bf.write(BEYOND['newsletter_text'])
+BEYOND_HOME=beyond_ucp.summary_html(BEYOND, link_prefix='signals.html', page='home')
+BEYOND_CHANGES=beyond_ucp.summary_html(BEYOND, link_prefix='signals.html', page='changes')
 STATUS_SHORT={'ucp':'Yes: UCP profile found','no_ucp':'No UCP profile found','couldnt_check':"Couldn't check"}
 LOOK={}
 for r in RET:
@@ -324,6 +335,7 @@ _cc_note=(f'<p class="muted">Of those {_ccn} on {_day_long}: {_ccs["robots_disal
           f'<a href="methodology.html#couldnt-check">How we split that</a>. That split is about why our crawler got no answer; it does not say what AI shopping agents see.</p>') if _ccn else ''
 home=f'''<h1>What online stores tell AI shopping agents</h1>
 <p class="lede">Every week we check {len(RET)} retailers and stores ({nsites} websites) to see whether they publish the profile AI shopping agents read. It's called a <a href="https://ucp.dev/">UCP</a> profile. We also record four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. No profile doesn't mean AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">How we measure</a>.</p>
+{BEYOND_HOME}
 {segcards()}{joined_txt}
 {checkbox()}
 <div class="stats"><div class="stat"><b>{len(U)}</b><span>retailers/stores with a UCP profile on at least one site</span></div>
@@ -494,7 +506,7 @@ if CHG:
         hist='<h2>Earlier comparisons</h2><div class="tw"><table><tr><th>Crawls compared</th><th>Joined</th><th>Left</th><th>Had a profile, now couldn\'t check</th><th>With a UCP profile</th></tr>'+''.join(f'<tr><td>{_dlong(a)} → {_dlong(b)}</td><td>{j}</td><td>{l}</td><td>{u}</td><td>{t}</td></tr>' for a,b,j,l,u,t in reversed(H))+'</table></div>'
     else:
         hist=f'<h2>Earlier comparisons</h2><p>None yet. Our crawl of {_dlong(cs[0]["crawl_date"])} is the first one saved in this format, so this is the first comparison. Each new crawl adds a row here.</p>'
-    body=f'''<h1>{CHGTITLE}</h1>{intro}{same_store_txt()}{totals_tbl}{split_tbl}{signals_tbl}{signals_detail}
+    body=f'''<h1>{CHGTITLE}</h1>{intro}{same_store_txt()}{BEYOND_CHANGES}{totals_tbl}{split_tbl}{signals_tbl}{signals_detail}
 <h2>Joined: newly publishing a UCP profile ({n("joined")})</h2>{L(CHG["joined"],joined_why,f"No store started publishing a UCP profile between {pv} and {cu}.")}
 <h2>Left: profile no longer found ({n("left")})</h2>{L(CHG["left"],f"UCP profile found on {pv}, none found on {cu}.",f"No store stopped publishing a UCP profile between {pv} and {cu}.")}
 <h2>Had a profile, now couldn't check ({n("now_unreachable")})</h2><p class="muted">Not counted as leaving: our crawler was refused or could not reach the site this time. That is not a claim about what AI shopping agents see.</p>{L(CHG["now_unreachable"],unreach_why,f"Every store that had a UCP profile on {pv} could be checked again on {cu}.")}
@@ -502,8 +514,10 @@ if CHG:
 <h2 id="new">Newly tracked ({n("newly_tracked")})</h2><p class="muted">Added to our list this time; not counted as joining. A store that publishes a UCP profile on first sight still appears here, not under Joined.</p>{L(CHG["newly_tracked"],"added to our list for this crawl.",f"No stores were added to our list between {pv} and {cu}; we tracked the same {nT} both times.")}
 {hist}'''
 else:
-    body=f'<h1>{CHGTITLE}</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing a UCP profile), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>'
+    body=f'<h1>{CHGTITLE}</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing a UCP profile), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>{BEYOND_CHANGES}'
 page('changes.html',f'What changed: stores that started or stopped publishing a UCP profile | {NAME}',body+signup())
+page('signals.html',f'Beyond UCP: what else stores publish for AI agents | {NAME}',beyond_ucp.page_html(BEYOND)+signup(),
+     f'Beyond the UCP profile: public signals from the ShopBot Index crawl of {DAY}, each counted only among websites that answered for that file, with the stores that publish each one.')
 
 # ---- agent-readiness signals (phase 2 of the crawl) ----
 import datetime as _dt; _nd=_dt.date.fromisoformat(DAY)+_dt.timedelta(days=7-_dt.date.fromisoformat(DAY).weekday()); NEXTCRAWL=f'{_nd.day} {_nd.strftime("%B")} {_nd.year}'  # next Monday after the crawl
@@ -719,7 +733,7 @@ import importlib.util as _ilu
 _sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.py')); _cm=_ilu.module_from_spec(_sp); _sp.loader.exec_module(_cm)
 CRAWL_UA=_cm.UA
 UA_NOTE='' if D.get('user_agent')==CRAWL_UA else f' <small class="muted">(The crawl of {DAY} still used the earlier User-Agent <code>{E(D.get("user_agent",""))}</code>, which read only <code>/robots.txt</code> and <code>/.well-known/ucp</code>.)</small>'
-SIGMETH=f'''<h2 id="signals">1b. Supporting signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score.</p>
+SIGMETH=f'''<h2 id="signals">1b. Supporting signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score. Counts for the latest crawl, each with its own denominator, are on the <a href="signals.html">Beyond UCP</a> page. A refusal is not "no".</p>
 <div class="tw nomax"><table><tr><th>Signal</th><th>How we check</th><th>What it means</th><th>What it doesn't mean</th></tr>
 <tr><td><b>UCP profile</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
 <tr><td><b>Agent tools (MCP)</b></td><td>If the UCP profile names an MCP endpoint, we send one read-only JSON-RPC <code>tools/list</code> request, identifying ourselves with our <a href="ucp/agent-profile.json">agent profile</a>. We never call a tool.</td><td>The endpoint is live and lists tools (for example catalog search, cart, checkout) right now.</td><td>That a purchase completes without the buyer; checkouts may hand the buyer back to the store's own checkout page.</td></tr>

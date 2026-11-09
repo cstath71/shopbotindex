@@ -21,6 +21,7 @@ How to read the results:
 - [Capabilities](https://shopbotindex.com/capabilities/): What UCP profiles declare (checkout, cart, catalog search and more), with the stores declaring each.
 - [Categories](https://shopbotindex.com/categories/): Results by store category.
 - [What changed](https://shopbotindex.com/changes.html): This week compared with the previous crawl: who started or stopped publishing a UCP profile.
+- [Beyond UCP](https://shopbotindex.com/signals.html): Public signals other than the UCP profile, each counted only among websites that answered for that file, with the stores that publish each one.
 - [Check your store](https://shopbotindex.com/check.html): Look up any domain in the latest crawl.
 - [Methodology](https://shopbotindex.com/methodology.html): Exactly what we fetch, how, and what the results do and don't mean.
 - [Guides](https://shopbotindex.com/guides/): Short guides on how to read ShopBot Index results.

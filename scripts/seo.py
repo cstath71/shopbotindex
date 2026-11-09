@@ -156,6 +156,7 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('Capabilities','capabilities/','What UCP profiles declare (checkout, cart, catalog search and more), with the stores declaring each.'),
            ('Categories','categories/','Results by store category.'),
            ('What changed','changes.html','This week compared with the previous crawl: who started or stopped publishing a UCP profile.'),
+           ('Beyond UCP','signals.html','Public signals other than the UCP profile, each counted only among websites that answered for that file, with the stores that publish each one.'),
            ('Check your store','check.html','Look up any domain in the latest crawl.'),
            ('Methodology','methodology.html','Exactly what we fetch, how, and what the results do and don\'t mean.'),
            ('Guides','guides/','Short guides on how to read ShopBot Index results.'),

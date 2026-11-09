@@ -1,0 +1,4354 @@
+{
+ "crawl_date": "2026-11-09",
+ "previous_crawl_date": "2026-11-02",
+ "phase2_reached": 2865,
+ "phase3_reached": 2519,
+ "denominator": "Websites that answered for that file (found plus not found). Refused is not \"no\". Error is not \"no\". Those websites are left out of the share.",
+ "signals": [
+  {
+   "key": "llms_txt",
+   "id": "llms-txt",
+   "label": "llms.txt",
+   "scope": "phase2",
+   "sentence": "A Markdown file at /llms.txt with notes for AI assistants, from the llms.txt (https://llmstxt.org/) proposal.",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://llmstxt.org/",
+     "label": "llms.txt"
+    }
+   ],
+   "found": 226,
+   "not_found": 1355,
+   "answered": 1581,
+   "refused": 1217,
+   "error": 67,
+   "robots_disallow": 0,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "14.3%",
+   "aside": "",
+   "wow": "2 fewer (was 228 of 1,587)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 228,
+    "not_found": 1359,
+    "answered": 1587,
+    "refused": 1213,
+    "error": 65,
+    "reached": 2865,
+    "share_display": "14.4%"
+   },
+   "found_change": -2,
+   "stores": [
+    {
+     "id": "100kmph.com",
+     "name": "100kmph.com",
+     "path": "store/100kmph-com.html"
+    },
+    {
+     "id": "18herbs.com",
+     "name": "18herbs.com",
+     "path": "store/18herbs-com.html"
+    },
+    {
+     "id": "1hairstop.in",
+     "name": "1hairstop.in",
+     "path": "store/1hairstop-in.html"
+    },
+    {
+     "id": "51pyramids.in",
+     "name": "51pyramids.in",
+     "path": "store/51pyramids-in.html"
+    },
+    {
+     "id": "Q259340",
+     "name": "7-Eleven",
+     "path": "store/7-eleven.html"
+    },
+    {
+     "id": "7mm.co.in",
+     "name": "7mm.co.in",
+     "path": "store/7mm-co-in.html"
+    },
+    {
+     "id": "99bookscart.com",
+     "name": "99bookscart.com",
+     "path": "store/99bookscart-com.html"
+    },
+    {
+     "id": "a-ma-maniere.com",
+     "name": "a-ma-maniere.com",
+     "path": "store/a-ma-maniere-com.html"
+    },
+    {
+     "id": "aachho.com",
+     "name": "aachho.com",
+     "path": "store/aachho-com.html"
+    },
+    {
+     "id": "aadar.co",
+     "name": "aadar.co",
+     "path": "store/aadar-co.html"
+    },
+    {
+     "id": "aaranyaa.in",
+     "name": "aaranyaa.in",
+     "path": "store/aaranyaa-in.html"
+    },
+    {
+     "id": "abboocandleco.com",
+     "name": "abboocandleco.com",
+     "path": "store/abboocandleco-com.html"
+    },
+    {
+     "id": "abovethecloudsstore.com",
+     "name": "abovethecloudsstore.com",
+     "path": "store/abovethecloudsstore-com.html"
+    },
+    {
+     "id": "Q4674255",
+     "name": "Ackermans",
+     "path": "store/ackermans.html"
+    },
+    {
+     "id": "Q125054",
+     "name": "Aldi",
+     "path": "store/aldi.html"
+    },
+    {
+     "id": "Q41171672",
+     "name": "Aldi Süd",
+     "path": "store/aldi-sud.html"
+    },
+    {
+     "id": "alistetechnologies.com",
+     "name": "alistetechnologies.com",
+     "path": "store/alistetechnologies-com.html"
+    },
+    {
+     "id": "Q58014",
+     "name": "Allegro",
+     "path": "store/allegro.html"
+    },
+    {
+     "id": "Q4734952",
+     "name": "AlphaGraphics",
+     "path": "store/alphagraphics.html"
+    },
+    {
+     "id": "Q2842931",
+     "name": "American Eagle Outfitters",
+     "path": "store/american-eagle-outfitters.html"
+    },
+    {
+     "id": "Q3064093",
+     "name": "Americanas",
+     "path": "store/americanas.html"
+    },
+    {
+     "id": "Q14516046",
+     "name": "Asprey",
+     "path": "store/asprey.html"
+    },
+    {
+     "id": "Q10359961",
+     "name": "AURES Holdings",
+     "path": "store/aures-holdings.html"
+    },
+    {
+     "id": "Q780477",
+     "name": "aussieBum",
+     "path": "store/aussiebum.html"
+    },
+    {
+     "id": "Q4826087",
+     "name": "AutoZone",
+     "path": "store/autozone.html"
+    },
+    {
+     "id": "avedaayur.com",
+     "name": "avedaayur.com",
+     "path": "store/avedaayur-com.html"
+    },
+    {
+     "id": "Q821960",
+     "name": "Berlitz Corporation",
+     "path": "store/berlitz-corporation.html"
+    },
+    {
+     "id": "bighaat.com",
+     "name": "bighaat.com",
+     "path": "store/bighaat-com.html"
+    },
+    {
+     "id": "Q28206937",
+     "name": "Boll & Branch",
+     "path": "store/boll-branch.html"
+    },
+    {
+     "id": "Q4943627",
+     "name": "Boone Drug",
+     "path": "store/boone-drug.html"
+    },
+    {
+     "id": "Q136722433",
+     "name": "Boozt",
+     "path": "store/boozt.html"
+    },
+    {
+     "id": "Q4946656",
+     "name": "Borsheim's Fine Jewelry",
+     "path": "store/borsheim-s-fine-jewelry.html"
+    },
+    {
+     "id": "Q4950452",
+     "name": "Boutique La Vie en rose",
+     "path": "store/boutique-la-vie-en-rose.html"
+    },
+    {
+     "id": "Q4950489",
+     "name": "Boux Avenue",
+     "path": "store/boux-avenue.html"
+    },
+    {
+     "id": "Q4952569",
+     "name": "Boyner Group",
+     "path": "store/boyner-group.html"
+    },
+    {
+     "id": "bringg.in",
+     "name": "bringg.in",
+     "path": "store/bringg-in.html"
+    },
+    {
+     "id": "Q4975084",
+     "name": "Brookshire Brothers",
+     "path": "store/brookshire-brothers.html"
+    },
+    {
+     "id": "Q4982335",
+     "name": "Buc-ee's",
+     "path": "store/buc-ee-s.html"
+    },
+    {
+     "id": "Q48770898",
+     "name": "Buck Mason",
+     "path": "store/buck-mason.html"
+    },
+    {
+     "id": "Q4997447",
+     "name": "Bunches Florapost",
+     "path": "store/bunches-florapost.html"
+    },
+    {
+     "id": "buywow.in",
+     "name": "buywow.in",
+     "path": "store/buywow-in.html"
+    },
+    {
+     "id": "Q5028383",
+     "name": "Camping World",
+     "path": "store/camping-world.html"
+    },
+    {
+     "id": "Q1032400",
+     "name": "Canadian Tire",
+     "path": "store/canadian-tire.html"
+    },
+    {
+     "id": "Q16247191",
+     "name": "Carvana",
+     "path": "store/carvana.html"
+    },
+    {
+     "id": "casestudio.in",
+     "name": "casestudio.in",
+     "path": "store/casestudio-in.html"
+    },
+    {
+     "id": "cashify.in",
+     "name": "cashify.in",
+     "path": "store/cashify-in.html"
+    },
+    {
+     "id": "Q5105515",
+     "name": "Chow Tai Fook",
+     "path": "store/chow-tai-fook.html"
+    },
+    {
+     "id": "clinikally.com",
+     "name": "clinikally.com",
+     "path": "store/clinikally-com.html"
+    },
+    {
+     "id": "Q2390074",
+     "name": "Coop",
+     "path": "store/coop-lekkermakkelijk-nl.html"
+    },
+    {
+     "id": "Q5175738",
+     "name": "Cotton Traders",
+     "path": "store/cotton-traders.html"
+    },
+    {
+     "id": "Q61070539",
+     "name": "Covirán",
+     "path": "store/coviran.html"
+    },
+    {
+     "id": "Q624375",
+     "name": "CVS Health",
+     "path": "store/cvs-health.html"
+    },
+    {
+     "id": "Q133445212",
+     "name": "Cyber Folks",
+     "path": "store/cyber-folks.html"
+    },
+    {
+     "id": "Q5230388",
+     "name": "David's Bridal",
+     "path": "store/david-s-bridal.html"
+    },
+    {
+     "id": "Q379911",
+     "name": "Denner",
+     "path": "store/denner.html"
+    },
+    {
+     "id": "designcafe.com",
+     "name": "designcafe.com",
+     "path": "store/designcafe-com.html"
+    },
+    {
+     "id": "Q844805",
+     "name": "Dillard's",
+     "path": "store/dillard-s.html"
+    },
+    {
+     "id": "Q5281735",
+     "name": "Discount Tire",
+     "path": "store/discount-tire.html"
+    },
+    {
+     "id": "Q266572",
+     "name": "dm-drogerie markt",
+     "path": "store/dm-drogerie-markt.html"
+    },
+    {
+     "id": "Q4036922",
+     "name": "DNS (store chain)",
+     "path": "store/dns-store-chain.html"
+    },
+    {
+     "id": "doomsday-store.com",
+     "name": "doomsday-store.com",
+     "path": "store/doomsday-store-com.html"
+    },
+    {
+     "id": "Q5327075",
+     "name": "Earth Fare",
+     "path": "store/earth-fare.html"
+    },
+    {
+     "id": "Q3046482",
+     "name": "Eason & Son",
+     "path": "store/eason-son.html"
+    },
+    {
+     "id": "Q5329759",
+     "name": "East of England Co-operative Society",
+     "path": "store/east-of-england-co-operative-society.html"
+    },
+    {
+     "id": "Q5351735",
+     "name": "El Palacio de Hierro",
+     "path": "store/el-palacio-de-hierro.html"
+    },
+    {
+     "id": "etherbit.in",
+     "name": "etherbit.in",
+     "path": "store/etherbit-in.html"
+    },
+    {
+     "id": "Q1353939",
+     "name": "Etsy",
+     "path": "store/etsy.html"
+    },
+    {
+     "id": "Q106589420",
+     "name": "Evaly",
+     "path": "store/evaly.html"
+    },
+    {
+     "id": "Q1383272",
+     "name": "Ex Libris",
+     "path": "store/ex-libris.html"
+    },
+    {
+     "id": "Q680990",
+     "name": "Expert",
+     "path": "store/expert.html"
+    },
+    {
+     "id": "explorewatersports.in",
+     "name": "explorewatersports.in",
+     "path": "store/explorewatersports-in.html"
+    },
+    {
+     "id": "fablestreet.com",
+     "name": "fablestreet.com",
+     "path": "store/fablestreet-com.html"
+    },
+    {
+     "id": "Q5430911",
+     "name": "Fairway Market",
+     "path": "store/fairway-market-fairwaymarkets-com.html"
+    },
+    {
+     "id": "Q48818046",
+     "name": "Fanatical",
+     "path": "store/fanatical.html"
+    },
+    {
+     "id": "Q2917244",
+     "name": "FAO Schwarz",
+     "path": "store/fao-schwarz.html"
+    },
+    {
+     "id": "Q5434998",
+     "name": "Fareway",
+     "path": "store/fareway.html"
+    },
+    {
+     "id": "Q18712957",
+     "name": "Farfetch",
+     "path": "store/farfetch.html"
+    },
+    {
+     "id": "Q5435855",
+     "name": "Farmigo",
+     "path": "store/farmigo.html"
+    },
+    {
+     "id": "Q96377962",
+     "name": "FirstCry",
+     "path": "store/firstcry.html"
+    },
+    {
+     "id": "Q5410132",
+     "name": "Fiverr",
+     "path": "store/fiverr.html"
+    },
+    {
+     "id": "Q4038791",
+     "name": "Fix Price",
+     "path": "store/fix-price.html"
+    },
+    {
+     "id": "Q6859973",
+     "name": "Fleet Farm",
+     "path": "store/fleet-farm.html"
+    },
+    {
+     "id": "Q2786319",
+     "name": "Flying Tiger Copenhagen",
+     "path": "store/flying-tiger-copenhagen.html"
+    },
+    {
+     "id": "foxtale.in",
+     "name": "foxtale.in",
+     "path": "store/foxtale-in.html"
+    },
+    {
+     "id": "Q765087",
+     "name": "Fruit of the Loom",
+     "path": "store/fruit-of-the-loom.html"
+    },
+    {
+     "id": "fuaosanitaryware.com",
+     "name": "fuaosanitaryware.com",
+     "path": "store/fuaosanitaryware-com.html"
+    },
+    {
+     "id": "furbicle.com",
+     "name": "furbicle.com",
+     "path": "store/furbicle-com.html"
+    },
+    {
+     "id": "Q1499198",
+     "name": "Gekås",
+     "path": "store/gekas.html"
+    },
+    {
+     "id": "Q1524904",
+     "name": "Gina Tricot",
+     "path": "store/gina-tricot.html"
+    },
+    {
+     "id": "Q457503",
+     "name": "Globus",
+     "path": "store/globus-globus-de.html"
+    },
+    {
+     "id": "Q16994221",
+     "name": "GoAntiques",
+     "path": "store/goantiques.html"
+    },
+    {
+     "id": "Q106411451",
+     "name": "Gold Apple",
+     "path": "store/gold-apple.html"
+    },
+    {
+     "id": "Q852787",
+     "name": "Groupon",
+     "path": "store/groupon.html"
+    },
+    {
+     "id": "Q11221981",
+     "name": "Gumroad, Inc.",
+     "path": "store/gumroad-inc.html"
+    },
+    {
+     "id": "Q5618258",
+     "name": "Gumtree",
+     "path": "store/gumtree.html"
+    },
+    {
+     "id": "Q5628558",
+     "name": "H. Samuel",
+     "path": "store/h-samuel.html"
+    },
+    {
+     "id": "Q3398786",
+     "name": "Halfords",
+     "path": "store/halfords.html"
+    },
+    {
+     "id": "Q55099570",
+     "name": "Happy Puzzle Company",
+     "path": "store/happy-puzzle-company.html"
+    },
+    {
+     "id": "Q10517909",
+     "name": "Happy Socks",
+     "path": "store/happy-socks.html"
+    },
+    {
+     "id": "happycultures.in",
+     "name": "happycultures.in",
+     "path": "store/happycultures-in.html"
+    },
+    {
+     "id": "Q27918492",
+     "name": "Hawkers",
+     "path": "store/hawkers.html"
+    },
+    {
+     "id": "Q20714382",
+     "name": "Hipcamp",
+     "path": "store/hipcamp.html"
+    },
+    {
+     "id": "Q18386050",
+     "name": "Honda Civic 2001 model Orieal Prosmatic",
+     "path": "store/honda-civic-2001-model-orieal-prosmatic.html"
+    },
+    {
+     "id": "Q55613975",
+     "name": "Hostinger",
+     "path": "store/hostinger.html"
+    },
+    {
+     "id": "hotspotstore.in",
+     "name": "hotspotstore.in",
+     "path": "store/hotspotstore-in.html"
+    },
+    {
+     "id": "Q5914994",
+     "name": "House of Guitars",
+     "path": "store/house-of-guitars.html"
+    },
+    {
+     "id": "iafaforallergy.com",
+     "name": "iafaforallergy.com",
+     "path": "store/iafaforallergy-com.html"
+    },
+    {
+     "id": "Q16997513",
+     "name": "J. W. Pepper & Son, Inc.",
+     "path": "store/j-w-pepper-son-inc.html"
+    },
+    {
+     "id": "Q6168434",
+     "name": "Jazzercise",
+     "path": "store/jazzercise.html"
+    },
+    {
+     "id": "shop.jennipro.com",
+     "name": "JENNi",
+     "path": "store/jenni.html"
+    },
+    {
+     "id": "Q11507765",
+     "name": "JHC",
+     "path": "store/jhc.html"
+    },
+    {
+     "id": "Q6310864",
+     "name": "Jumbo",
+     "path": "store/jumbo-jumbo-cl.html"
+    },
+    {
+     "id": "Q2820820",
+     "name": "K-way",
+     "path": "store/k-way.html"
+    },
+    {
+     "id": "Q1735474",
+     "name": "Kastner & Öhler",
+     "path": "store/kastner-ohler.html"
+    },
+    {
+     "id": "Q685967",
+     "name": "Kaufland",
+     "path": "store/kaufland.html"
+    },
+    {
+     "id": "Q62029290",
+     "name": "Kay Jewelers",
+     "path": "store/kay-jewelers.html"
+    },
+    {
+     "id": "Q1741191",
+     "name": "Kijiji",
+     "path": "store/kijiji.html"
+    },
+    {
+     "id": "Q124369295",
+     "name": "Klick Eesti",
+     "path": "store/klick-eesti.html"
+    },
+    {
+     "id": "Q6421682",
+     "name": "Kmart Australia",
+     "path": "store/kmart-australia.html"
+    },
+    {
+     "id": "koskii.com",
+     "name": "koskii.com",
+     "path": "store/koskii-com.html"
+    },
+    {
+     "id": "Q30184736",
+     "name": "Kytary.cz",
+     "path": "store/kytary-cz.html"
+    },
+    {
+     "id": "Q5393605",
+     "name": "Kärkkäinen",
+     "path": "store/karkkainen.html"
+    },
+    {
+     "id": "Q839555",
+     "name": "Lands' End",
+     "path": "store/lands-end.html"
+    },
+    {
+     "id": "Q140287877",
+     "name": "Lazada Philippines",
+     "path": "store/lazada-philippines.html"
+    },
+    {
+     "id": "Q24958893",
+     "name": "Lazada Vietnam",
+     "path": "store/lazada-vietnam.html"
+    },
+    {
+     "id": "Q6711261",
+     "name": "Lider",
+     "path": "store/lider.html"
+    },
+    {
+     "id": "Q3240853",
+     "name": "Liligo.com",
+     "path": "store/liligo-com.html"
+    },
+    {
+     "id": "Q3064071",
+     "name": "Lojas Renner",
+     "path": "store/lojas-renner.html"
+    },
+    {
+     "id": "Q106298409",
+     "name": "Lovisa",
+     "path": "store/lovisa.html"
+    },
+    {
+     "id": "Q48862469",
+     "name": "Lucky's Market",
+     "path": "store/lucky-s-market.html"
+    },
+    {
+     "id": "Q10873304",
+     "name": "Made-in-China.com",
+     "path": "store/made-in-china-com.html"
+    },
+    {
+     "id": "Q17068209",
+     "name": "Maker's Row",
+     "path": "store/maker-s-row.html"
+    },
+    {
+     "id": "Q6766373",
+     "name": "Mark's",
+     "path": "store/mark-s.html"
+    },
+    {
+     "id": "Q6791878",
+     "name": "Mattress Firm",
+     "path": "store/mattress-firm.html"
+    },
+    {
+     "id": "Q2381223",
+     "name": "MediaMarkt",
+     "path": "store/mediamarkt.html"
+    },
+    {
+     "id": "melangebox.com",
+     "name": "melangebox.com",
+     "path": "store/melangebox-com.html"
+    },
+    {
+     "id": "menzofy.in",
+     "name": "menzofy.in",
+     "path": "store/menzofy-in.html"
+    },
+    {
+     "id": "merchit.in",
+     "name": "merchit.in",
+     "path": "store/merchit-in.html"
+    },
+    {
+     "id": "Q1837290",
+     "name": "Mexx",
+     "path": "store/mexx.html"
+    },
+    {
+     "id": "Q6899359",
+     "name": "MONY Group",
+     "path": "store/mony-group.html"
+    },
+    {
+     "id": "Q16475372",
+     "name": "Morele.net",
+     "path": "store/morele-net.html"
+    },
+    {
+     "id": "Q922344",
+     "name": "Morrisons",
+     "path": "store/morrisons.html"
+    },
+    {
+     "id": "Q6947269",
+     "name": "Mydin",
+     "path": "store/mydin.html"
+    },
+    {
+     "id": "mylofamily.com",
+     "name": "mylofamily.com",
+     "path": "store/mylofamily-com.html"
+    },
+    {
+     "id": "Q20709719",
+     "name": "Myprotein",
+     "path": "store/myprotein.html"
+    },
+    {
+     "id": "Q53108351",
+     "name": "Mytheresa",
+     "path": "store/mytheresa.html"
+    },
+    {
+     "id": "naturalheroes.nl",
+     "name": "naturalheroes.nl",
+     "path": "store/naturalheroes-nl.html"
+    },
+    {
+     "id": "nutriforest.in",
+     "name": "nutriforest.in",
+     "path": "store/nutriforest-in.html"
+    },
+    {
+     "id": "Q22907412",
+     "name": "Nykaa",
+     "path": "store/nykaa.html"
+    },
+    {
+     "id": "oberlo.in",
+     "name": "oberlo.in",
+     "path": "store/oberlo-in.html"
+    },
+    {
+     "id": "Q43452713",
+     "name": "On AG",
+     "path": "store/on-ag.html"
+    },
+    {
+     "id": "oziva.in",
+     "name": "oziva.in",
+     "path": "store/oziva-in.html"
+    },
+    {
+     "id": "Q7117161",
+     "name": "P. C. Richard & Son",
+     "path": "store/p-c-richard-son.html"
+    },
+    {
+     "id": "Q7155843",
+     "name": "Pavers Shoes",
+     "path": "store/pavers-shoes.html"
+    },
+    {
+     "id": "Q3307147",
+     "name": "PetSmart",
+     "path": "store/petsmart.html"
+    },
+    {
+     "id": "Q1434528",
+     "name": "Poundland",
+     "path": "store/poundland.html"
+    },
+    {
+     "id": "pristyncare.com",
+     "name": "pristyncare.com",
+     "path": "store/pristyncare-com.html"
+    },
+    {
+     "id": "prolixr.in",
+     "name": "prolixr.in",
+     "path": "store/prolixr-in.html"
+    },
+    {
+     "id": "Q16172136",
+     "name": "Qoo10.jp",
+     "path": "store/qoo10-jp.html"
+    },
+    {
+     "id": "Q7271953",
+     "name": "QuikTrip",
+     "path": "store/quiktrip.html"
+    },
+    {
+     "id": "Q544251",
+     "name": "Ravelry",
+     "path": "store/ravelry.html"
+    },
+    {
+     "id": "Q7313497",
+     "name": "Rent-A-Center",
+     "path": "store/rent-a-center.html"
+    },
+    {
+     "id": "Q573266",
+     "name": "REWE Group",
+     "path": "store/rewe-group.html"
+    },
+    {
+     "id": "Q39045377",
+     "name": "Rexall",
+     "path": "store/rexall.html"
+    },
+    {
+     "id": "Q85797658",
+     "name": "Rodd & Gunn",
+     "path": "store/rodd-gunn.html"
+    },
+    {
+     "id": "Q28734634",
+     "name": "rohlik.cz",
+     "path": "store/rohlik-cz.html"
+    },
+    {
+     "id": "Q132774969",
+     "name": "Rokt",
+     "path": "store/rokt.html"
+    },
+    {
+     "id": "Q7419620",
+     "name": "Santa Isabel",
+     "path": "store/santa-isabel.html"
+    },
+    {
+     "id": "Q2543504",
+     "name": "Saturn",
+     "path": "store/saturn.html"
+    },
+    {
+     "id": "Q639447",
+     "name": "Seven & I Holdings Co.",
+     "path": "store/seven-i-holdings-co.html"
+    },
+    {
+     "id": "Q107377209",
+     "name": "Shein",
+     "path": "store/shein.html"
+    },
+    {
+     "id": "Q7501150",
+     "name": "Shopify",
+     "path": "store/shopify.html"
+    },
+    {
+     "id": "Q115664015",
+     "name": "Shwapno",
+     "path": "store/shwapno.html"
+    },
+    {
+     "id": "Q3494037",
+     "name": "Sport Chek",
+     "path": "store/sport-chek.html"
+    },
+    {
+     "id": "stickr.nl",
+     "name": "stickr.nl",
+     "path": "store/stickr-nl.html"
+    },
+    {
+     "id": "Q16636819",
+     "name": "Supermercados Disco del Uruguay",
+     "path": "store/supermercados-disco-del-uruguay.html"
+    },
+    {
+     "id": "Q11072650",
+     "name": "Swear",
+     "path": "store/swear.html"
+    },
+    {
+     "id": "Q16952110",
+     "name": "Sweet Frog",
+     "path": "store/sweet-frog.html"
+    },
+    {
+     "id": "takk.in",
+     "name": "takk.in",
+     "path": "store/takk-in.html"
+    },
+    {
+     "id": "Q7685854",
+     "name": "Target Australia",
+     "path": "store/target-australia.html"
+    },
+    {
+     "id": "Q1046951",
+     "name": "Target Corporation",
+     "path": "store/target-corporation.html"
+    },
+    {
+     "id": "teez.in",
+     "name": "teez.in",
+     "path": "store/teez-in.html"
+    },
+    {
+     "id": "Q24089773",
+     "name": "TerryWhite Chemmart",
+     "path": "store/terrywhite-chemmart.html"
+    },
+    {
+     "id": "Q837851",
+     "name": "The Body Shop",
+     "path": "store/the-body-shop.html"
+    },
+    {
+     "id": "Q3520257",
+     "name": "The Children's Place",
+     "path": "store/the-children-s-place.html"
+    },
+    {
+     "id": "Q7737217",
+     "name": "The Good Guys",
+     "path": "store/the-good-guys.html"
+    },
+    {
+     "id": "Q24993367",
+     "name": "The Protein Works",
+     "path": "store/the-protein-works.html"
+    },
+    {
+     "id": "theobroma.in",
+     "name": "theobroma.in",
+     "path": "store/theobroma-in.html"
+    },
+    {
+     "id": "Q7808101",
+     "name": "Tinex",
+     "path": "store/tinex.html"
+    },
+    {
+     "id": "Q20473304",
+     "name": "Trendyol",
+     "path": "store/trendyol.html"
+    },
+    {
+     "id": "Q17035733",
+     "name": "Trespass",
+     "path": "store/trespass.html"
+    },
+    {
+     "id": "Q2020019",
+     "name": "TsUM",
+     "path": "store/tsum.html"
+    },
+    {
+     "id": "Q7889101",
+     "name": "United Rentals",
+     "path": "store/united-rentals.html"
+    },
+    {
+     "id": "unknwn.com",
+     "name": "unknwn.com",
+     "path": "store/unknwn-com.html"
+    },
+    {
+     "id": "Q3344170",
+     "name": "Upwork",
+     "path": "store/upwork.html"
+    },
+    {
+     "id": "Q130569566",
+     "name": "Uzum",
+     "path": "store/uzum.html"
+    },
+    {
+     "id": "Q919641",
+     "name": "Verizon",
+     "path": "store/verizon.html"
+    },
+    {
+     "id": "Q4411944",
+     "name": "Verkkokauppa.com",
+     "path": "store/verkkokauppa-com.html"
+    },
+    {
+     "id": "Q7929200",
+     "name": "Vijay Sales",
+     "path": "store/vijay-sales.html"
+    },
+    {
+     "id": "Q19854317",
+     "name": "Vipshop",
+     "path": "store/vipshop.html"
+    },
+    {
+     "id": "Q11288478",
+     "name": "Wegmans",
+     "path": "store/wegmans.html"
+    },
+    {
+     "id": "Q7726524",
+     "name": "Well Pharmacy",
+     "path": "store/well-pharmacy.html"
+    },
+    {
+     "id": "Q7985852",
+     "name": "West Marine",
+     "path": "store/west-marine.html"
+    },
+    {
+     "id": "Q17117130",
+     "name": "Westborn Market",
+     "path": "store/westborn-market.html"
+    },
+    {
+     "id": "Q51162950",
+     "name": "Wikipedia Store",
+     "path": "store/wikipedia-store.html"
+    },
+    {
+     "id": "Q8000739",
+     "name": "Wild Oats Markets",
+     "path": "store/wild-oats-markets.html"
+    },
+    {
+     "id": "Q96415240",
+     "name": "Williams Sonoma",
+     "path": "store/williams-sonoma.html"
+    },
+    {
+     "id": "Q420506",
+     "name": "Wix.com",
+     "path": "store/wix-com.html"
+    },
+    {
+     "id": "Q8033997",
+     "name": "Woolworths",
+     "path": "store/woolworths.html"
+    },
+    {
+     "id": "Q12010840",
+     "name": "XXL Sport & Villmark",
+     "path": "store/xxl-sport-villmark.html"
+    },
+    {
+     "id": "Q15916707",
+     "name": "Yue Hwa Chinese Products Emporium",
+     "path": "store/yue-hwa-chinese-products-emporium.html"
+    },
+    {
+     "id": "Q136570",
+     "name": "Zalando",
+     "path": "store/zalando.html"
+    },
+    {
+     "id": "Q8065305",
+     "name": "Zale Corporation",
+     "path": "store/zale-corporation.html"
+    },
+    {
+     "id": "Q845330",
+     "name": "Zellers",
+     "path": "store/zellers.html"
+    },
+    {
+     "id": "Q220327",
+     "name": "Zooplus AG",
+     "path": "store/zooplus-ag.html"
+    },
+    {
+     "id": "Q106463667",
+     "name": "Éxito",
+     "path": "store/exito.html"
+    }
+   ],
+   "store_count": 216,
+   "prose": "llms.txt: found 226 of 1,581 websites that answered (14.3%). Refused 1,217. Error 67. Week over week: 2 fewer (was 228 of 1,587) on 2 November 2026. 216 stores publish it."
+  },
+  {
+   "key": "agents_md",
+   "id": "agents-md",
+   "label": "AGENTS.md",
+   "scope": "phase2",
+   "sentence": "A Markdown file at /agents.md with instructions for AI assistants, checked alongside llms.txt as described in our methodology (https://shopbotindex.com/methodology.html#signals).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://shopbotindex.com/methodology.html#signals",
+     "label": "methodology"
+    }
+   ],
+   "found": 31,
+   "not_found": 1486,
+   "answered": 1517,
+   "refused": 1271,
+   "error": 76,
+   "robots_disallow": 1,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "2.0%",
+   "aside": "Left out of the share: 1 disallowed by robots.txt.",
+   "wow": "3 fewer (was 34 of 1,523)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 34,
+    "not_found": 1489,
+    "answered": 1523,
+    "refused": 1265,
+    "error": 76,
+    "reached": 2865,
+    "share_display": "2.2%"
+   },
+   "found_change": -3,
+   "stores": [
+    {
+     "id": "100kmph.com",
+     "name": "100kmph.com",
+     "path": "store/100kmph-com.html"
+    },
+    {
+     "id": "18herbs.com",
+     "name": "18herbs.com",
+     "path": "store/18herbs-com.html"
+    },
+    {
+     "id": "1hairstop.in",
+     "name": "1hairstop.in",
+     "path": "store/1hairstop-in.html"
+    },
+    {
+     "id": "51pyramids.in",
+     "name": "51pyramids.in",
+     "path": "store/51pyramids-in.html"
+    },
+    {
+     "id": "7mm.co.in",
+     "name": "7mm.co.in",
+     "path": "store/7mm-co-in.html"
+    },
+    {
+     "id": "99bookscart.com",
+     "name": "99bookscart.com",
+     "path": "store/99bookscart-com.html"
+    },
+    {
+     "id": "a-ma-maniere.com",
+     "name": "a-ma-maniere.com",
+     "path": "store/a-ma-maniere-com.html"
+    },
+    {
+     "id": "aachho.com",
+     "name": "aachho.com",
+     "path": "store/aachho-com.html"
+    },
+    {
+     "id": "aadar.co",
+     "name": "aadar.co",
+     "path": "store/aadar-co.html"
+    },
+    {
+     "id": "aaranyaa.in",
+     "name": "aaranyaa.in",
+     "path": "store/aaranyaa-in.html"
+    },
+    {
+     "id": "abboocandleco.com",
+     "name": "abboocandleco.com",
+     "path": "store/abboocandleco-com.html"
+    },
+    {
+     "id": "Q4674255",
+     "name": "Ackermans",
+     "path": "store/ackermans.html"
+    },
+    {
+     "id": "Q14516046",
+     "name": "Asprey",
+     "path": "store/asprey.html"
+    },
+    {
+     "id": "Q48770898",
+     "name": "Buck Mason",
+     "path": "store/buck-mason.html"
+    },
+    {
+     "id": "Q5175738",
+     "name": "Cotton Traders",
+     "path": "store/cotton-traders.html"
+    },
+    {
+     "id": "Q2917244",
+     "name": "FAO Schwarz",
+     "path": "store/fao-schwarz.html"
+    },
+    {
+     "id": "Q2786319",
+     "name": "Flying Tiger Copenhagen",
+     "path": "store/flying-tiger-copenhagen.html"
+    },
+    {
+     "id": "foxtale.in",
+     "name": "foxtale.in",
+     "path": "store/foxtale-in.html"
+    },
+    {
+     "id": "shop.jennipro.com",
+     "name": "JENNi",
+     "path": "store/jenni.html"
+    },
+    {
+     "id": "Q2820820",
+     "name": "K-way",
+     "path": "store/k-way.html"
+    },
+    {
+     "id": "Q106298409",
+     "name": "Lovisa",
+     "path": "store/lovisa.html"
+    },
+    {
+     "id": "Q1837290",
+     "name": "Mexx",
+     "path": "store/mexx.html"
+    },
+    {
+     "id": "Q1434528",
+     "name": "Poundland",
+     "path": "store/poundland.html"
+    },
+    {
+     "id": "Q7501150",
+     "name": "Shopify",
+     "path": "store/shopify.html"
+    },
+    {
+     "id": "Q837851",
+     "name": "The Body Shop",
+     "path": "store/the-body-shop.html"
+    },
+    {
+     "id": "Q7996831",
+     "name": "Whittard of Chelsea",
+     "path": "store/whittard-of-chelsea.html"
+    },
+    {
+     "id": "Q51162950",
+     "name": "Wikipedia Store",
+     "path": "store/wikipedia-store.html"
+    },
+    {
+     "id": "Q12010840",
+     "name": "XXL Sport & Villmark",
+     "path": "store/xxl-sport-villmark.html"
+    },
+    {
+     "id": "Q15916707",
+     "name": "Yue Hwa Chinese Products Emporium",
+     "path": "store/yue-hwa-chinese-products-emporium.html"
+    },
+    {
+     "id": "Q845330",
+     "name": "Zellers",
+     "path": "store/zellers.html"
+    },
+    {
+     "id": "Q220327",
+     "name": "Zooplus AG",
+     "path": "store/zooplus-ag.html"
+    }
+   ],
+   "store_count": 31,
+   "prose": "AGENTS.md: found 31 of 1,517 websites that answered (2.0%). Refused 1,271. Error 76. Left out of the share: 1 disallowed by robots.txt. Week over week: 3 fewer (was 34 of 1,523) on 2 November 2026. 31 stores publish it."
+  },
+  {
+   "key": "mcp_tools",
+   "id": "mcp-tools",
+   "label": "MCP tools",
+   "scope": "phase2",
+   "sentence": "A read-only tools/list answer from an MCP endpoint named in the store's UCP profile (UCP specification (https://ucp.dev/specification/overview/)).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://ucp.dev/specification/overview/",
+     "label": "UCP specification"
+    }
+   ],
+   "found": 8,
+   "not_found": 0,
+   "answered": 8,
+   "refused": 11,
+   "error": 936,
+   "robots_disallow": 1,
+   "not_checked": 0,
+   "not_applicable": 1909,
+   "could_not_read": 0,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "100.0%",
+   "aside": "Left out of the share: 1 disallowed by robots.txt; 1,909 whose UCP profile named no MCP endpoint.",
+   "wow": "unchanged (was 8 of 8)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 8,
+    "not_found": 0,
+    "answered": 8,
+    "refused": 10,
+    "error": 933,
+    "reached": 2865,
+    "share_display": "100.0%"
+   },
+   "found_change": 0,
+   "stores": [
+    {
+     "id": "explorewatersports.in",
+     "name": "explorewatersports.in",
+     "path": "store/explorewatersports-in.html"
+    },
+    {
+     "id": "shop.jennipro.com",
+     "name": "JENNi",
+     "path": "store/jenni.html"
+    },
+    {
+     "id": "Q11507765",
+     "name": "JHC",
+     "path": "store/jhc.html"
+    },
+    {
+     "id": "Q48862469",
+     "name": "Lucky's Market",
+     "path": "store/lucky-s-market.html"
+    },
+    {
+     "id": "merchit.in",
+     "name": "merchit.in",
+     "path": "store/merchit-in.html"
+    },
+    {
+     "id": "takk.in",
+     "name": "takk.in",
+     "path": "store/takk-in.html"
+    },
+    {
+     "id": "Q7808101",
+     "name": "Tinex",
+     "path": "store/tinex.html"
+    },
+    {
+     "id": "Q8000739",
+     "name": "Wild Oats Markets",
+     "path": "store/wild-oats-markets.html"
+    }
+   ],
+   "store_count": 8,
+   "prose": "MCP tools: found 8 of 8 websites that answered (100.0%). Refused 11. Error 936. Left out of the share: 1 disallowed by robots.txt; 1,909 whose UCP profile named no MCP endpoint. Week over week: unchanged (was 8 of 8) on 2 November 2026. 8 stores publish it."
+  },
+  {
+   "key": "ai_catalog",
+   "id": "ai-catalog",
+   "label": "AI catalog",
+   "scope": "phase2",
+   "sentence": "A discovery file at /.well-known/ai-catalog.json listing MCP servers (MCP server cards (https://modelcontextprotocol.io/seps/2127-mcp-server-cards)).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://modelcontextprotocol.io/seps/2127-mcp-server-cards",
+     "label": "MCP server cards"
+    }
+   ],
+   "found": 3,
+   "not_found": 1539,
+   "answered": 1542,
+   "refused": 1240,
+   "error": 83,
+   "robots_disallow": 0,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "0.2%",
+   "aside": "",
+   "wow": "unchanged (was 3 of 1,544)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 3,
+    "not_found": 1541,
+    "answered": 1544,
+    "refused": 1243,
+    "error": 78,
+    "reached": 2865,
+    "share_display": "0.2%"
+   },
+   "found_change": 0,
+   "stores": [
+    {
+     "id": "bringg.in",
+     "name": "bringg.in",
+     "path": "store/bringg-in.html"
+    },
+    {
+     "id": "Q765087",
+     "name": "Fruit of the Loom",
+     "path": "store/fruit-of-the-loom.html"
+    },
+    {
+     "id": "Q55613975",
+     "name": "Hostinger",
+     "path": "store/hostinger.html"
+    }
+   ],
+   "store_count": 3,
+   "prose": "AI catalog: found 3 of 1,542 websites that answered (0.2%). Refused 1,240. Error 83. Week over week: unchanged (was 3 of 1,544) on 2 November 2026. 3 stores publish it."
+  },
+  {
+   "key": "acp",
+   "id": "acp",
+   "label": "ACP",
+   "scope": "phase2",
+   "sentence": "An Agentic Commerce Protocol discovery file at /.well-known/acp.json (ACP (https://github.com/agentic-commerce-protocol/agentic-commerce-protocol)).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol",
+     "label": "ACP"
+    }
+   ],
+   "found": 1,
+   "not_found": 1547,
+   "answered": 1548,
+   "refused": 1237,
+   "error": 80,
+   "robots_disallow": 0,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "0.1%",
+   "aside": "",
+   "wow": "unchanged (was 1 of 1,543)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 1,
+    "not_found": 1542,
+    "answered": 1543,
+    "refused": 1244,
+    "error": 78,
+    "reached": 2865,
+    "share_display": "0.1%"
+   },
+   "found_change": 0,
+   "stores": [
+    {
+     "id": "alphonsomango.in",
+     "name": "alphonsomango.in",
+     "path": "store/alphonsomango-in.html"
+    }
+   ],
+   "store_count": 1,
+   "prose": "ACP: found 1 of 1,548 websites that answered (0.1%). Refused 1,237. Error 80. Week over week: unchanged (was 1 of 1,543) on 2 November 2026. 1 store publishes it."
+  },
+  {
+   "key": "robots_ai",
+   "id": "robots-ai",
+   "label": "robots.txt AI rules",
+   "scope": "phase2",
+   "sentence": "robots.txt rules that name AI crawler tokens documented by OpenAI (https://developers.openai.com/api/docs/bots), Anthropic (https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), Perplexity (https://docs.perplexity.ai/docs/resources/perplexity-crawlers) and Google (https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers).",
+   "sources": [
+    {
+     "token": "openai",
+     "href": "https://developers.openai.com/api/docs/bots",
+     "label": "OpenAI"
+    },
+    {
+     "token": "anthropic",
+     "href": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+     "label": "Anthropic"
+    },
+    {
+     "token": "perplexity",
+     "href": "https://docs.perplexity.ai/docs/resources/perplexity-crawlers",
+     "label": "Perplexity"
+    },
+    {
+     "token": "google",
+     "href": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+     "label": "Google"
+    }
+   ],
+   "found": 312,
+   "not_found": 2021,
+   "answered": 2333,
+   "refused": null,
+   "error": null,
+   "robots_disallow": 0,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 532,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "13.4%",
+   "aside": "Left out of the share: 532 with no readable robots.txt. This file has no separate refused or error count.",
+   "wow": "3 more (was 309 of 2,334)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 309,
+    "not_found": 2025,
+    "answered": 2334,
+    "refused": null,
+    "error": null,
+    "reached": 2865,
+    "share_display": "13.2%"
+   },
+   "found_change": 3,
+   "stores": [
+    {
+     "id": "Q85727745",
+     "name": "1stDibs",
+     "path": "store/1stdibs.html"
+    },
+    {
+     "id": "Q20311688",
+     "name": "ABC Fine Wine & Spirits",
+     "path": "store/abc-fine-wine-spirits.html"
+    },
+    {
+     "id": "adorebypriyanka.com",
+     "name": "adorebypriyanka.com",
+     "path": "store/adorebypriyanka-com.html"
+    },
+    {
+     "id": "Q63327",
+     "name": "Airbnb",
+     "path": "store/airbnb.html"
+    },
+    {
+     "id": "Q125054",
+     "name": "Aldi",
+     "path": "store/aldi.html"
+    },
+    {
+     "id": "Q41171672",
+     "name": "Aldi Süd",
+     "path": "store/aldi-sud.html"
+    },
+    {
+     "id": "Q1359568",
+     "name": "Alibaba Group",
+     "path": "store/alibaba-group.html"
+    },
+    {
+     "id": "alphonsomango.in",
+     "name": "alphonsomango.in",
+     "path": "store/alphonsomango-in.html"
+    },
+    {
+     "id": "Q3884",
+     "name": "Amazon",
+     "path": "store/amazon.html"
+    },
+    {
+     "id": "Q27676067",
+     "name": "Amazon Go",
+     "path": "store/amazon-go.html"
+    },
+    {
+     "id": "ambraneindia.com",
+     "name": "ambraneindia.com",
+     "path": "store/ambraneindia-com.html"
+    },
+    {
+     "id": "Q3064093",
+     "name": "Americanas",
+     "path": "store/americanas.html"
+    },
+    {
+     "id": "anemos.in",
+     "name": "anemos.in",
+     "path": "store/anemos-in.html"
+    },
+    {
+     "id": "Q60765315",
+     "name": "Arpico Super Centre",
+     "path": "store/arpico-super-centre.html"
+    },
+    {
+     "id": "Q10359961",
+     "name": "AURES Holdings",
+     "path": "store/aures-holdings.html"
+    },
+    {
+     "id": "Q780477",
+     "name": "aussieBum",
+     "path": "store/aussiebum.html"
+    },
+    {
+     "id": "Q4829577",
+     "name": "Avvo",
+     "path": "store/avvo.html"
+    },
+    {
+     "id": "Q4836931",
+     "name": "B&M",
+     "path": "store/b-m.html"
+    },
+    {
+     "id": "Q17232036",
+     "name": "Babies \"R\" Us",
+     "path": "store/babies-r-us.html"
+    },
+    {
+     "id": "Q4851443",
+     "name": "Ballantynes",
+     "path": "store/ballantynes.html"
+    },
+    {
+     "id": "Q16838251",
+     "name": "Bart's Books",
+     "path": "store/bart-s-books.html"
+    },
+    {
+     "id": "Q4876153",
+     "name": "Bealls",
+     "path": "store/bealls.html"
+    },
+    {
+     "id": "beanlycoffee.com",
+     "name": "beanlycoffee.com",
+     "path": "store/beanlycoffee-com.html"
+    },
+    {
+     "id": "Q127428",
+     "name": "Belk",
+     "path": "store/belk.html"
+    },
+    {
+     "id": "beminimalist.co",
+     "name": "beminimalist.co",
+     "path": "store/beminimalist-co.html"
+    },
+    {
+     "id": "Q533415",
+     "name": "Best Buy",
+     "path": "store/best-buy.html"
+    },
+    {
+     "id": "Q4896532",
+     "name": "Best-one",
+     "path": "store/best-one.html"
+    },
+    {
+     "id": "Q116679441",
+     "name": "Bestway Wholesale",
+     "path": "store/bestway-wholesale.html"
+    },
+    {
+     "id": "Q4898566",
+     "name": "Better World Books",
+     "path": "store/better-world-books.html"
+    },
+    {
+     "id": "bighaat.com",
+     "name": "bighaat.com",
+     "path": "store/bighaat-com.html"
+    },
+    {
+     "id": "Q1022075",
+     "name": "BIM",
+     "path": "store/bim.html"
+    },
+    {
+     "id": "bluedahlia.in",
+     "name": "bluedahlia.in",
+     "path": "store/bluedahlia-in.html"
+    },
+    {
+     "id": "Q52855390",
+     "name": "BM Česko",
+     "path": "store/bm-cesko.html"
+    },
+    {
+     "id": "boldfit.in",
+     "name": "boldfit.in",
+     "path": "store/boldfit-in.html"
+    },
+    {
+     "id": "Q28206937",
+     "name": "Boll & Branch",
+     "path": "store/boll-branch.html"
+    },
+    {
+     "id": "bombaysweetshop.com",
+     "name": "bombaysweetshop.com",
+     "path": "store/bombaysweetshop-com.html"
+    },
+    {
+     "id": "Q28721140",
+     "name": "Booky.fi",
+     "path": "store/booky-fi.html"
+    },
+    {
+     "id": "Q136722433",
+     "name": "Boozt",
+     "path": "store/boozt.html"
+    },
+    {
+     "id": "Q4950452",
+     "name": "Boutique La Vie en rose",
+     "path": "store/boutique-la-vie-en-rose.html"
+    },
+    {
+     "id": "Q4952569",
+     "name": "Boyner Group",
+     "path": "store/boyner-group.html"
+    },
+    {
+     "id": "bringg.in",
+     "name": "bringg.in",
+     "path": "store/bringg-in.html"
+    },
+    {
+     "id": "Q4968659",
+     "name": "Briscoe Group",
+     "path": "store/briscoe-group.html"
+    },
+    {
+     "id": "Q48770898",
+     "name": "Buck Mason",
+     "path": "store/buck-mason.html"
+    },
+    {
+     "id": "bunaai.com",
+     "name": "bunaai.com",
+     "path": "store/bunaai-com.html"
+    },
+    {
+     "id": "buywow.in",
+     "name": "buywow.in",
+     "path": "store/buywow-in.html"
+    },
+    {
+     "id": "Q701338",
+     "name": "C&A",
+     "path": "store/c-a.html"
+    },
+    {
+     "id": "ca.octobersveryown.com",
+     "name": "ca.octobersveryown.com",
+     "path": "store/ca-octobersveryown-com.html"
+    },
+    {
+     "id": "Q5033572",
+     "name": "Canteen Stores Department",
+     "path": "store/canteen-stores-department.html"
+    },
+    {
+     "id": "Q28035409",
+     "name": "Carpisa",
+     "path": "store/carpisa.html"
+    },
+    {
+     "id": "Q217599",
+     "name": "Carrefour",
+     "path": "store/carrefour.html"
+    },
+    {
+     "id": "Q5047480",
+     "name": "Carulla",
+     "path": "store/carulla.html"
+    },
+    {
+     "id": "Q11788344",
+     "name": "CCC",
+     "path": "store/ccc.html"
+    },
+    {
+     "id": "Q28858523",
+     "name": "Ceconomy",
+     "path": "store/ceconomy.html"
+    },
+    {
+     "id": "Q2894459",
+     "name": "Central Madeirense",
+     "path": "store/central-madeirense.html"
+    },
+    {
+     "id": "Q3878818",
+     "name": "CHARLES & KEITH",
+     "path": "store/charles-keith.html"
+    },
+    {
+     "id": "chumbak.com",
+     "name": "chumbak.com",
+     "path": "store/chumbak-com.html"
+    },
+    {
+     "id": "cityblueshop.com",
+     "name": "cityblueshop.com",
+     "path": "store/cityblueshop-com.html"
+    },
+    {
+     "id": "clinikally.com",
+     "name": "clinikally.com",
+     "path": "store/clinikally-com.html"
+    },
+    {
+     "id": "Q2979949",
+     "name": "Club Monaco",
+     "path": "store/club-monaco.html"
+    },
+    {
+     "id": "Q5142575",
+     "name": "Coldwater Creek",
+     "path": "store/coldwater-creek.html"
+    },
+    {
+     "id": "confettigifts.in",
+     "name": "confettigifts.in",
+     "path": "store/confettigifts-in.html"
+    },
+    {
+     "id": "Q55138358",
+     "name": "Coppa's Fresh Market",
+     "path": "store/coppa-s-fresh-market.html"
+    },
+    {
+     "id": "Q5175738",
+     "name": "Cotton Traders",
+     "path": "store/cotton-traders.html"
+    },
+    {
+     "id": "Q2078880",
+     "name": "CVS Pharmacy",
+     "path": "store/cvs-pharmacy.html"
+    },
+    {
+     "id": "Q5230388",
+     "name": "David's Bridal",
+     "path": "store/david-s-bridal.html"
+    },
+    {
+     "id": "demozastores.com",
+     "name": "demozastores.com",
+     "path": "store/demozastores-com.html"
+    },
+    {
+     "id": "dermalogica.in",
+     "name": "dermalogica.in",
+     "path": "store/dermalogica-in.html"
+    },
+    {
+     "id": "Q5278478",
+     "name": "DinoSol",
+     "path": "store/dinosol.html"
+    },
+    {
+     "id": "dotandkey.com",
+     "name": "dotandkey.com",
+     "path": "store/dotandkey-com.html"
+    },
+    {
+     "id": "drtrust.in",
+     "name": "drtrust.in",
+     "path": "store/drtrust-in.html"
+    },
+    {
+     "id": "duroflexworld.com",
+     "name": "duroflexworld.com",
+     "path": "store/duroflexworld-com.html"
+    },
+    {
+     "id": "Q5318687",
+     "name": "Dylan's Candy Bar",
+     "path": "store/dylan-s-candy-bar.html"
+    },
+    {
+     "id": "Q5327075",
+     "name": "Earth Fare",
+     "path": "store/earth-fare.html"
+    },
+    {
+     "id": "Q5329759",
+     "name": "East of England Co-operative Society",
+     "path": "store/east-of-england-co-operative-society.html"
+    },
+    {
+     "id": "Q58024",
+     "name": "EBay",
+     "path": "store/ebay.html"
+    },
+    {
+     "id": "ekaya.in",
+     "name": "ekaya.in",
+     "path": "store/ekaya-in.html"
+    },
+    {
+     "id": "Q5351735",
+     "name": "El Palacio de Hierro",
+     "path": "store/el-palacio-de-hierro.html"
+    },
+    {
+     "id": "Q627929",
+     "name": "Ellos",
+     "path": "store/ellos.html"
+    },
+    {
+     "id": "estele.co",
+     "name": "estele.co",
+     "path": "store/estele-co.html"
+    },
+    {
+     "id": "ethicalhackersacademy.com",
+     "name": "ethicalhackersacademy.com",
+     "path": "store/ethicalhackersacademy-com.html"
+    },
+    {
+     "id": "Q7277895",
+     "name": "Euro-Net",
+     "path": "store/euro-net.html"
+    },
+    {
+     "id": "Q17770215",
+     "name": "Europris",
+     "path": "store/europris.html"
+    },
+    {
+     "id": "Q680990",
+     "name": "Expert",
+     "path": "store/expert.html"
+    },
+    {
+     "id": "Q5423915",
+     "name": "F. Hinds",
+     "path": "store/f-hinds.html"
+    },
+    {
+     "id": "fablestreet.com",
+     "name": "fablestreet.com",
+     "path": "store/fablestreet-com.html"
+    },
+    {
+     "id": "fabriclore.com",
+     "name": "fabriclore.com",
+     "path": "store/fabriclore-com.html"
+    },
+    {
+     "id": "Q18150640",
+     "name": "Fanatics, Inc.",
+     "path": "store/fanatics-inc.html"
+    },
+    {
+     "id": "farmerr.in",
+     "name": "farmerr.in",
+     "path": "store/farmerr-in.html"
+    },
+    {
+     "id": "Q5435855",
+     "name": "Farmigo",
+     "path": "store/farmigo.html"
+    },
+    {
+     "id": "fashor.com",
+     "name": "fashor.com",
+     "path": "store/fashor-com.html"
+    },
+    {
+     "id": "Q3743192",
+     "name": "Ferrino",
+     "path": "store/ferrino.html"
+    },
+    {
+     "id": "Q96377962",
+     "name": "FirstCry",
+     "path": "store/firstcry.html"
+    },
+    {
+     "id": "Q15848204",
+     "name": "Fitshop",
+     "path": "store/fitshop.html"
+    },
+    {
+     "id": "Q1435950",
+     "name": "Food Lion",
+     "path": "store/food-lion.html"
+    },
+    {
+     "id": "Q5465579",
+     "name": "FoodWorks",
+     "path": "store/foodworks.html"
+    },
+    {
+     "id": "Q5472911",
+     "name": "Fortunoff",
+     "path": "store/fortunoff.html"
+    },
+    {
+     "id": "foxtale.in",
+     "name": "foxtale.in",
+     "path": "store/foxtale-in.html"
+    },
+    {
+     "id": "Q420822",
+     "name": "Gap Inc.",
+     "path": "store/gap-inc.html"
+    },
+    {
+     "id": "Q5558336",
+     "name": "Giant Food",
+     "path": "store/giant-food.html"
+    },
+    {
+     "id": "Q5558332",
+     "name": "Giant Food Stores",
+     "path": "store/giant-food-stores.html"
+    },
+    {
+     "id": "giva.co",
+     "name": "giva.co",
+     "path": "store/giva-co.html"
+    },
+    {
+     "id": "Q683505",
+     "name": "Globus",
+     "path": "store/globus-globus-ch.html"
+    },
+    {
+     "id": "Q623647",
+     "name": "Gmarket",
+     "path": "store/gmarket.html"
+    },
+    {
+     "id": "Q16994221",
+     "name": "GoAntiques",
+     "path": "store/goantiques.html"
+    },
+    {
+     "id": "Q106411451",
+     "name": "Gold Apple",
+     "path": "store/gold-apple.html"
+    },
+    {
+     "id": "gonoise.com",
+     "name": "gonoise.com",
+     "path": "store/gonoise-com.html"
+    },
+    {
+     "id": "Q5583733",
+     "name": "Goody's",
+     "path": "store/goody-s.html"
+    },
+    {
+     "id": "gourisgoodies.com",
+     "name": "gourisgoodies.com",
+     "path": "store/gourisgoodies-com.html"
+    },
+    {
+     "id": "gritzo.com",
+     "name": "gritzo.com",
+     "path": "store/gritzo-com.html"
+    },
+    {
+     "id": "Q5610145",
+     "name": "Grolier Poetry Bookshop",
+     "path": "store/grolier-poetry-bookshop.html"
+    },
+    {
+     "id": "Q852787",
+     "name": "Groupon",
+     "path": "store/groupon.html"
+    },
+    {
+     "id": "guduchiayurveda.com",
+     "name": "guduchiayurveda.com",
+     "path": "store/guduchiayurveda-com.html"
+    },
+    {
+     "id": "Q2470307",
+     "name": "Guess",
+     "path": "store/guess.html"
+    },
+    {
+     "id": "Q5616562",
+     "name": "Guineys",
+     "path": "store/guineys.html"
+    },
+    {
+     "id": "Q111951472",
+     "name": "Guthrie Bowron",
+     "path": "store/guthrie-bowron.html"
+    },
+    {
+     "id": "Q10517909",
+     "name": "Happy Socks",
+     "path": "store/happy-socks.html"
+    },
+    {
+     "id": "Q5674252",
+     "name": "Hart Stores",
+     "path": "store/hart-stores.html"
+    },
+    {
+     "id": "Q27918492",
+     "name": "Hawkers",
+     "path": "store/hawkers.html"
+    },
+    {
+     "id": "Q5751041",
+     "name": "Hickey Freeman",
+     "path": "store/hickey-freeman.html"
+    },
+    {
+     "id": "Q109535972",
+     "name": "Hill Street Grocer",
+     "path": "store/hill-street-grocer.html"
+    },
+    {
+     "id": "Q20714382",
+     "name": "Hipcamp",
+     "path": "store/hipcamp.html"
+    },
+    {
+     "id": "Q5887921",
+     "name": "HomeAdvisor",
+     "path": "store/homeadvisor.html"
+    },
+    {
+     "id": "Q55613975",
+     "name": "Hostinger",
+     "path": "store/hostinger.html"
+    },
+    {
+     "id": "Q23461622",
+     "name": "Idea",
+     "path": "store/idea.html"
+    },
+    {
+     "id": "imoostore.com",
+     "name": "imoostore.com",
+     "path": "store/imoostore-com.html"
+    },
+    {
+     "id": "indulekha.co.in",
+     "name": "indulekha.co.in",
+     "path": "store/indulekha-co-in.html"
+    },
+    {
+     "id": "Q3153200",
+     "name": "Intermarché",
+     "path": "store/intermarche.html"
+    },
+    {
+     "id": "Q666888",
+     "name": "Intersport",
+     "path": "store/intersport.html"
+    },
+    {
+     "id": "itokri.com",
+     "name": "itokri.com",
+     "path": "store/itokri-com.html"
+    },
+    {
+     "id": "Q6108019",
+     "name": "JD Sports",
+     "path": "store/jd-sports.html"
+    },
+    {
+     "id": "shop.jennipro.com",
+     "name": "JENNi",
+     "path": "store/jenni.html"
+    },
+    {
+     "id": "Q6268615",
+     "name": "Johnston & Murphy",
+     "path": "store/johnston-murphy.html"
+    },
+    {
+     "id": "Q6310864",
+     "name": "Jumbo",
+     "path": "store/jumbo-jumbo-cl.html"
+    },
+    {
+     "id": "justherbs.in",
+     "name": "justherbs.in",
+     "path": "store/justherbs-in.html"
+    },
+    {
+     "id": "Q1735474",
+     "name": "Kastner & Öhler",
+     "path": "store/kastner-ohler.html"
+    },
+    {
+     "id": "kiwla.com",
+     "name": "kiwla.com",
+     "path": "store/kiwla-com.html"
+    },
+    {
+     "id": "Q124369295",
+     "name": "Klick Eesti",
+     "path": "store/klick-eesti.html"
+    },
+    {
+     "id": "Q110104471",
+     "name": "Kontakt.az",
+     "path": "store/kontakt-az.html"
+    },
+    {
+     "id": "koskii.com",
+     "name": "koskii.com",
+     "path": "store/koskii-com.html"
+    },
+    {
+     "id": "kssshop.com",
+     "name": "kssshop.com",
+     "path": "store/kssshop-com.html"
+    },
+    {
+     "id": "Q30184736",
+     "name": "Kytary.cz",
+     "path": "store/kytary-cz.html"
+    },
+    {
+     "id": "lakmeindia.com",
+     "name": "lakmeindia.com",
+     "path": "store/lakmeindia-com.html"
+    },
+    {
+     "id": "Q140287877",
+     "name": "Lazada Philippines",
+     "path": "store/lazada-philippines.html"
+    },
+    {
+     "id": "Q24958893",
+     "name": "Lazada Vietnam",
+     "path": "store/lazada-vietnam.html"
+    },
+    {
+     "id": "Q1866547",
+     "name": "Livraria Bertrand",
+     "path": "store/livraria-bertrand.html"
+    },
+    {
+     "id": "Q22336859",
+     "name": "Loake",
+     "path": "store/loake.html"
+    },
+    {
+     "id": "Q3064071",
+     "name": "Lojas Renner",
+     "path": "store/lojas-renner.html"
+    },
+    {
+     "id": "londonrag.in",
+     "name": "londonrag.in",
+     "path": "store/londonrag-in.html"
+    },
+    {
+     "id": "lotusherbals.com",
+     "name": "lotusherbals.com",
+     "path": "store/lotusherbals-com.html"
+    },
+    {
+     "id": "lovebeautyandplanet.in",
+     "name": "lovebeautyandplanet.in",
+     "path": "store/lovebeautyandplanet-in.html"
+    },
+    {
+     "id": "Q6703090",
+     "name": "Lumber Liquidators",
+     "path": "store/lumber-liquidators.html"
+    },
+    {
+     "id": "Q10873304",
+     "name": "Made-in-China.com",
+     "path": "store/made-in-china-com.html"
+    },
+    {
+     "id": "mahaveers.com",
+     "name": "mahaveers.com",
+     "path": "store/mahaveers-com.html"
+    },
+    {
+     "id": "Q105287172",
+     "name": "MahoganyBooks",
+     "path": "store/mahoganybooks.html"
+    },
+    {
+     "id": "Q704606",
+     "name": "Makro",
+     "path": "store/makro.html"
+    },
+    {
+     "id": "marmeto.com",
+     "name": "marmeto.com",
+     "path": "store/marmeto-com.html"
+    },
+    {
+     "id": "Q6791878",
+     "name": "Mattress Firm",
+     "path": "store/mattress-firm.html"
+    },
+    {
+     "id": "mavshacklive.in",
+     "name": "mavshacklive.in",
+     "path": "store/mavshacklive-in.html"
+    },
+    {
+     "id": "maxprotein.in",
+     "name": "maxprotein.in",
+     "path": "store/maxprotein-in.html"
+    },
+    {
+     "id": "mcaffeine.com",
+     "name": "mcaffeine.com",
+     "path": "store/mcaffeine-com.html"
+    },
+    {
+     "id": "Q11776794",
+     "name": "Media Expert",
+     "path": "store/media-expert.html"
+    },
+    {
+     "id": "Q2381223",
+     "name": "MediaMarkt",
+     "path": "store/mediamarkt.html"
+    },
+    {
+     "id": "melangebox.com",
+     "name": "melangebox.com",
+     "path": "store/melangebox-com.html"
+    },
+    {
+     "id": "mellow.co.in",
+     "name": "mellow.co.in",
+     "path": "store/mellow-co-in.html"
+    },
+    {
+     "id": "Q4994191",
+     "name": "Metz & Co",
+     "path": "store/metz-co.html"
+    },
+    {
+     "id": "miuse.nl",
+     "name": "miuse.nl",
+     "path": "store/miuse-nl.html"
+    },
+    {
+     "id": "modernmyth.in",
+     "name": "modernmyth.in",
+     "path": "store/modernmyth-in.html"
+    },
+    {
+     "id": "Q17100584",
+     "name": "Molton Brown",
+     "path": "store/molton-brown.html"
+    },
+    {
+     "id": "Q11233609",
+     "name": "MonotaRO",
+     "path": "store/monotaro.html"
+    },
+    {
+     "id": "Q6899359",
+     "name": "MONY Group",
+     "path": "store/mony-group.html"
+    },
+    {
+     "id": "Q16475372",
+     "name": "Morele.net",
+     "path": "store/morele-net.html"
+    },
+    {
+     "id": "mothersparsh.com",
+     "name": "mothersparsh.com",
+     "path": "store/mothersparsh-com.html"
+    },
+    {
+     "id": "Q105044323",
+     "name": "MR.DIY",
+     "path": "store/mr-diy.html"
+    },
+    {
+     "id": "Q6947269",
+     "name": "Mydin",
+     "path": "store/mydin.html"
+    },
+    {
+     "id": "myfitness.in",
+     "name": "myfitness.in",
+     "path": "store/myfitness-in.html"
+    },
+    {
+     "id": "mylofamily.com",
+     "name": "mylofamily.com",
+     "path": "store/mylofamily-com.html"
+    },
+    {
+     "id": "mypoojabox.in",
+     "name": "mypoojabox.in",
+     "path": "store/mypoojabox-in.html"
+    },
+    {
+     "id": "Q6514414",
+     "name": "Narvesen",
+     "path": "store/narvesen.html"
+    },
+    {
+     "id": "naturalheroes.nl",
+     "name": "naturalheroes.nl",
+     "path": "store/naturalheroes-nl.html"
+    },
+    {
+     "id": "Q22023369",
+     "name": "Navy Exchange",
+     "path": "store/navy-exchange.html"
+    },
+    {
+     "id": "neemans.com",
+     "name": "neemans.com",
+     "path": "store/neemans-com.html"
+    },
+    {
+     "id": "nestasia.in",
+     "name": "nestasia.in",
+     "path": "store/nestasia-in.html"
+    },
+    {
+     "id": "nestkidsconceptstore.nl",
+     "name": "nestkidsconceptstore.nl",
+     "path": "store/nestkidsconceptstore-nl.html"
+    },
+    {
+     "id": "neuherbs.com",
+     "name": "neuherbs.com",
+     "path": "store/neuherbs-com.html"
+    },
+    {
+     "id": "Q706421",
+     "name": "New Yorker",
+     "path": "store/new-yorker.html"
+    },
+    {
+     "id": "nidranutrition.com",
+     "name": "nidranutrition.com",
+     "path": "store/nidranutrition-com.html"
+    },
+    {
+     "id": "nikoniko.nl",
+     "name": "nikoniko.nl",
+     "path": "store/nikoniko-nl.html"
+    },
+    {
+     "id": "Q1998983",
+     "name": "Norfa",
+     "path": "store/norfa.html"
+    },
+    {
+     "id": "Q19562429",
+     "name": "Normal",
+     "path": "store/normal.html"
+    },
+    {
+     "id": "nutrispray.co.in",
+     "name": "nutrispray.co.in",
+     "path": "store/nutrispray-co-in.html"
+    },
+    {
+     "id": "Q1337797",
+     "name": "Office Depot",
+     "path": "store/office-depot.html"
+    },
+    {
+     "id": "ohmat.nl",
+     "name": "ohmat.nl",
+     "path": "store/ohmat-nl.html"
+    },
+    {
+     "id": "Q7088304",
+     "name": "Ollie's Bargain Outlet",
+     "path": "store/ollie-s-bargain-outlet.html"
+    },
+    {
+     "id": "Q17072662",
+     "name": "One Kings Lane",
+     "path": "store/one-kings-lane.html"
+    },
+    {
+     "id": "oziva.in",
+     "name": "oziva.in",
+     "path": "store/oziva-in.html"
+    },
+    {
+     "id": "Q2241604",
+     "name": "Pandora",
+     "path": "store/pandora.html"
+    },
+    {
+     "id": "Q7140896",
+     "name": "Party City",
+     "path": "store/party-city.html"
+    },
+    {
+     "id": "Q7155843",
+     "name": "Pavers Shoes",
+     "path": "store/pavers-shoes.html"
+    },
+    {
+     "id": "Q3307147",
+     "name": "PetSmart",
+     "path": "store/petsmart.html"
+    },
+    {
+     "id": "Q104532444",
+     "name": "Petzone",
+     "path": "store/petzone.html"
+    },
+    {
+     "id": "Q32414703",
+     "name": "Picnic",
+     "path": "store/picnic.html"
+    },
+    {
+     "id": "ponds.in",
+     "name": "ponds.in",
+     "path": "store/ponds-in.html"
+    },
+    {
+     "id": "Q110299434",
+     "name": "Postie",
+     "path": "store/postie.html"
+    },
+    {
+     "id": "Q62073183",
+     "name": "Preçolandia",
+     "path": "store/precolandia.html"
+    },
+    {
+     "id": "Q7242652",
+     "name": "Priceline",
+     "path": "store/priceline.html"
+    },
+    {
+     "id": "pristyncare.com",
+     "name": "pristyncare.com",
+     "path": "store/pristyncare-com.html"
+    },
+    {
+     "id": "prorganiq.com",
+     "name": "prorganiq.com",
+     "path": "store/prorganiq-com.html"
+    },
+    {
+     "id": "Q7284705",
+     "name": "Rainbow Sandals, Inc.",
+     "path": "store/rainbow-sandals-inc.html"
+    },
+    {
+     "id": "Q7276204",
+     "name": "RC Willey Home Furnishings",
+     "path": "store/rc-willey-home-furnishings.html"
+    },
+    {
+     "id": "Q18636397",
+     "name": "Rebel",
+     "path": "store/rebel.html"
+    },
+    {
+     "id": "Q111951487",
+     "name": "Resene",
+     "path": "store/resene.html"
+    },
+    {
+     "id": "Q7330409",
+     "name": "Richer Sounds",
+     "path": "store/richer-sounds.html"
+    },
+    {
+     "id": "Q7336696",
+     "name": "Ritchies Stores",
+     "path": "store/ritchies-stores.html"
+    },
+    {
+     "id": "Q7353143",
+     "name": "Robinsons Supermarket",
+     "path": "store/robinsons-supermarket.html"
+    },
+    {
+     "id": "Q85797658",
+     "name": "Rodd & Gunn",
+     "path": "store/rodd-gunn.html"
+    },
+    {
+     "id": "royalbrothers.com",
+     "name": "royalbrothers.com",
+     "path": "store/royalbrothers-com.html"
+    },
+    {
+     "id": "Q20401398",
+     "name": "SACO Hardware",
+     "path": "store/saco-hardware.html"
+    },
+    {
+     "id": "Q2543504",
+     "name": "Saturn",
+     "path": "store/saturn.html"
+    },
+    {
+     "id": "scitron.com",
+     "name": "scitron.com",
+     "path": "store/scitron-com.html"
+    },
+    {
+     "id": "Q7448622",
+     "name": "Sellers Bros.",
+     "path": "store/sellers-bros.html"
+    },
+    {
+     "id": "shop.lakmesalon.in",
+     "name": "shop.lakmesalon.in",
+     "path": "store/shop-lakmesalon-in.html"
+    },
+    {
+     "id": "Q25381741",
+     "name": "Shpock",
+     "path": "store/shpock.html"
+    },
+    {
+     "id": "shreeman.in",
+     "name": "shreeman.in",
+     "path": "store/shreeman-in.html"
+    },
+    {
+     "id": "simpleskincare.in",
+     "name": "simpleskincare.in",
+     "path": "store/simpleskincare-in.html"
+    },
+    {
+     "id": "skippi.in",
+     "name": "skippi.in",
+     "path": "store/skippi-in.html"
+    },
+    {
+     "id": "Q7538410",
+     "name": "Slackers CDs and Games",
+     "path": "store/slackers-cds-and-games.html"
+    },
+    {
+     "id": "Q7539684",
+     "name": "Sleep Country Canada",
+     "path": "store/sleep-country-canada.html"
+    },
+    {
+     "id": "slurrpfarm.com",
+     "name": "slurrpfarm.com",
+     "path": "store/slurrpfarm-com.html"
+    },
+    {
+     "id": "snooplay.in",
+     "name": "snooplay.in",
+     "path": "store/snooplay-in.html"
+    },
+    {
+     "id": "Q7604016",
+     "name": "Stater Bros.",
+     "path": "store/stater-bros.html"
+    },
+    {
+     "id": "Q3658429",
+     "name": "Stop & Shop",
+     "path": "store/stop-shop.html"
+    },
+    {
+     "id": "stylemylo.com",
+     "name": "stylemylo.com",
+     "path": "store/stylemylo-com.html"
+    },
+    {
+     "id": "Q6134992",
+     "name": "Suburbia",
+     "path": "store/suburbia.html"
+    },
+    {
+     "id": "Q7643119",
+     "name": "Supercheap Auto",
+     "path": "store/supercheap-auto.html"
+    },
+    {
+     "id": "suta.in",
+     "name": "suta.in",
+     "path": "store/suta-in.html"
+    },
+    {
+     "id": "Q12338957",
+     "name": "T. Hansen Gruppen",
+     "path": "store/t-hansen-gruppen.html"
+    },
+    {
+     "id": "Q7687267",
+     "name": "Taskrabbit",
+     "path": "store/taskrabbit.html"
+    },
+    {
+     "id": "Q104856323",
+     "name": "Teachers Pay Teachers",
+     "path": "store/teachers-pay-teachers.html"
+    },
+    {
+     "id": "teez.in",
+     "name": "teez.in",
+     "path": "store/teez-in.html"
+    },
+    {
+     "id": "Q114258161",
+     "name": "Temu",
+     "path": "store/temu.html"
+    },
+    {
+     "id": "tentabs.in",
+     "name": "tentabs.in",
+     "path": "store/tentabs-in.html"
+    },
+    {
+     "id": "Q3520257",
+     "name": "The Children's Place",
+     "path": "store/the-children-s-place.html"
+    },
+    {
+     "id": "Q24993367",
+     "name": "The Protein Works",
+     "path": "store/the-protein-works.html"
+    },
+    {
+     "id": "Q48814470",
+     "name": "The White Company",
+     "path": "store/the-white-company.html"
+    },
+    {
+     "id": "theartconnect.in",
+     "name": "theartconnect.in",
+     "path": "store/theartconnect-in.html"
+    },
+    {
+     "id": "theobroma.in",
+     "name": "theobroma.in",
+     "path": "store/theobroma-in.html"
+    },
+    {
+     "id": "thesleeplabs.com",
+     "name": "thesleeplabs.com",
+     "path": "store/thesleeplabs-com.html"
+    },
+    {
+     "id": "thewhitewillow.in",
+     "name": "thewhitewillow.in",
+     "path": "store/thewhitewillow-in.html"
+    },
+    {
+     "id": "theyellowdoorstore.com",
+     "name": "theyellowdoorstore.com",
+     "path": "store/theyellowdoorstore-com.html"
+    },
+    {
+     "id": "Q1539868",
+     "name": "Thomann",
+     "path": "store/thomann.html"
+    },
+    {
+     "id": "Q1424735",
+     "name": "Thomas Philipps",
+     "path": "store/thomas-philipps.html"
+    },
+    {
+     "id": "Q110221600",
+     "name": "Torpedo7",
+     "path": "store/torpedo7.html"
+    },
+    {
+     "id": "toyhome.in",
+     "name": "toyhome.in",
+     "path": "store/toyhome-in.html"
+    },
+    {
+     "id": "Q7832666",
+     "name": "Trago Mills",
+     "path": "store/trago-mills.html"
+    },
+    {
+     "id": "Q17035733",
+     "name": "Trespass",
+     "path": "store/trespass.html"
+    },
+    {
+     "id": "Q265286",
+     "name": "Trivago",
+     "path": "store/trivago.html"
+    },
+    {
+     "id": "trunativ.co",
+     "name": "trunativ.co",
+     "path": "store/trunativ-co.html"
+    },
+    {
+     "id": "uathayam.in",
+     "name": "uathayam.in",
+     "path": "store/uathayam-in.html"
+    },
+    {
+     "id": "Q7880076",
+     "name": "Ulta Beauty",
+     "path": "store/ulta-beauty.html"
+    },
+    {
+     "id": "Q7887832",
+     "name": "United Hardware Distributing Company",
+     "path": "store/united-hardware-distributing-company.html"
+    },
+    {
+     "id": "Q3344170",
+     "name": "Upwork",
+     "path": "store/upwork.html"
+    },
+    {
+     "id": "us.octobersveryown.com",
+     "name": "us.octobersveryown.com",
+     "path": "store/us-octobersveryown-com.html"
+    },
+    {
+     "id": "Q130569566",
+     "name": "Uzum",
+     "path": "store/uzum.html"
+    },
+    {
+     "id": "Q7929200",
+     "name": "Vijay Sales",
+     "path": "store/vijay-sales.html"
+    },
+    {
+     "id": "Q11935495",
+     "name": "Vinted",
+     "path": "store/vinted.html"
+    },
+    {
+     "id": "Q19854317",
+     "name": "Vipshop",
+     "path": "store/vipshop.html"
+    },
+    {
+     "id": "Q2530746",
+     "name": "Volg",
+     "path": "store/volg.html"
+    },
+    {
+     "id": "vooki.in",
+     "name": "vooki.in",
+     "path": "store/vooki-in.html"
+    },
+    {
+     "id": "Q39052914",
+     "name": "WalterMart",
+     "path": "store/waltermart.html"
+    },
+    {
+     "id": "Q28130376",
+     "name": "Well.ca",
+     "path": "store/well-ca.html"
+    },
+    {
+     "id": "Q7994237",
+     "name": "Whitcoulls",
+     "path": "store/whitcoulls.html"
+    },
+    {
+     "id": "Q3067008",
+     "name": "William Rast",
+     "path": "store/william-rast.html"
+    },
+    {
+     "id": "Q1630624",
+     "name": "Wine-Searcher",
+     "path": "store/wine-searcher.html"
+    },
+    {
+     "id": "Q8033997",
+     "name": "Woolworths",
+     "path": "store/woolworths.html"
+    },
+    {
+     "id": "writingsonthewall.in",
+     "name": "writingsonthewall.in",
+     "path": "store/writingsonthewall-in.html"
+    },
+    {
+     "id": "xech.com",
+     "name": "xech.com",
+     "path": "store/xech-com.html"
+    },
+    {
+     "id": "Q8054542",
+     "name": "Yoke's Fresh Market",
+     "path": "store/yoke-s-fresh-market.html"
+    },
+    {
+     "id": "zestpics.com",
+     "name": "zestpics.com",
+     "path": "store/zestpics-com.html"
+    },
+    {
+     "id": "Q106463667",
+     "name": "Éxito",
+     "path": "store/exito.html"
+    }
+   ],
+   "store_count": 279,
+   "prose": "robots.txt AI rules: found 312 of 2,333 websites that answered (13.4%). Left out of the share: 532 with no readable robots.txt. This file has no separate refused or error count. Week over week: 3 more (was 309 of 2,334) on 2 November 2026. 279 stores publish it."
+  },
+  {
+   "key": "content_signals",
+   "id": "content-signals",
+   "label": "Content signals",
+   "scope": "phase2",
+   "sentence": "Content-Signal lines in robots.txt, recorded with the AI crawler tokens documented by OpenAI (https://developers.openai.com/api/docs/bots), Anthropic (https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), Perplexity (https://docs.perplexity.ai/docs/resources/perplexity-crawlers) and Google (https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers).",
+   "sources": [
+    {
+     "token": "openai",
+     "href": "https://developers.openai.com/api/docs/bots",
+     "label": "OpenAI"
+    },
+    {
+     "token": "anthropic",
+     "href": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+     "label": "Anthropic"
+    },
+    {
+     "token": "perplexity",
+     "href": "https://docs.perplexity.ai/docs/resources/perplexity-crawlers",
+     "label": "Perplexity"
+    },
+    {
+     "token": "google",
+     "href": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+     "label": "Google"
+    }
+   ],
+   "found": 75,
+   "not_found": 2258,
+   "answered": 2333,
+   "refused": null,
+   "error": null,
+   "robots_disallow": 0,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 532,
+   "reached": 2865,
+   "full": null,
+   "partial": null,
+   "share_display": "3.2%",
+   "aside": "Left out of the share: 532 with no readable robots.txt. This file has no separate refused or error count.",
+   "wow": "unchanged (was 75 of 2,334)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 75,
+    "not_found": 2259,
+    "answered": 2334,
+    "refused": null,
+    "error": null,
+    "reached": 2865,
+    "share_display": "3.2%"
+   },
+   "found_change": 0,
+   "stores": [
+    {
+     "id": "adorebypriyanka.com",
+     "name": "adorebypriyanka.com",
+     "path": "store/adorebypriyanka-com.html"
+    },
+    {
+     "id": "alphonsomango.in",
+     "name": "alphonsomango.in",
+     "path": "store/alphonsomango-in.html"
+    },
+    {
+     "id": "Q60765315",
+     "name": "Arpico Super Centre",
+     "path": "store/arpico-super-centre.html"
+    },
+    {
+     "id": "Q17232036",
+     "name": "Babies \"R\" Us",
+     "path": "store/babies-r-us.html"
+    },
+    {
+     "id": "Q4898566",
+     "name": "Better World Books",
+     "path": "store/better-world-books.html"
+    },
+    {
+     "id": "Q1022075",
+     "name": "BIM",
+     "path": "store/bim.html"
+    },
+    {
+     "id": "boldfit.in",
+     "name": "boldfit.in",
+     "path": "store/boldfit-in.html"
+    },
+    {
+     "id": "Q4997447",
+     "name": "Bunches Florapost",
+     "path": "store/bunches-florapost.html"
+    },
+    {
+     "id": "ca.octobersveryown.com",
+     "name": "ca.octobersveryown.com",
+     "path": "store/ca-octobersveryown-com.html"
+    },
+    {
+     "id": "Q217599",
+     "name": "Carrefour",
+     "path": "store/carrefour.html"
+    },
+    {
+     "id": "Q11788344",
+     "name": "CCC",
+     "path": "store/ccc.html"
+    },
+    {
+     "id": "Q28858523",
+     "name": "Ceconomy",
+     "path": "store/ceconomy.html"
+    },
+    {
+     "id": "cityblueshop.com",
+     "name": "cityblueshop.com",
+     "path": "store/cityblueshop-com.html"
+    },
+    {
+     "id": "Q5230388",
+     "name": "David's Bridal",
+     "path": "store/david-s-bridal.html"
+    },
+    {
+     "id": "ethicalhackersacademy.com",
+     "name": "ethicalhackersacademy.com",
+     "path": "store/ethicalhackersacademy-com.html"
+    },
+    {
+     "id": "fabriclore.com",
+     "name": "fabriclore.com",
+     "path": "store/fabriclore-com.html"
+    },
+    {
+     "id": "Q5430911",
+     "name": "Fairway Market",
+     "path": "store/fairway-market-fairwaymarkets-com.html"
+    },
+    {
+     "id": "Q5465579",
+     "name": "FoodWorks",
+     "path": "store/foodworks.html"
+    },
+    {
+     "id": "Q683505",
+     "name": "Globus",
+     "path": "store/globus-globus-ch.html"
+    },
+    {
+     "id": "Q623647",
+     "name": "Gmarket",
+     "path": "store/gmarket.html"
+    },
+    {
+     "id": "Q5583733",
+     "name": "Goody's",
+     "path": "store/goody-s.html"
+    },
+    {
+     "id": "gourisgoodies.com",
+     "name": "gourisgoodies.com",
+     "path": "store/gourisgoodies-com.html"
+    },
+    {
+     "id": "Q852787",
+     "name": "Groupon",
+     "path": "store/groupon.html"
+    },
+    {
+     "id": "Q2470307",
+     "name": "Guess",
+     "path": "store/guess.html"
+    },
+    {
+     "id": "Q111951472",
+     "name": "Guthrie Bowron",
+     "path": "store/guthrie-bowron.html"
+    },
+    {
+     "id": "Q5889167",
+     "name": "Homeplus",
+     "path": "store/homeplus.html"
+    },
+    {
+     "id": "Q55613975",
+     "name": "Hostinger",
+     "path": "store/hostinger.html"
+    },
+    {
+     "id": "Q23461622",
+     "name": "Idea",
+     "path": "store/idea.html"
+    },
+    {
+     "id": "Q3153200",
+     "name": "Intermarché",
+     "path": "store/intermarche.html"
+    },
+    {
+     "id": "Q666888",
+     "name": "Intersport",
+     "path": "store/intersport.html"
+    },
+    {
+     "id": "Q6268615",
+     "name": "Johnston & Murphy",
+     "path": "store/johnston-murphy.html"
+    },
+    {
+     "id": "kssshop.com",
+     "name": "kssshop.com",
+     "path": "store/kssshop-com.html"
+    },
+    {
+     "id": "Q1866547",
+     "name": "Livraria Bertrand",
+     "path": "store/livraria-bertrand.html"
+    },
+    {
+     "id": "Q6703090",
+     "name": "Lumber Liquidators",
+     "path": "store/lumber-liquidators.html"
+    },
+    {
+     "id": "mahaveers.com",
+     "name": "mahaveers.com",
+     "path": "store/mahaveers-com.html"
+    },
+    {
+     "id": "Q704606",
+     "name": "Makro",
+     "path": "store/makro.html"
+    },
+    {
+     "id": "mavshacklive.in",
+     "name": "mavshacklive.in",
+     "path": "store/mavshacklive-in.html"
+    },
+    {
+     "id": "Q4994191",
+     "name": "Metz & Co",
+     "path": "store/metz-co.html"
+    },
+    {
+     "id": "miuse.nl",
+     "name": "miuse.nl",
+     "path": "store/miuse-nl.html"
+    },
+    {
+     "id": "modernmyth.in",
+     "name": "modernmyth.in",
+     "path": "store/modernmyth-in.html"
+    },
+    {
+     "id": "Q17100584",
+     "name": "Molton Brown",
+     "path": "store/molton-brown.html"
+    },
+    {
+     "id": "Q6899359",
+     "name": "MONY Group",
+     "path": "store/mony-group.html"
+    },
+    {
+     "id": "Q6947269",
+     "name": "Mydin",
+     "path": "store/mydin.html"
+    },
+    {
+     "id": "Q6514414",
+     "name": "Narvesen",
+     "path": "store/narvesen.html"
+    },
+    {
+     "id": "nestasia.in",
+     "name": "nestasia.in",
+     "path": "store/nestasia-in.html"
+    },
+    {
+     "id": "nestkidsconceptstore.nl",
+     "name": "nestkidsconceptstore.nl",
+     "path": "store/nestkidsconceptstore-nl.html"
+    },
+    {
+     "id": "nidranutrition.com",
+     "name": "nidranutrition.com",
+     "path": "store/nidranutrition-com.html"
+    },
+    {
+     "id": "Q1998983",
+     "name": "Norfa",
+     "path": "store/norfa.html"
+    },
+    {
+     "id": "Q19562429",
+     "name": "Normal",
+     "path": "store/normal.html"
+    },
+    {
+     "id": "Q1337797",
+     "name": "Office Depot",
+     "path": "store/office-depot.html"
+    },
+    {
+     "id": "Q2241604",
+     "name": "Pandora",
+     "path": "store/pandora.html"
+    },
+    {
+     "id": "Q104532444",
+     "name": "Petzone",
+     "path": "store/petzone.html"
+    },
+    {
+     "id": "ponds.in",
+     "name": "ponds.in",
+     "path": "store/ponds-in.html"
+    },
+    {
+     "id": "Q7242652",
+     "name": "Priceline",
+     "path": "store/priceline.html"
+    },
+    {
+     "id": "prorganiq.com",
+     "name": "prorganiq.com",
+     "path": "store/prorganiq-com.html"
+    },
+    {
+     "id": "Q7538410",
+     "name": "Slackers CDs and Games",
+     "path": "store/slackers-cds-and-games.html"
+    },
+    {
+     "id": "Q54974273",
+     "name": "Sportisimo",
+     "path": "store/sportisimo.html"
+    },
+    {
+     "id": "Q7604016",
+     "name": "Stater Bros.",
+     "path": "store/stater-bros.html"
+    },
+    {
+     "id": "stylemylo.com",
+     "name": "stylemylo.com",
+     "path": "store/stylemylo-com.html"
+    },
+    {
+     "id": "Q3520257",
+     "name": "The Children's Place",
+     "path": "store/the-children-s-place.html"
+    },
+    {
+     "id": "thesleeplabs.com",
+     "name": "thesleeplabs.com",
+     "path": "store/thesleeplabs-com.html"
+    },
+    {
+     "id": "theyellowdoorstore.com",
+     "name": "theyellowdoorstore.com",
+     "path": "store/theyellowdoorstore-com.html"
+    },
+    {
+     "id": "toyhome.in",
+     "name": "toyhome.in",
+     "path": "store/toyhome-in.html"
+    },
+    {
+     "id": "Q7832666",
+     "name": "Trago Mills",
+     "path": "store/trago-mills.html"
+    },
+    {
+     "id": "Q17035733",
+     "name": "Trespass",
+     "path": "store/trespass.html"
+    },
+    {
+     "id": "us.octobersveryown.com",
+     "name": "us.octobersveryown.com",
+     "path": "store/us-octobersveryown-com.html"
+    },
+    {
+     "id": "Q130569566",
+     "name": "Uzum",
+     "path": "store/uzum.html"
+    },
+    {
+     "id": "Q4411944",
+     "name": "Verkkokauppa.com",
+     "path": "store/verkkokauppa-com.html"
+    },
+    {
+     "id": "Q11935495",
+     "name": "Vinted",
+     "path": "store/vinted.html"
+    },
+    {
+     "id": "vooki.in",
+     "name": "vooki.in",
+     "path": "store/vooki-in.html"
+    },
+    {
+     "id": "Q39052914",
+     "name": "WalterMart",
+     "path": "store/waltermart.html"
+    },
+    {
+     "id": "Q11288478",
+     "name": "Wegmans",
+     "path": "store/wegmans.html"
+    },
+    {
+     "id": "Q16325095",
+     "name": "WhiteAway",
+     "path": "store/whiteaway.html"
+    },
+    {
+     "id": "Q12010840",
+     "name": "XXL Sport & Villmark",
+     "path": "store/xxl-sport-villmark.html"
+    },
+    {
+     "id": "Q106463667",
+     "name": "Éxito",
+     "path": "store/exito.html"
+    }
+   ],
+   "store_count": 75,
+   "prose": "Content signals: found 75 of 2,333 websites that answered (3.2%). Left out of the share: 532 with no readable robots.txt. This file has no separate refused or error count. Week over week: unchanged (was 75 of 2,334) on 2 November 2026. 75 stores publish it."
+  },
+  {
+   "key": "product",
+   "id": "product-data",
+   "label": "Product data",
+   "scope": "phase2",
+   "sentence": "schema.org Product markup on one product page we could fetch (schema.org Product (https://schema.org/Product)).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://schema.org/Product",
+     "label": "schema.org Product"
+    }
+   ],
+   "found": 171,
+   "not_found": 136,
+   "answered": 307,
+   "refused": null,
+   "error": null,
+   "robots_disallow": 2,
+   "not_checked": 2556,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2865,
+   "full": 149,
+   "partial": 22,
+   "share_display": "55.7%",
+   "aside": "Of the 171 found, 149 have price, currency and availability and 22 have Product markup without all three. Left out of the share: 2 disallowed by robots.txt; 2,556 not reached (no product page). This file has no separate refused or error count.",
+   "wow": "1 more (was 170 of 301)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 170,
+    "not_found": 131,
+    "answered": 301,
+    "refused": null,
+    "error": null,
+    "reached": 2865,
+    "share_display": "56.5%"
+   },
+   "found_change": 1,
+   "stores": [
+    {
+     "id": "100kmph.com",
+     "name": "100kmph.com",
+     "path": "store/100kmph-com.html"
+    },
+    {
+     "id": "18herbs.com",
+     "name": "18herbs.com",
+     "path": "store/18herbs-com.html"
+    },
+    {
+     "id": "1hairstop.in",
+     "name": "1hairstop.in",
+     "path": "store/1hairstop-in.html"
+    },
+    {
+     "id": "51pyramids.in",
+     "name": "51pyramids.in",
+     "path": "store/51pyramids-in.html"
+    },
+    {
+     "id": "Q2817899",
+     "name": "5àsec",
+     "path": "store/5asec.html"
+    },
+    {
+     "id": "7mm.co.in",
+     "name": "7mm.co.in",
+     "path": "store/7mm-co-in.html"
+    },
+    {
+     "id": "99bookscart.com",
+     "name": "99bookscart.com",
+     "path": "store/99bookscart-com.html"
+    },
+    {
+     "id": "a-ma-maniere.com",
+     "name": "a-ma-maniere.com",
+     "path": "store/a-ma-maniere-com.html"
+    },
+    {
+     "id": "Q63367373",
+     "name": "Amcal",
+     "path": "store/amcal.html"
+    },
+    {
+     "id": "Q2842931",
+     "name": "American Eagle Outfitters",
+     "path": "store/american-eagle-outfitters.html"
+    },
+    {
+     "id": "Q1974912",
+     "name": "Apranga, AB",
+     "path": "store/apranga-ab.html"
+    },
+    {
+     "id": "Q24965506",
+     "name": "Aquarelle.com Group",
+     "path": "store/aquarelle-com-group.html"
+    },
+    {
+     "id": "Q14516046",
+     "name": "Asprey",
+     "path": "store/asprey.html"
+    },
+    {
+     "id": "Q4876153",
+     "name": "Bealls",
+     "path": "store/bealls.html"
+    },
+    {
+     "id": "bighaat.com",
+     "name": "bighaat.com",
+     "path": "store/bighaat-com.html"
+    },
+    {
+     "id": "bikenbiker.com",
+     "name": "bikenbiker.com",
+     "path": "store/bikenbiker-com.html"
+    },
+    {
+     "id": "Q864933",
+     "name": "BIPA",
+     "path": "store/bipa.html"
+    },
+    {
+     "id": "bodysensation.in",
+     "name": "bodysensation.in",
+     "path": "store/bodysensation-in.html"
+    },
+    {
+     "id": "Q28206937",
+     "name": "Boll & Branch",
+     "path": "store/boll-branch.html"
+    },
+    {
+     "id": "Q30688042",
+     "name": "Boohoo Group",
+     "path": "store/boohoo-group.html"
+    },
+    {
+     "id": "Q4943252",
+     "name": "Bookmans",
+     "path": "store/bookmans.html"
+    },
+    {
+     "id": "Q4947190",
+     "name": "Boscov's",
+     "path": "store/boscov-s.html"
+    },
+    {
+     "id": "Q4950489",
+     "name": "Boux Avenue",
+     "path": "store/boux-avenue.html"
+    },
+    {
+     "id": "Q4976688",
+     "name": "Browns of York",
+     "path": "store/browns-of-york.html"
+    },
+    {
+     "id": "Q48770898",
+     "name": "Buck Mason",
+     "path": "store/buck-mason.html"
+    },
+    {
+     "id": "Q4997447",
+     "name": "Bunches Florapost",
+     "path": "store/bunches-florapost.html"
+    },
+    {
+     "id": "buywow.in",
+     "name": "buywow.in",
+     "path": "store/buywow-in.html"
+    },
+    {
+     "id": "Q217599",
+     "name": "Carrefour",
+     "path": "store/carrefour.html"
+    },
+    {
+     "id": "Q2955924",
+     "name": "Champs Sports",
+     "path": "store/champs-sports.html"
+    },
+    {
+     "id": "Q2967663",
+     "name": "Church's",
+     "path": "store/church-s.html"
+    },
+    {
+     "id": "cityblueshop.com",
+     "name": "cityblueshop.com",
+     "path": "store/cityblueshop-com.html"
+    },
+    {
+     "id": "Q3356220",
+     "name": "Clas Ohlson",
+     "path": "store/clas-ohlson.html"
+    },
+    {
+     "id": "clinikally.com",
+     "name": "clinikally.com",
+     "path": "store/clinikally-com.html"
+    },
+    {
+     "id": "Q5174750",
+     "name": "Cost Plus World Market",
+     "path": "store/cost-plus-world-market.html"
+    },
+    {
+     "id": "Q5175738",
+     "name": "Cotton Traders",
+     "path": "store/cotton-traders.html"
+    },
+    {
+     "id": "Q130547426",
+     "name": "craftpix.net",
+     "path": "store/craftpix-net.html"
+    },
+    {
+     "id": "dermaessentia.com",
+     "name": "dermaessentia.com",
+     "path": "store/dermaessentia-com.html"
+    },
+    {
+     "id": "Q3845315",
+     "name": "Deseret Book",
+     "path": "store/deseret-book.html"
+    },
+    {
+     "id": "Q16643324",
+     "name": "Detskiy Mir",
+     "path": "store/detskiy-mir.html"
+    },
+    {
+     "id": "digiduct.in",
+     "name": "digiduct.in",
+     "path": "store/digiduct-in.html"
+    },
+    {
+     "id": "Q145168",
+     "name": "Dollar General",
+     "path": "store/dollar-general.html"
+    },
+    {
+     "id": "Q2677329",
+     "name": "Dosenbach-Ochsner",
+     "path": "store/dosenbach-ochsner.html"
+    },
+    {
+     "id": "etherbit.in",
+     "name": "etherbit.in",
+     "path": "store/etherbit-in.html"
+    },
+    {
+     "id": "Q106589420",
+     "name": "Evaly",
+     "path": "store/evaly.html"
+    },
+    {
+     "id": "fablestreet.com",
+     "name": "fablestreet.com",
+     "path": "store/fablestreet-com.html"
+    },
+    {
+     "id": "Q2917244",
+     "name": "FAO Schwarz",
+     "path": "store/fao-schwarz.html"
+    },
+    {
+     "id": "Q2786319",
+     "name": "Flying Tiger Copenhagen",
+     "path": "store/flying-tiger-copenhagen.html"
+    },
+    {
+     "id": "Q63335",
+     "name": "Foot Locker",
+     "path": "store/foot-locker.html"
+    },
+    {
+     "id": "foxtale.in",
+     "name": "foxtale.in",
+     "path": "store/foxtale-in.html"
+    },
+    {
+     "id": "Q765087",
+     "name": "Fruit of the Loom",
+     "path": "store/fruit-of-the-loom.html"
+    },
+    {
+     "id": "Q457503",
+     "name": "Globus",
+     "path": "store/globus-globus-de.html"
+    },
+    {
+     "id": "Q4139985",
+     "name": "Gloria Jeans",
+     "path": "store/gloria-jeans.html"
+    },
+    {
+     "id": "Q5583733",
+     "name": "Goody's",
+     "path": "store/goody-s.html"
+    },
+    {
+     "id": "Q5618258",
+     "name": "Gumtree",
+     "path": "store/gumtree.html"
+    },
+    {
+     "id": "Q21178602",
+     "name": "Han Kjøbenhavn",
+     "path": "store/han-kjobenhavn.html"
+    },
+    {
+     "id": "Q5665029",
+     "name": "Harris Scarfe",
+     "path": "store/harris-scarfe.html"
+    },
+    {
+     "id": "Q16983381",
+     "name": "Harry Rosen Inc.",
+     "path": "store/harry-rosen-inc.html"
+    },
+    {
+     "id": "Q3408814",
+     "name": "Henry Poole & Co",
+     "path": "store/henry-poole-co.html"
+    },
+    {
+     "id": "Q9013416",
+     "name": "HKTV",
+     "path": "store/hktv.html"
+    },
+    {
+     "id": "Q5888229",
+     "name": "Home Bargains",
+     "path": "store/home-bargains.html"
+    },
+    {
+     "id": "Q9294032",
+     "name": "Hot Topic",
+     "path": "store/hot-topic.html"
+    },
+    {
+     "id": "ignitedminds.co.in",
+     "name": "ignitedminds.co.in",
+     "path": "store/ignitedminds-co-in.html"
+    },
+    {
+     "id": "Q1303887",
+     "name": "Imperial Porcelain Factory",
+     "path": "store/imperial-porcelain-factory.html"
+    },
+    {
+     "id": "indycouture.in",
+     "name": "indycouture.in",
+     "path": "store/indycouture-in.html"
+    },
+    {
+     "id": "Q305404",
+     "name": "Intimissimi",
+     "path": "store/intimissimi.html"
+    },
+    {
+     "id": "italiancatch.nl",
+     "name": "italiancatch.nl",
+     "path": "store/italiancatch-nl.html"
+    },
+    {
+     "id": "Q5370765",
+     "name": "J.Crew",
+     "path": "store/j-crew.html"
+    },
+    {
+     "id": "shop.jennipro.com",
+     "name": "JENNi",
+     "path": "store/jenni.html"
+    },
+    {
+     "id": "Q6189611",
+     "name": "Jewelry Television",
+     "path": "store/jewelry-television.html"
+    },
+    {
+     "id": "Q2820820",
+     "name": "K-way",
+     "path": "store/k-way.html"
+    },
+    {
+     "id": "Q3192162",
+     "name": "Kalenji",
+     "path": "store/kalenji.html"
+    },
+    {
+     "id": "kiwla.com",
+     "name": "kiwla.com",
+     "path": "store/kiwla-com.html"
+    },
+    {
+     "id": "koskii.com",
+     "name": "koskii.com",
+     "path": "store/koskii-com.html"
+    },
+    {
+     "id": "Q6450420",
+     "name": "Kwik Trip",
+     "path": "store/kwik-trip.html"
+    },
+    {
+     "id": "Q3217138",
+     "name": "Lane Crawford",
+     "path": "store/lane-crawford.html"
+    },
+    {
+     "id": "Q18400706",
+     "name": "Letoile",
+     "path": "store/letoile.html"
+    },
+    {
+     "id": "Q151954",
+     "name": "Lidl",
+     "path": "store/lidl.html"
+    },
+    {
+     "id": "Q106298409",
+     "name": "Lovisa",
+     "path": "store/lovisa.html"
+    },
+    {
+     "id": "lujobox.com",
+     "name": "lujobox.com",
+     "path": "store/lujobox-com.html"
+    },
+    {
+     "id": "Q6703090",
+     "name": "Lumber Liquidators",
+     "path": "store/lumber-liquidators.html"
+    },
+    {
+     "id": "Q940518",
+     "name": "Magnit",
+     "path": "store/magnit.html"
+    },
+    {
+     "id": "Q382686",
+     "name": "Manor",
+     "path": "store/manor.html"
+    },
+    {
+     "id": "marathonsports.com",
+     "name": "marathonsports.com",
+     "path": "store/marathonsports-com.html"
+    },
+    {
+     "id": "Q714491",
+     "name": "Marks & Spencer",
+     "path": "store/marks-spencer.html"
+    },
+    {
+     "id": "Q12061509",
+     "name": "Matalan",
+     "path": "store/matalan.html"
+    },
+    {
+     "id": "Q2381223",
+     "name": "MediaMarkt",
+     "path": "store/mediamarkt.html"
+    },
+    {
+     "id": "melangebox.com",
+     "name": "melangebox.com",
+     "path": "store/melangebox-com.html"
+    },
+    {
+     "id": "Q23808789",
+     "name": "Metro Retail Stores Group",
+     "path": "store/metro-retail-stores-group.html"
+    },
+    {
+     "id": "Q1837290",
+     "name": "Mexx",
+     "path": "store/mexx.html"
+    },
+    {
+     "id": "Q3308250",
+     "name": "Michael Hill Jeweller",
+     "path": "store/michael-hill-jeweller.html"
+    },
+    {
+     "id": "Q6835667",
+     "name": "Michaels",
+     "path": "store/michaels.html"
+    },
+    {
+     "id": "Q25111530",
+     "name": "Missguided",
+     "path": "store/missguided.html"
+    },
+    {
+     "id": "Q620881",
+     "name": "Modere",
+     "path": "store/modere.html"
+    },
+    {
+     "id": "Q2076935",
+     "name": "Munich",
+     "path": "store/munich.html"
+    },
+    {
+     "id": "mylofamily.com",
+     "name": "mylofamily.com",
+     "path": "store/mylofamily-com.html"
+    },
+    {
+     "id": "Q20709719",
+     "name": "Myprotein",
+     "path": "store/myprotein.html"
+    },
+    {
+     "id": "nathabit.in",
+     "name": "nathabit.in",
+     "path": "store/nathabit-in.html"
+    },
+    {
+     "id": "naturalheroes.nl",
+     "name": "naturalheroes.nl",
+     "path": "store/naturalheroes-nl.html"
+    },
+    {
+     "id": "Q22023369",
+     "name": "Navy Exchange",
+     "path": "store/navy-exchange.html"
+    },
+    {
+     "id": "Q7076076",
+     "name": "Ocean State Job Lot",
+     "path": "store/ocean-state-job-lot.html"
+    },
+    {
+     "id": "Q43452713",
+     "name": "On AG",
+     "path": "store/on-ag.html"
+    },
+    {
+     "id": "Q1027874",
+     "name": "Oniverse",
+     "path": "store/oniverse.html"
+    },
+    {
+     "id": "Q7105269",
+     "name": "Orvis",
+     "path": "store/orvis.html"
+    },
+    {
+     "id": "Q2042514",
+     "name": "OVS",
+     "path": "store/ovs.html"
+    },
+    {
+     "id": "Q7131643",
+     "name": "Pantaloons",
+     "path": "store/pantaloons.html"
+    },
+    {
+     "id": "party-anthem.com",
+     "name": "party-anthem.com",
+     "path": "store/party-anthem-com.html"
+    },
+    {
+     "id": "Q7155843",
+     "name": "Pavers Shoes",
+     "path": "store/pavers-shoes.html"
+    },
+    {
+     "id": "pehrsilver.com",
+     "name": "pehrsilver.com",
+     "path": "store/pehrsilver-com.html"
+    },
+    {
+     "id": "Q7191691",
+     "name": "Pier 1 Imports",
+     "path": "store/pier-1-imports.html"
+    },
+    {
+     "id": "Q17051868",
+     "name": "Poshmark",
+     "path": "store/poshmark.html"
+    },
+    {
+     "id": "Q1434528",
+     "name": "Poundland",
+     "path": "store/poundland.html"
+    },
+    {
+     "id": "Q140811543",
+     "name": "Prince and Sanjay Jewellers",
+     "path": "store/prince-and-sanjay-jewellers.html"
+    },
+    {
+     "id": "Q116871244",
+     "name": "PROSTOR",
+     "path": "store/prostor.html"
+    },
+    {
+     "id": "Q18636397",
+     "name": "Rebel",
+     "path": "store/rebel.html"
+    },
+    {
+     "id": "Q7313614",
+     "name": "Renys",
+     "path": "store/renys.html"
+    },
+    {
+     "id": "Q3433273",
+     "name": "Rite Aid",
+     "path": "store/rite-aid.html"
+    },
+    {
+     "id": "Q2670328",
+     "name": "River Island",
+     "path": "store/river-island.html"
+    },
+    {
+     "id": "Q17029682",
+     "name": "Rizzoli Bookstore",
+     "path": "store/rizzoli-bookstore.html"
+    },
+    {
+     "id": "Q20401398",
+     "name": "SACO Hardware",
+     "path": "store/saco-hardware.html"
+    },
+    {
+     "id": "shop.aubree.in",
+     "name": "shop.aubree.in",
+     "path": "store/shop-aubree-in.html"
+    },
+    {
+     "id": "Q7505012",
+     "name": "Shun Fat Supermarket",
+     "path": "store/shun-fat-supermarket.html"
+    },
+    {
+     "id": "sketchfabdecor.com",
+     "name": "sketchfabdecor.com",
+     "path": "store/sketchfabdecor-com.html"
+    },
+    {
+     "id": "Q7539684",
+     "name": "Sleep Country Canada",
+     "path": "store/sleep-country-canada.html"
+    },
+    {
+     "id": "Q2295606",
+     "name": "Smyk",
+     "path": "store/smyk.html"
+    },
+    {
+     "id": "Q7547351",
+     "name": "Snappy Snaps",
+     "path": "store/snappy-snaps.html"
+    },
+    {
+     "id": "Q7579979",
+     "name": "Sportsman's Warehouse",
+     "path": "store/sportsman-s-warehouse.html"
+    },
+    {
+     "id": "Q7643119",
+     "name": "Supercheap Auto",
+     "path": "store/supercheap-auto.html"
+    },
+    {
+     "id": "sustainkart.com",
+     "name": "sustainkart.com",
+     "path": "store/sustainkart-com.html"
+    },
+    {
+     "id": "tapetum.in",
+     "name": "tapetum.in",
+     "path": "store/tapetum-in.html"
+    },
+    {
+     "id": "Q7685854",
+     "name": "Target Australia",
+     "path": "store/target-australia.html"
+    },
+    {
+     "id": "Q104856323",
+     "name": "Teachers Pay Teachers",
+     "path": "store/teachers-pay-teachers.html"
+    },
+    {
+     "id": "teez.in",
+     "name": "teez.in",
+     "path": "store/teez-in.html"
+    },
+    {
+     "id": "Q3357520",
+     "name": "Teknikmagasinet",
+     "path": "store/teknikmagasinet.html"
+    },
+    {
+     "id": "Q24089773",
+     "name": "TerryWhite Chemmart",
+     "path": "store/terrywhite-chemmart.html"
+    },
+    {
+     "id": "Q837851",
+     "name": "The Body Shop",
+     "path": "store/the-body-shop.html"
+    },
+    {
+     "id": "Q3520257",
+     "name": "The Children's Place",
+     "path": "store/the-children-s-place.html"
+    },
+    {
+     "id": "Q24993367",
+     "name": "The Protein Works",
+     "path": "store/the-protein-works.html"
+    },
+    {
+     "id": "Q48814470",
+     "name": "The White Company",
+     "path": "store/the-white-company.html"
+    },
+    {
+     "id": "Q7775853",
+     "name": "The Works",
+     "path": "store/the-works.html"
+    },
+    {
+     "id": "thehouseofjersey.com",
+     "name": "thehouseofjersey.com",
+     "path": "store/thehouseofjersey-com.html"
+    },
+    {
+     "id": "theobroma.in",
+     "name": "theobroma.in",
+     "path": "store/theobroma-in.html"
+    },
+    {
+     "id": "thesportsedit.com",
+     "name": "thesportsedit.com",
+     "path": "store/thesportsedit-com.html"
+    },
+    {
+     "id": "toothsi.in",
+     "name": "toothsi.in",
+     "path": "store/toothsi-in.html"
+    },
+    {
+     "id": "Q1090880",
+     "name": "Topman",
+     "path": "store/topman.html"
+    },
+    {
+     "id": "Q7880076",
+     "name": "Ulta Beauty",
+     "path": "store/ulta-beauty.html"
+    },
+    {
+     "id": "Q7884777",
+     "name": "Unicorn Grocery",
+     "path": "store/unicorn-grocery.html"
+    },
+    {
+     "id": "Q7920606",
+     "name": "VENUS Fashion",
+     "path": "store/venus-fashion.html"
+    },
+    {
+     "id": "Q7929200",
+     "name": "Vijay Sales",
+     "path": "store/vijay-sales.html"
+    },
+    {
+     "id": "Q3558391",
+     "name": "Vilebrequin",
+     "path": "store/vilebrequin.html"
+    },
+    {
+     "id": "Q7932495",
+     "name": "Vineyard Vines",
+     "path": "store/vineyard-vines.html"
+    },
+    {
+     "id": "Q7933910",
+     "name": "Virgin Experience Days",
+     "path": "store/virgin-experience-days.html"
+    },
+    {
+     "id": "wallmantra.com",
+     "name": "wallmantra.com",
+     "path": "store/wallmantra-com.html"
+    },
+    {
+     "id": "Q28130376",
+     "name": "Well.ca",
+     "path": "store/well-ca.html"
+    },
+    {
+     "id": "werwellness.in",
+     "name": "werwellness.in",
+     "path": "store/werwellness-in.html"
+    },
+    {
+     "id": "Q16325095",
+     "name": "WhiteAway",
+     "path": "store/whiteaway.html"
+    },
+    {
+     "id": "Q7996831",
+     "name": "Whittard of Chelsea",
+     "path": "store/whittard-of-chelsea.html"
+    },
+    {
+     "id": "Q51162950",
+     "name": "Wikipedia Store",
+     "path": "store/wikipedia-store.html"
+    },
+    {
+     "id": "Q12010840",
+     "name": "XXL Sport & Villmark",
+     "path": "store/xxl-sport-villmark.html"
+    },
+    {
+     "id": "Q24993680",
+     "name": "Yorkshire Trading Company",
+     "path": "store/yorkshire-trading-company.html"
+    },
+    {
+     "id": "Q15916707",
+     "name": "Yue Hwa Chinese Products Emporium",
+     "path": "store/yue-hwa-chinese-products-emporium.html"
+    },
+    {
+     "id": "Q147505",
+     "name": "Zappos",
+     "path": "store/zappos.html"
+    }
+   ],
+   "store_count": 161,
+   "prose": "Product data: found 171 of 307 websites that answered (55.7%). Of the 171 found, 149 have price, currency and availability and 22 have Product markup without all three. Left out of the share: 2 disallowed by robots.txt; 2,556 not reached (no product page). This file has no separate refused or error count. Week over week: 1 more (was 170 of 301) on 2 November 2026. 161 stores publish it."
+  },
+  {
+   "key": "poppy",
+   "id": "poppy",
+   "label": "Poppy",
+   "scope": "phase3",
+   "sentence": "A Personal Agent Protocol file at /.well-known/poppy.json (Personal Agent Protocol (https://personalagentprotocol.org/docs/spec)).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://personalagentprotocol.org/docs/spec",
+     "label": "Personal Agent Protocol"
+    }
+   ],
+   "found": 1,
+   "not_found": 1604,
+   "answered": 1605,
+   "refused": 840,
+   "error": 73,
+   "robots_disallow": 1,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2519,
+   "full": null,
+   "partial": null,
+   "share_display": "0.1%",
+   "aside": "Left out of the share: 1 disallowed by robots.txt. Checked on 2,519 websites that answered the UCP pass, which is this file's own denominator set.",
+   "wow": "1 more (was 0 of 2,409)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 0,
+    "not_found": 2409,
+    "answered": 2409,
+    "refused": 28,
+    "error": 85,
+    "reached": 2523,
+    "share_display": "0.0%"
+   },
+   "found_change": 1,
+   "stores": [
+    {
+     "id": "Q1353939",
+     "name": "Etsy",
+     "path": "store/etsy.html"
+    }
+   ],
+   "store_count": 1,
+   "prose": "Poppy: found 1 of 1,605 websites that answered (0.1%). Refused 840. Error 73. Left out of the share: 1 disallowed by robots.txt. Checked on 2,519 websites that answered the UCP pass, which is this file's own denominator set. Week over week: 1 more (was 0 of 2,409) on 2 November 2026. 1 store publishes it."
+  },
+  {
+   "key": "a2a",
+   "id": "a2a",
+   "label": "A2A agent card",
+   "scope": "phase3",
+   "sentence": "An A2A agent card at /.well-known/agent-card.json or the earlier /.well-known/agent.json path (A2A agent discovery (https://a2a-protocol.org/latest/topics/agent-discovery/)).",
+   "sources": [
+    {
+     "token": "src",
+     "href": "https://a2a-protocol.org/latest/topics/agent-discovery/",
+     "label": "A2A agent discovery"
+    }
+   ],
+   "found": 0,
+   "not_found": 1580,
+   "answered": 1580,
+   "refused": 851,
+   "error": 87,
+   "robots_disallow": 1,
+   "not_checked": 0,
+   "not_applicable": 0,
+   "could_not_read": 0,
+   "reached": 2519,
+   "full": null,
+   "partial": null,
+   "share_display": "0.0%",
+   "aside": "Left out of the share: 1 disallowed by robots.txt. Checked on 2,519 websites that answered the UCP pass, which is this file's own denominator set.",
+   "wow": "1 fewer (was 1 of 2,403)",
+   "previous": {
+    "crawl_date": "2026-11-02",
+    "found": 1,
+    "not_found": 2402,
+    "answered": 2403,
+    "refused": 30,
+    "error": 89,
+    "reached": 2523,
+    "share_display": "0.0%"
+   },
+   "found_change": -1,
+   "stores": [],
+   "store_count": 0,
+   "prose": "A2A agent card: found 0 of 1,580 websites that answered (0.0%). Refused 851. Error 87. Left out of the share: 1 disallowed by robots.txt. Checked on 2,519 websites that answered the UCP pass, which is this file's own denominator set. Week over week: 1 fewer (was 1 of 2,403) on 2 November 2026. No tracked store publishes it."
+  }
+ ],
+ "newsletter_text": "Beyond UCP, crawl of 9 November 2026\n\nUCP stays the headline: which stores publish a UCP profile. The same crawl also counts other public signals. Each share uses only the websites that answered for that file. Refused is not \"no\". An error is not \"no\". Those websites are left out of the share.\n\nAgent-readiness pass: 2,865 websites reached. Agent discovery files (Poppy, A2A): 2,519 websites checked.\n\nllms.txt: found 226 of 1,581 websites that answered (14.3%). Refused 1,217. Error 67. Week over week: 2 fewer (was 228 of 1,587) on 2 November 2026. 216 stores publish it.\n\nAGENTS.md: found 31 of 1,517 websites that answered (2.0%). Refused 1,271. Error 76. Left out of the share: 1 disallowed by robots.txt. Week over week: 3 fewer (was 34 of 1,523) on 2 November 2026. 31 stores publish it.\n\nMCP tools: found 8 of 8 websites that answered (100.0%). Refused 11. Error 936. Left out of the share: 1 disallowed by robots.txt; 1,909 whose UCP profile named no MCP endpoint. Week over week: unchanged (was 8 of 8) on 2 November 2026. 8 stores publish it.\n\nAI catalog: found 3 of 1,542 websites that answered (0.2%). Refused 1,240. Error 83. Week over week: unchanged (was 3 of 1,544) on 2 November 2026. 3 stores publish it.\n\nACP: found 1 of 1,548 websites that answered (0.1%). Refused 1,237. Error 80. Week over week: unchanged (was 1 of 1,543) on 2 November 2026. 1 store publishes it.\n\nrobots.txt AI rules: found 312 of 2,333 websites that answered (13.4%). Left out of the share: 532 with no readable robots.txt. This file has no separate refused or error count. Week over week: 3 more (was 309 of 2,334) on 2 November 2026. 279 stores publish it.\n\nContent signals: found 75 of 2,333 websites that answered (3.2%). Left out of the share: 532 with no readable robots.txt. This file has no separate refused or error count. Week over week: unchanged (was 75 of 2,334) on 2 November 2026. 75 stores publish it.\n\nProduct data: found 171 of 307 websites that answered (55.7%). Of the 171 found, 149 have price, currency and availability and 22 have Product markup without all three. Left out of the share: 2 disallowed by robots.txt; 2,556 not reached (no product page). This file has no separate refused or error count. Week over week: 1 more (was 170 of 301) on 2 November 2026. 161 stores publish it.\n\nPoppy: found 1 of 1,605 websites that answered (0.1%). Refused 840. Error 73. Left out of the share: 1 disallowed by robots.txt. Checked on 2,519 websites that answered the UCP pass, which is this file's own denominator set. Week over week: 1 more (was 0 of 2,409) on 2 November 2026. 1 store publishes it.\n\nA2A agent card: found 0 of 1,580 websites that answered (0.0%). Refused 851. Error 87. Left out of the share: 1 disallowed by robots.txt. Checked on 2,519 websites that answered the UCP pass, which is this file's own denominator set. Week over week: 1 fewer (was 1 of 2,403) on 2 November 2026. No tracked store publishes it.\n\nStores for each signal: https://shopbotindex.com/signals.html\nHow we check: https://shopbotindex.com/methodology.html#signals\n"
+}

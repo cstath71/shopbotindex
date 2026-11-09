@@ -12,9 +12,10 @@ The weekly routine drafts the email from `data/changes-latest.json` and the buil
   `Same stores as last week: {same_store.ucp} of the {same_store.n} retailers and stores we tracked in both crawls publish a UCP profile (last week: {same_store.ucp_previous}). {len(newly_tracked)} stores are newly tracked this week and not counted as joining.`
   Joined/left only ever come from stores tracked in both crawls. Never call newly tracked stores "joined" or "new adopters".
 - **Body:** joined / left / couldn't check this time / capability changes, as today. Each store links to its `https://shopbotindex.com/store/<slug>.html` page.
+- **Beyond UCP (required, every issue):** after the UCP joined/left body, paste the block in `data/beyond-ucp-latest.md` (the same text as `newsletter_text` in `data/beyond-ucp-latest.json`). `scripts/build.py` rewrites both from the latest crawl on every build, including each Monday via `scripts/weekly.sh`. Use those counts, denominators and week-over-week lines only. Shares are of websites that answered for that file. Say that a refusal is not "no". Link `https://shopbotindex.com/signals.html` and `https://shopbotindex.com/methodology.html#signals`. Do not invent numbers.
 - **Footer:**
   `ShopBot Index: the weekly index of what online stores tell AI shopping agents · https://shopbotindex.com · How we measure: https://shopbotindex.com/methodology.html · Follow on X: https://x.com/ShopBotIndex`
   `You're getting this because you subscribed at shopbotindex.com. Unsubscribe: {{{RESEND_UNSUBSCRIBE_URL}}} · Privacy: https://shopbotindex.com/privacy.html`
 
-Until five-signals ships and Release 2 adds its change types, don't mention agent tools, AI rules in robots.txt, llms.txt / AI guidance files or product data.
 Never say a store "supports" (in any wording) or "blocks" AI agents, or that agents can or can't buy there.
+The Beyond UCP block states what the crawl found. It does not say a store can or can't be shopped by agents.
