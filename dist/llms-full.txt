@@ -2,7 +2,7 @@
 
 > ShopBot Index is an independent weekly index of what online stores tell AI shopping agents. Every Monday it checks 2854 retailers and stores (3294 websites): Shopify stores, big retailers and other retailers & marketplaces. The headline measure is whether each one publishes a UCP profile, the profile AI shopping agents read, at /.well-known/ucp.
 
-Latest crawl: 2026-11-02. In ShopBot Index's crawl of 2 November 2026, 947 of the 2224 retailers and stores we could check publish a UCP profile, the profile AI shopping agents read (42.6%). By segment: Shopify stores 838 of 1041 (80.5%), big retailers 15 of 255 (5.9%) and other retailers & marketplaces 94 of 928 (10.1%). We couldn't check 630 of the 2854 we track (blocked or unreachable), so they aren't counted, and we re-check every store each Monday.
+Latest crawl: 2026-11-09. In ShopBot Index's crawl of 9 November 2026, 951 of the 2225 retailers and stores we could check publish a UCP profile, the profile AI shopping agents read (42.7%). By segment: Shopify stores 841 of 1042 (80.7%), big retailers 16 of 255 (6.3%) and other retailers & marketplaces 94 of 928 (10.1%). We couldn't check 629 of the 2854 we track (blocked or unreachable), so they aren't counted, and we re-check every store each Monday.
 
 How to read the results:
 - "UCP profile found": the store publishes a Universal Commerce Protocol profile at /.well-known/ucp and lists what it supports. A UCP profile isn't proof that AI agents can shop at a store.
@@ -15,8 +15,8 @@ How to read the results:
 - [Home](https://shopbotindex.com/): Headline numbers from the latest crawl, by segment, big retailers with a UCP profile, capabilities and payment handlers.
 - [All stores](https://shopbotindex.com/stores.html): Every one of the 2854 retailers and stores with its result (the table is drawn with JavaScript; each store also has its own page under /store/).
 - [Segments](https://shopbotindex.com/segments/): Shopify stores, big retailers, other retailers & marketplaces, side by side.
-- [Shopify stores](https://shopbotindex.com/segments/shopify.html): 838 of 1041 checked publish a UCP profile (80.5%).
-- [Big retailers](https://shopbotindex.com/segments/big.html): 15 of 255 checked publish a UCP profile (5.9%).
+- [Shopify stores](https://shopbotindex.com/segments/shopify.html): 841 of 1042 checked publish a UCP profile (80.7%).
+- [Big retailers](https://shopbotindex.com/segments/big.html): 16 of 255 checked publish a UCP profile (6.3%).
 - [Other retailers & marketplaces](https://shopbotindex.com/segments/other.html): 94 of 928 checked publish a UCP profile (10.1%).
 - [Capabilities](https://shopbotindex.com/capabilities/): What UCP profiles declare (checkout, cart, catalog search and more), with the stores declaring each.
 - [Categories](https://shopbotindex.com/categories/): Results by store category.
@@ -38,16 +38,16 @@ How to read the results:
 ## FAQ
 
 - **What is a UCP profile?** A Universal Commerce Protocol (UCP) profile is a JSON file a store publishes at `/.well-known/ucp`: the machine-readable profile AI shopping agents read. It lists the protocol version, services, capabilities (for example checkout, cart or catalog search) and payment handlers. [How we check it](https://shopbotindex.com/methodology.html).
-- **How many online stores publish a UCP profile?** In our crawl of 2 November 2026, 947 of the 2224 retailers and stores we could check (42.6%). By segment: Shopify stores 838 of 1041 (80.5%), big retailers 15 of 255 (5.9%) and other retailers & marketplaces 94 of 928 (10.1%). These are shares of our list of 2854, not of all online stores.
-- **Which big retailers publish a UCP profile?** 15 in the crawl of 2 November 2026: American Eagle Outfitters, Asprey, Debenhams PLC, FAO Schwarz, Farfetch, Flying Tiger Copenhagen, Hamleys, IKEA, Mexx, On AG, Pepco, Poundland, Quiksilver, The Body Shop and Zellers. That is 15 of the 255 big retailers we could check. [See all big retailers](https://shopbotindex.com/segments/big.html).
+- **How many online stores publish a UCP profile?** In our crawl of 9 November 2026, 951 of the 2225 retailers and stores we could check (42.7%). By segment: Shopify stores 841 of 1042 (80.7%), big retailers 16 of 255 (6.3%) and other retailers & marketplaces 94 of 928 (10.1%). These are shares of our list of 2854, not of all online stores.
+- **Which big retailers publish a UCP profile?** 16 in the crawl of 9 November 2026: American Eagle Outfitters, Asprey, Boozt, Debenhams PLC, FAO Schwarz, Farfetch, Flying Tiger Copenhagen, Hamleys, IKEA, Mexx, On AG, Pepco, Poundland, Quiksilver, The Body Shop and Zellers. That is 16 of the 255 big retailers we could check. [See all big retailers](https://shopbotindex.com/segments/big.html).
 - **What does it mean if a store has no UCP profile?** Only that we found no profile at `/.well-known/ucp`. Some agent shopping runs through a normal web browser or through channels we can't see from outside, such as product feeds shared privately with AI assistants. Equally, a UCP profile isn't proof that AI agents can shop at a store.
-- **How often is ShopBot Index updated?** Every week. The crawl runs on Mondays; the latest was on 2 November 2026 and the next is due on 9 November 2026. [See what changed](https://shopbotindex.com/changes.html).
+- **How often is ShopBot Index updated?** Every week. The crawl runs on Mondays; the latest was on 9 November 2026 and the next is due on 16 November 2026. [See what changed](https://shopbotindex.com/changes.html).
 - **How can I check my own store?** Type its domain into [Check your store](https://shopbotindex.com/check.html). It looks the domain up in our latest crawl. If the store isn't in the index yet, email [hello@shopbotindex.com](mailto:hello@shopbotindex.com) and we'll include it in a future crawl.
 
 ## Methodology
 
 - **What does ShopBot Index check on each website?** It reads `/robots.txt` first, then fetches `/.well-known/ucp`, where the UCP specification says a business publishes its profile. It also records supporting signals: an MCP endpoint named in the UCP profile, AI-agent rules in robots.txt, `/llms.txt` or `/agents.md`, and schema.org Product markup on one product page. [Details](https://shopbotindex.com/methodology.html#signals).
-- **Why are some stores marked "couldn't check"?** Every one of their websites refused our request (401/403/429), timed out, failed TLS or DNS, or disallowed the path in robots.txt. We never try to get around that. These stores are shown separately and left out of adoption rates: 630 of 2854 in the crawl of 2 November 2026.
+- **Why are some stores marked "couldn't check"?** Every one of their websites refused our request (401/403/429), timed out, failed TLS or DNS, or disallowed the path in robots.txt. We never try to get around that. These stores are shown separately and left out of adoption rates: 629 of 2854 in the crawl of 9 November 2026.
 - **Which stores are tracked?** Three segments, side by side: Shopify stores (1330), Big retailers (350) and Other retailers & marketplaces (1174). They come from Wikipedia and Wikidata lists and public lists of Shopify stores. This is not a random sample of all stores, so shares are shares of our list.
 - **How many requests does the crawler send?** Usually 10 to 14 per website per week, and never more than 18, one at a time per website, with robots.txt respected for every URL. [How we fetch](https://shopbotindex.com/methodology.html#crawler).
 - **How can a website opt out?** Disallow `/` (or just the paths we read) for `ShopBotIndexBot` in robots.txt, or email [hello@shopbotindex.com](mailto:hello@shopbotindex.com).
@@ -58,42 +58,43 @@ How to read the results:
 hello@shopbotindex.com · https://x.com/ShopBotIndex
 
 
-## Results by segment (crawl of 2026-11-02)
+## Results by segment (crawl of 2026-11-09)
 
-- Shopify stores (Stores from public lists of Shopify stores.): 1330 tracked, 838 UCP profile found, 203 no UCP profile found, 289 couldn't check; 838 of 1041 checked (80.5%).
-- Big retailers (Retailers on Wikipedia's List of largest retail companies, or with Wikipedia articles in 10+ languages.): 350 tracked, 15 UCP profile found, 240 no UCP profile found, 95 couldn't check; 15 of 255 checked (5.9%).
+- Shopify stores (Stores from public lists of Shopify stores.): 1330 tracked, 841 UCP profile found, 201 no UCP profile found, 288 couldn't check; 841 of 1042 checked (80.7%).
+- Big retailers (Retailers on Wikipedia's List of largest retail companies, or with Wikipedia articles in 10+ languages.): 350 tracked, 16 UCP profile found, 239 no UCP profile found, 95 couldn't check; 16 of 255 checked (6.3%).
 - Other retailers & marketplaces (Other retail chains, department stores, supermarkets, hypermarkets and online marketplaces listed on Wikipedia or Wikidata.): 1174 tracked, 94 UCP profile found, 834 no UCP profile found, 246 couldn't check; 94 of 928 checked (10.1%).
 
-## Capabilities declared in UCP profiles (947 stores with a profile)
+## Capabilities declared in UCP profiles (951 stores with a profile)
 
-- Checkout (`dev.ucp.shopping.checkout`): 943 of 947 (99.6%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-checkout.html
-- Fulfillment (shipping options) (`dev.ucp.shopping.fulfillment`): 942 of 947 (99.5%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-fulfillment.html
-- Cart (`dev.ucp.shopping.cart`): 940 of 947 (99.3%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-cart.html
-- Discount codes (`dev.ucp.shopping.discount`): 940 of 947 (99.3%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-discount.html
-- Order management (`dev.ucp.shopping.order`): 934 of 947 (98.6%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-order.html
-- Catalog lookup (`dev.ucp.shopping.catalog.lookup`): 930 of 947 (98.2%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-catalog-lookup.html
-- Catalog search (`dev.ucp.shopping.catalog.search`): 930 of 947 (98.2%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-catalog-search.html
-- Identity linking (account sign-in) (`dev.ucp.common.identity_linking`): 923 of 947 (97.5%) - https://shopbotindex.com/capabilities/dev-ucp-common-identity-linking.html
-- Buyer consent (`dev.ucp.shopping.buyer_consent`): 923 of 947 (97.5%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-buyer-consent.html
-- Shopify catalog (vendor extension) (`dev.shopify.catalog`): 922 of 947 (97.4%) - https://shopbotindex.com/capabilities/dev-shopify-catalog.html
-- dev.shopify.shopping.declared_fields (`dev.shopify.shopping.declared_fields`): 922 of 947 (97.4%) - https://shopbotindex.com/capabilities/dev-shopify-shopping-declared-fields.html
-- dev.ucp.common.ask (`dev.ucp.common.ask`): 922 of 947 (97.4%) - https://shopbotindex.com/capabilities/dev-ucp-common-ask.html
-- Permalinks (`dev.ucp.shopping.permalink`): 922 of 947 (97.4%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-permalink.html
-- dev.ucp.common.location.lookup (`dev.ucp.common.location.lookup`): 104 of 947 (11.0%) - https://shopbotindex.com/capabilities/dev-ucp-common-location-lookup.html
-- dev.ucp.common.location.search (`dev.ucp.common.location.search`): 104 of 947 (11.0%) - https://shopbotindex.com/capabilities/dev-ucp-common-location-search.html
-- dev.ucp.common.payment.authentication (`dev.ucp.common.payment.authentication`): 1 of 947 (0.1%) - https://shopbotindex.com/capabilities/dev-ucp-common-payment-authentication.html
-- google.commerce.shopping.lookup (`google.commerce.shopping.lookup`): 1 of 947 (0.1%) - https://shopbotindex.com/capabilities/google-commerce-shopping-lookup.html
-- google.commerce.shopping.search (`google.commerce.shopping.search`): 1 of 947 (0.1%) - https://shopbotindex.com/capabilities/google-commerce-shopping-search.html
-- complete_checkout (`complete_checkout`): 1 of 947 (0.1%) - https://shopbotindex.com/capabilities/complete-checkout.html
-- payment_handlers (`payment_handlers`): 1 of 947 (0.1%) - https://shopbotindex.com/capabilities/payment-handlers.html
+- Checkout (`dev.ucp.shopping.checkout`): 947 of 951 (99.6%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-checkout.html
+- Fulfillment (shipping options) (`dev.ucp.shopping.fulfillment`): 946 of 951 (99.5%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-fulfillment.html
+- Discount codes (`dev.ucp.shopping.discount`): 944 of 951 (99.3%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-discount.html
+- Cart (`dev.ucp.shopping.cart`): 943 of 951 (99.2%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-cart.html
+- Order management (`dev.ucp.shopping.order`): 937 of 951 (98.5%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-order.html
+- Catalog lookup (`dev.ucp.shopping.catalog.lookup`): 933 of 951 (98.1%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-catalog-lookup.html
+- Catalog search (`dev.ucp.shopping.catalog.search`): 933 of 951 (98.1%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-catalog-search.html
+- Identity linking (account sign-in) (`dev.ucp.common.identity_linking`): 926 of 951 (97.4%) - https://shopbotindex.com/capabilities/dev-ucp-common-identity-linking.html
+- Buyer consent (`dev.ucp.shopping.buyer_consent`): 926 of 951 (97.4%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-buyer-consent.html
+- Shopify catalog (vendor extension) (`dev.shopify.catalog`): 925 of 951 (97.3%) - https://shopbotindex.com/capabilities/dev-shopify-catalog.html
+- dev.shopify.shopping.declared_fields (`dev.shopify.shopping.declared_fields`): 925 of 951 (97.3%) - https://shopbotindex.com/capabilities/dev-shopify-shopping-declared-fields.html
+- dev.ucp.common.ask (`dev.ucp.common.ask`): 925 of 951 (97.3%) - https://shopbotindex.com/capabilities/dev-ucp-common-ask.html
+- Permalinks (`dev.ucp.shopping.permalink`): 925 of 951 (97.3%) - https://shopbotindex.com/capabilities/dev-ucp-shopping-permalink.html
+- dev.ucp.common.location.lookup (`dev.ucp.common.location.lookup`): 106 of 951 (11.1%) - https://shopbotindex.com/capabilities/dev-ucp-common-location-lookup.html
+- dev.ucp.common.location.search (`dev.ucp.common.location.search`): 106 of 951 (11.1%) - https://shopbotindex.com/capabilities/dev-ucp-common-location-search.html
+- dev.ucp.common.payment.authentication (`dev.ucp.common.payment.authentication`): 1 of 951 (0.1%) - https://shopbotindex.com/capabilities/dev-ucp-common-payment-authentication.html
+- google.commerce.shopping.lookup (`google.commerce.shopping.lookup`): 1 of 951 (0.1%) - https://shopbotindex.com/capabilities/google-commerce-shopping-lookup.html
+- google.commerce.shopping.search (`google.commerce.shopping.search`): 1 of 951 (0.1%) - https://shopbotindex.com/capabilities/google-commerce-shopping-search.html
+- complete_checkout (`complete_checkout`): 1 of 951 (0.1%) - https://shopbotindex.com/capabilities/complete-checkout.html
+- payment_handlers (`payment_handlers`): 1 of 951 (0.1%) - https://shopbotindex.com/capabilities/payment-handlers.html
 
 ## Payment handlers listed
 
-- Google Pay (`com.google.pay`): 268 of 947
-- Shopify card handler (`dev.shopify.card`): 262 of 947
-- Shop Pay (`dev.shopify.shop_pay`): 262 of 947
+- Google Pay (`com.google.pay`): 270 of 951
+- Shopify card handler (`dev.shopify.card`): 263 of 951
+- Shop Pay (`dev.shopify.shop_pay`): 263 of 951
+- com.klarna.payments (`com.klarna.payments`): 1 of 951
 
-## All 947 retailers and stores with a UCP profile (crawl of 2026-11-02)
+## All 951 retailers and stores with a UCP profile (crawl of 2026-11-09)
 
 - [100kmph.com](https://shopbotindex.com/store/100kmph-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [18herbs.com](https://shopbotindex.com/store/18herbs-com.html) (Shopify stores; 13 capabilities declared, including checkout)
@@ -175,7 +176,6 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [bajaao.com](https://shopbotindex.com/store/bajaao-com.html) (Shopify stores; 15 capabilities declared, including checkout)
 - [bandidospitstop.com](https://shopbotindex.com/store/bandidospitstop-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [barenecessities.in](https://shopbotindex.com/store/barenecessities-in.html) (Shopify stores; 13 capabilities declared, including checkout)
-- [basicbrowns.com](https://shopbotindex.com/store/basicbrowns-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bathbombs.com](https://shopbotindex.com/store/bathbombs-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [baublebuy.com](https://shopbotindex.com/store/baublebuy-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bbcicecream.com](https://shopbotindex.com/store/bbcicecream-com.html) (Shopify stores; 15 capabilities declared, including checkout)
@@ -191,6 +191,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [beminimalist.co](https://shopbotindex.com/store/beminimalist-co.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bengalloomsindia.com](https://shopbotindex.com/store/bengalloomsindia-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [benkibrewingtools.com](https://shopbotindex.com/store/benkibrewingtools-com.html) (Shopify stores; 13 capabilities declared, including checkout)
+- [berrylush.com](https://shopbotindex.com/store/berrylush-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [beruru.com](https://shopbotindex.com/store/beruru-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bespokehomejewels.com](https://shopbotindex.com/store/bespokehomejewels-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bestlifenaturals.in](https://shopbotindex.com/store/bestlifenaturals-in.html) (Shopify stores; 13 capabilities declared, including checkout)
@@ -228,6 +229,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [bombucha.in](https://shopbotindex.com/store/bombucha-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bookkish.com](https://shopbotindex.com/store/bookkish-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bookstech.in](https://shopbotindex.com/store/bookstech-in.html) (Shopify stores; 13 capabilities declared, including checkout)
+- [Boozt](https://shopbotindex.com/store/boozt.html) (Big retailers; 3 capabilities declared, including checkout)
 - [borgioli.nl](https://shopbotindex.com/store/borgioli-nl.html) (Shopify stores; 15 capabilities declared, including checkout)
 - [boultaudio.com](https://shopbotindex.com/store/boultaudio-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [bowsandarrowsberkeley.com](https://shopbotindex.com/store/bowsandarrowsberkeley-com.html) (Shopify stores; 15 capabilities declared, including checkout)
@@ -350,7 +352,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [ekmik.com](https://shopbotindex.com/store/ekmik-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [elanstore.in](https://shopbotindex.com/store/elanstore-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [elante.co.in](https://shopbotindex.com/store/elante-co-in.html) (Shopify stores; 13 capabilities declared, including checkout)
-- [elegantautoretail.com](https://shopbotindex.com/store/elegantautoretail-com.html) (Shopify stores; 13 capabilities declared, including checkout)
+- [elegantautoretail.com](https://shopbotindex.com/store/elegantautoretail-com.html) (Shopify stores; 15 capabilities declared, including checkout)
 - [elfenwatches.com](https://shopbotindex.com/store/elfenwatches-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [Emma Sleep](https://shopbotindex.com/store/emma-sleep.html) (Other retailers & marketplaces; 13 capabilities declared, including checkout)
 - [emmeke.nl](https://shopbotindex.com/store/emmeke-nl.html) (Shopify stores; 13 capabilities declared, including checkout)
@@ -538,7 +540,6 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [keeros.in](https://shopbotindex.com/store/keeros-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [kharakapas.com](https://shopbotindex.com/store/kharakapas-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [kicaactive.com](https://shopbotindex.com/store/kicaactive-com.html) (Shopify stores; 13 capabilities declared, including checkout)
-- [kidsmandi.com](https://shopbotindex.com/store/kidsmandi-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [kimirica.shop](https://shopbotindex.com/store/kimirica-shop.html) (Shopify stores; 15 capabilities declared, including checkout)
 - [kitabay.com](https://shopbotindex.com/store/kitabay-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [kith.com](https://shopbotindex.com/store/kith-com.html) (Shopify stores; 13 capabilities declared, including checkout)
@@ -696,6 +697,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [Ollie's Bargain Outlet](https://shopbotindex.com/store/ollie-s-bargain-outlet.html) (Other retailers & marketplaces; 13 capabilities declared, including checkout)
 - [omobikes.com](https://shopbotindex.com/store/omobikes-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [On AG](https://shopbotindex.com/store/on-ag.html) (Big retailers; 13 capabilities declared, including checkout)
+- [oneness287.com](https://shopbotindex.com/store/oneness287-com.html) (Shopify stores; 15 capabilities declared, including checkout)
 - [onezeros.in](https://shopbotindex.com/store/onezeros-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [onlineprasad.com](https://shopbotindex.com/store/onlineprasad-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [organicgyaan.com](https://shopbotindex.com/store/organicgyaan-com.html) (Shopify stores; 13 capabilities declared, including checkout)
@@ -809,6 +811,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [seikowatches.co.in](https://shopbotindex.com/store/seikowatches-co-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [seute.in](https://shopbotindex.com/store/seute-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [shadesofspring.in](https://shopbotindex.com/store/shadesofspring-in.html) (Shopify stores; 13 capabilities declared, including checkout)
+- [shahenaz.com](https://shopbotindex.com/store/shahenaz-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [shinexpro.in](https://shopbotindex.com/store/shinexpro-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [shirtdeal.nl](https://shopbotindex.com/store/shirtdeal-nl.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [ShirtPunch](https://shopbotindex.com/store/shirtpunch.html) (Other retailers & marketplaces; 13 capabilities declared, including checkout)
@@ -843,6 +846,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [skinkraft.com](https://shopbotindex.com/store/skinkraft-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [skippi.in](https://shopbotindex.com/store/skippi-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [skorganicfarms.com](https://shopbotindex.com/store/skorganicfarms-com.html) (Shopify stores; 13 capabilities declared, including checkout)
+- [skybags.co.in](https://shopbotindex.com/store/skybags-co-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [skybluestationerymart.com](https://shopbotindex.com/store/skybluestationerymart-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [skyshopy.com](https://shopbotindex.com/store/skyshopy-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [Sleep Country Canada](https://shopbotindex.com/store/sleep-country-canada.html) (Other retailers & marketplaces; 5 capabilities declared, including checkout)
@@ -950,6 +954,7 @@ hello@shopbotindex.com · https://x.com/ShopBotIndex
 - [theobjects.in](https://shopbotindex.com/store/theobjects-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [thepostbox.in](https://shopbotindex.com/store/thepostbox-in.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [theprink.in](https://shopbotindex.com/store/theprink-in.html) (Shopify stores; 13 capabilities declared, including checkout)
+- [theseersecret.com](https://shopbotindex.com/store/theseersecret-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [thesportsedit.com](https://shopbotindex.com/store/thesportsedit-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [thestateplate.com](https://shopbotindex.com/store/thestateplate-com.html) (Shopify stores; 13 capabilities declared, including checkout)
 - [thestiffcollar.com](https://shopbotindex.com/store/thestiffcollar-com.html) (Shopify stores; 13 capabilities declared, including checkout)
