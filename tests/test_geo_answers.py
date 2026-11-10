@@ -9,7 +9,7 @@ def T(h): return re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>','',h))).strip
 def lds(h): return [json.loads(m) for m in re.findall(r'<script type="application/ld\+json">(.*?)</script>',h,re.S)]
 def faq(h): return [x for o in lds(h) for x in o.get('@graph',[o]) if x.get('@type')=='FAQPage'][0]
 def sentences(text): return re.findall(r'\.(?=\s|$)', text)
-CONTENT_FLOOR='2026-11-10'
+CONTENT_FLOOR='2026-11-11'
 
 def stats():
     import sys
@@ -116,11 +116,20 @@ class GeoAnswers(unittest.TestCase):
             self.assertIn('does not by itself prove that agents can check out', summary)
             self._faq_matches(h)
             qs=[q['name'] for q in faq(h)['mainEntity']]
-            self.assertEqual(qs, [
+            base=[
                 'What is a UCP profile?',
                 'How do I check whether a store publishes a UCP profile?',
                 'Does a UCP profile mean agents can check out?',
-                'How many stores publish a UCP profile?'])
+                'How many stores publish a UCP profile?']
+            if path=='check.html':
+                self.assertEqual(qs, ['How can I check if my online store is ready for AI shopping agents?']+base)
+                how=faq(h)['mainEntity'][0]['acceptedAnswer']['text']
+                self.assertIn('/.well-known/ucp', how)
+                self.assertIn('all-stores table', how)
+                self.assertIn('href="stores.html"', h)
+                self.assertIn('does not by itself prove that agents can check out', how)
+            else:
+                self.assertEqual(qs, base)
             by={q['name']:q['acceptedAnswer']['text'] for q in faq(h)['mainEntity']}
             self.assertIn('does not by itself prove that agents can check out', by['Does a UCP profile mean agents can check out?'])
             self.assertIn('published declaration', by['Does a UCP profile mean agents can check out?'])

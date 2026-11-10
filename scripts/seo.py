@@ -155,21 +155,29 @@ def run(g):
             lds.append(faq_ld(g['CHECK_FAQ']))
         elif p==g.get('GUIDE_PATH') and g.get('GUIDE_FAQ'):
             lds.append(faq_ld(g['GUIDE_FAQ']))
-        meta=(g.get('SIGNAL_PAGES') or {}).get(p)
+        meta=(g.get('SIGNAL_PAGES') or {}).get(p) or (g.get('ANSWER_PAGES') or {}).get(p)
         if meta:
             url=SITE+'/'+p.replace('index.html',''); stamp=g.get('PAGE_STAMP') or DAY
             lead=_txt(meta['lead']); name=html.unescape(re.search(r'<title>(.*?)</title>',h).group(1))
             lds.append({"@type":"WebPage","@id":url+"#webpage","url":url,"name":name,"dateModified":stamp,"description":_txt(meta['desc']),"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}})
             lds.append({"@type":"Dataset","name":meta['h1'],"description":lead,"url":url,"dateModified":stamp,
                         "creator":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"license":SITE+"/terms.html","isBasedOn":{"@id":SITE+"/#dataset"},
-                        "measurementTechnique":"Public file or page fetched after robots.txt, rolled up to one result per store"})
+                        "measurementTechnique":meta.get('technique') or "Public file or page fetched after robots.txt, rolled up to one result per store"})
             lds.append(faq_ld(meta['faq']))
-            trail=[(NAME,''),('Beyond UCP','signals.html'),(meta['h1'], p.replace('index.html',''))]
+            trail=meta.get('trail') or [(NAME,''),('Beyond UCP','signals.html'),(meta['h1'], p.replace('index.html',''))]
             lds.append({"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+'/'+u} for i,(n,u) in enumerate(trail)]})
+            def _items(rows, list_name, description):
+                lds.append({"@type":"ItemList","name":list_name,"numberOfItems":len(rows),"description":description,
+                            "itemListElement":[{"@type":"ListItem","position":i+1,"name":it['name'],
+                                                **({"url":SITE+'/'+it['path']} if it.get('path') else {}),
+                                                **({"description":it['description']} if it.get('description') else {})}
+                                               for i,it in enumerate(rows)]})
             big=meta.get('big_items') or []
             if big:
-                lds.append({"@type":"ItemList","name":"Big retailers in this count","numberOfItems":len(big),"description":_txt(meta['faq'][1][1]) if len(meta['faq'])>1 else lead,
-                            "itemListElement":[{"@type":"ListItem","position":i+1,"name":it['name'],**({"url":SITE+'/'+it['path']} if it.get('path') else {})} for i,it in enumerate(big)]})
+                _items(big, "Big retailers in this count", _txt(meta['faq'][1][1]) if len(meta['faq'])>1 else lead)
+            named=meta.get('list_items') or []
+            if named:
+                _items(named, meta.get('list_name') or meta['h1'], lead)
         if lds: h=h.replace('</head>',_ld({"@context":"https://schema.org","@graph":lds})+'</head>',1)
         open(fp,'w').write(h)
     # ---- robots.txt, sitemap.xml, llms.txt, llms-full.txt, IndexNow key ----
@@ -210,16 +218,19 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('Categories','categories/','Results by store category.'),
            ('What changed','changes.html','This week compared with the previous crawl: who started or stopped publishing a UCP profile.'),
            ('Beyond UCP','signals.html','Public signals other than the UCP profile. The page opens with a store-level answer for every signal, then counts websites that answered for each file.'),
-           ('ACP','signals/acp/','How many stores publish an Agentic Commerce Protocol discovery file.'),
-           ('llms.txt','signals/llms-txt/','How many stores publish an llms.txt file.'),
+           ('ACP','signals/acp/','Which stores publish an Agentic Commerce Protocol (ACP) discovery file.'),
+           ('llms.txt','signals/llms-txt/','How many online stores have an llms.txt file in 2026.'),
            ('AGENTS.md','signals/agents-md/','How many stores publish an AGENTS.md file.'),
            ('AI catalog','signals/ai-catalog/','How many stores publish an AI catalog.'),
-           ('MCP','signals/mcp/','How many stores name an MCP endpoint in their UCP profile, and how many of those endpoints returned a tools list.'),
-           ('AI bots in robots.txt','signals/ai-bots-robots/','How many stores name AI crawlers in robots.txt, disallow the whole site with a wildcard rule, or publish a Content-Signal line.'),
+           ('MCP','signals/mcp/','Which online stores publish an MCP server for AI agents, and which endpoints returned a tools list.'),
+           ('AI bots in robots.txt','signals/ai-bots-robots/','Which retailers block AI bots like GPTBot in robots.txt, and how many stores name an AI crawler.'),
            ('Bot protection','signals/bot-protection/','How many stores were refused by bot protection.'),
            ('Product data','signals/product-data/','How many stores have schema.org Product markup on a product page we fetched.'),
            ('Agent cards','signals/agent-cards/','How many stores publish a valid Poppy file or a valid A2A agent card.'),
-           ('Check your store','check.html','Look up any domain in the latest crawl.'),
+           ('Which stores declare UCP checkout','which-stores-declare-ucp-checkout/','Which stores declare checkout in the UCP profile they publish.'),
+           ('Payment handlers','payment-handlers/','Which payment handlers stores declare in a UCP profile, including Shop Pay and Google Pay.'),
+           ('What is a UCP profile','guides/what-is-a-ucp-profile/','What a /.well-known/ucp profile is for AI shopping agents, and whether it means an agent can check out.'),
+           ('Check your store','check.html','How to check whether an online store publishes a UCP profile: fetch /.well-known/ucp, or look the domain up in this crawl.'),
            ('Methodology','methodology.html','Exactly what we fetch, how, and what the results do and don\'t mean.'),
            ('Guides','guides/','Short guides on how to read ShopBot Index results.'),
            ('What a published UCP profile proves','guides/what-a-ucp-profile-proves/','What a published UCP profile tells you, why an unchecked store stays unknown, and how to read the index without overstating a result.'),
@@ -270,6 +281,7 @@ def _llms_full(g,llms,ALL,SS):
     out.append(f'\n## Capabilities declared in UCP profiles ({len(U)} stores with a profile)\n')
     out+= [f'- {capn(c)} (`{c}`): {v} of {len(U)} ({g["pct"](v,len(U))}) - {SITE}/capabilities/{slug(c)}.html' for c,v in g['CAPC'].most_common()]
     out.append(f'\n## Payment handlers listed\n')
+    out.append(f'Counts of handlers stores declare in a UCP profile: {SITE}/payment-handlers/')
     out+= [f'- {g["phn"](p)} (`{p}`): {v} of {len(U)}' for p,v in g['PHC'].most_common()]
     out.append(f'\n## All {len(U)} retailers and stores with a UCP profile (crawl of {DAY})\n')
     out+= [f'- [{r["name"]}]({SITE}/store/{g["SLUG"][r["id"]]}.html) ({SEG[r["segment"]]}; {len(r["capabilities"])} capabilities declared{", including checkout" if "dev.ucp.shopping.checkout" in r["capabilities"] else ""})' for r in sorted(U,key=lambda r:r['name'].lower())]

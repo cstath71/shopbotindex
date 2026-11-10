@@ -30,7 +30,7 @@ CAPNAME={'dev.ucp.shopping.checkout':'Checkout','dev.ucp.shopping.cart':'Cart','
  'dev.ucp.shopping.discount':'Discount codes','dev.ucp.shopping.order':'Order management','dev.ucp.shopping.buyer_consent':'Buyer consent',
  'dev.ucp.shopping.catalog.search':'Catalog search','dev.ucp.shopping.catalog.lookup':'Catalog lookup','dev.ucp.common.identity_linking':'Identity linking (account sign-in)',
  'dev.ucp.shopping.permalink':'Permalinks','dev.shopify.catalog':'Shopify catalog (vendor extension)'}
-PHNAME={'com.google.pay':'Google Pay','dev.shopify.card':'Shopify card handler','dev.shopify.shop_pay':'Shop Pay','com.paypal':'PayPal'}
+PHNAME={'com.google.pay':'Google Pay','dev.shopify.card':'Shopify card handler','dev.shopify.shop_pay':'Shop Pay','com.paypal':'PayPal','com.klarna.payments':'Klarna'}
 capn=lambda c: CAPNAME.get(c,c); phn=lambda p: PHNAME.get(p,p)
 def pct(a,b): return f'{(100*a/b):.1f}%' if b else 'n/a'
 def segstats(rs):
@@ -333,7 +333,7 @@ import datetime as _dt_home
 def _long(d):
     x=_dt_home.date.fromisoformat(d); return f'{x.day} {x.strftime("%B")} {x.year}'
 _day_long=_long(DAY)
-CONTENT_UPDATED='2026-11-10'  # answer-first copy shipped this day; page lastmod is the later of this and the crawl date
+CONTENT_UPDATED='2026-11-11'  # answer pages for the 10 Nov citation gaps; page lastmod is the later of this and the crawl date
 PAGE_STAMP=CONTENT_UPDATED if CONTENT_UPDATED>DAY else DAY
 _cc_note=(f'<p class="muted">Of those {_ccn} on {_day_long}: {_ccs["robots_disallow"]} robots.txt disallow, {_ccs["blocked"]} refused (401/403/429/451), {_ccs["error"]} timeout or connection error, {_ccs["mixed"]} mixed. '
           f'<a href="methodology.html#couldnt-check">How we split that</a>. That split is about why our crawler got no answer; it does not say what AI shopping agents see.</p>') if _ccn else ''
@@ -357,8 +357,8 @@ home=f'''<h1>What online stores tell AI shopping agents</h1>
 <h2>Big retailers with a UCP profile ({len(BIGU)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({r['sites_with_ucp']} of {r['sites_checked']} sites{', '+E('/'.join(r['platforms'])) if r['platforms'] else ''})</small></li>" for r in BIGU)+"</ul>" if BIGU else "<p>None found in this crawl.</p>"}
 <h2>UCP profiles not on Shopify ({len(NONSHOP)})</h2>{"<ul class='cols'>"+"".join(f"<li>{E(r['name'])} <small>({E(SEG[r['segment']])})</small></li>" for r in NONSHOP)+"</ul>" if NONSHOP else "<p>None found.</p>"}
 <p><a href="stores.html"><b>Browse all {len(RET)} stores →</b></a></p>
-<h2>What UCP profiles declare</h2>{bars(CAPC,len(U),capn,lambda k:f"capabilities/{slug(k)}.html")}
-<h2>Payment handlers listed</h2>{bars(PHC,len(U),phn)}
+<h2>What UCP profiles declare</h2><p><a href="which-stores-declare-ucp-checkout/">Which stores declare UCP checkout</a> names every store whose profile declares checkout. Declaring checkout is not proof an agent can buy.</p>{bars(CAPC,len(U),capn,lambda k:f"capabilities/{slug(k)}.html")}
+<h2>Payment handlers listed</h2><p><a href="payment-handlers/">Which payment handlers do stores declare in their UCP profile</a>, counted only among stores that publish a UCP profile. A declared handler is not proof that an agent can pay.</p>{bars(PHC,len(U),phn)}
 <h2>Which AI assistants name which retailers</h2><p>From public announcements and help pages only. <a href="assistants.html">Details →</a></p>
 <div class="tw nomax"><table><tr><th>Assistant</th><th>Retailers named</th><th>Source</th></tr>{"".join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"].split(" (")[-1].rstrip(")"))}</a>, {E(c["date"])}</td></tr>' for c in CH["channels"])}</table></div>
 {signup()}{aff()}'''
@@ -393,11 +393,11 @@ _figs=(f'{_adoption()} We couldn\'t check {_num(ALLS["cc"])} of the {_num(ALLS["
 def _how(where):
     return (f'{where} The lookup reads the ShopBot Index crawl of {_day_long}, which tracks {_num(ALLS["n"])} retailers and stores. '
             f'It does not fetch the store live. If the domain is not in the index yet, the result links you to ask us to add it.')
-CHECK_SUMMARY=(f'{_adoption()} A UCP profile is a JSON file a store publishes at <code>/.well-known/ucp</code>, and publishing one does not by itself prove that agents can check out. '
-               f'Type a domain below to look that store up in this crawl.')
+CHECK_SUMMARY=(f'{_adoption()} To check your store, fetch <code>https://your-domain/.well-known/ucp</code> (a JSON file means the store publishes a UCP profile) or look the domain up on the <a href="stores.html">all-stores table</a> and in the form on this page, which reads the crawl of {_day_long} and does not fetch the store live, and publishing a UCP profile does not by itself prove that agents can check out.')
 GUIDE_SUMMARY=(f'{_adoption()} A published UCP profile is a machine-readable declaration at <code>/.well-known/ucp</code>, and it does not by itself prove that agents can check out. '
-               f'To check one store, look up its domain on <a href="../../check.html">Check your store</a>, which reads this crawl and does not fetch the store live.')
-CHECK_FAQ=[('What is a UCP profile?', _what_a),
+               f'To check one store, look up its domain on <a href="../../check.html">Check your store</a>, which reads this crawl and does not fetch the store live, and read <a href="../what-is-a-ucp-profile/">what a /.well-known/ucp profile is</a>.')
+CHECK_FAQ=[('How can I check if my online store is ready for AI shopping agents?', CHECK_SUMMARY),
+           ('What is a UCP profile?', _what_a),
            ('How do I check whether a store publishes a UCP profile?', _how('Type the store domain into the form on this page.')),
            ('Does a UCP profile mean agents can check out?', _checkout_a),
            ('How many stores publish a UCP profile?', _figs)]
@@ -503,10 +503,11 @@ for k in SEG:
         intro=f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.{newly}</p>'
         page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',intro+tail)
 # ---- capabilities ----
-page('capabilities/index.html',f'UCP capabilities | {NAME}',f'<h1>UCP capabilities</h1><p class="lede">Capabilities declared in UCP profiles, counted per retailer/store ({len(U)} with a profile).</p><ul>{"".join(f"<li><a href=\"{slug(c)}.html\">{E(capn(c))}</a>: {v} <small>(<code>{E(c)}</code>)</small></li>" for c,v in CAPC.most_common())}</ul>')
+page('capabilities/index.html',f'UCP capabilities | {NAME}',f'<h1>UCP capabilities</h1><p class="lede">Capabilities declared in UCP profiles, counted per retailer/store ({len(U)} with a profile).</p><p><a href="../which-stores-declare-ucp-checkout/">Which stores declare UCP checkout</a> lists every store whose profile declares checkout.</p><ul>{"".join(f"<li><a href=\"{slug(c)}.html\">{E(capn(c))}</a>: {v} <small>(<code>{E(c)}</code>)</small></li>" for c,v in CAPC.most_common())}</ul>')
 for c,v in CAPC.items():
     rs=[r for r in U if c in r['capabilities']]; sc=collections.Counter(r['segment'] for r in rs)
-    page(f'capabilities/{slug(c)}.html',f'{capn(c)}: stores declaring it | {NAME}',f'<h1>{E(capn(c))}</h1><p class="lede"><code>{E(c)}</code> is declared by {v} of {len(U)} stores with a UCP profile ({pct(v,len(U))}): {", ".join(f"{SEG[k]} {n}" for k,n in sc.most_common())}.</p>{rtable(rs)}')
+    note=('<p><a href="../which-stores-declare-ucp-checkout/">Which stores declare UCP checkout</a> lists every store whose profile declares this capability. Declaring checkout is not proof that an agent can buy.</p>' if c=='dev.ucp.shopping.checkout' else '')
+    page(f'capabilities/{slug(c)}.html',f'{capn(c)}: stores declaring it | {NAME}',f'<h1>{E(capn(c))}</h1><p class="lede"><code>{E(c)}</code> is declared by {v} of {len(U)} stores with a UCP profile ({pct(v,len(U))}): {", ".join(f"{SEG[k]} {n}" for k,n in sc.most_common())}.</p>{note}{rtable(rs)}')
 # ---- categories ----
 page('categories/index.html',f'Categories | {NAME}',f'<h1>Categories</h1><p class="lede">From Wikidata industry labels, the Wikipedia list a retailer came from, or the Shopify list a store came from.</p><div class="tw nomax"><table><tr><th>Category</th>{"".join(f"<th>{v}</th>" for v in SEG.values())}</tr>{"".join("<tr><td><a href=\"%s.html\">%s</a></td>"%(slug(c),E(c))+"".join(f"<td>{sum(1 for r in RET if r['category']==c and r['segment']==k and r['status']=='ucp')} / {sum(1 for r in RET if r['category']==c and r['segment']==k)}</td>" for k in SEG)+"</tr>" for c in CATS)}</table></div><p class="muted">Cells: with UCP / tracked.</p>')
 for c in CATS:
@@ -786,9 +787,9 @@ page('data-feed.html',f'ShopBot Index data feed: join the waitlist | {NAME}',f''
 <h2>What stays free</h2><p>Every store's result stays free on this site: the <a href="stores.html">all-stores table</a>, each store's page, <a href="check.html">Check your store</a>, watch alerts and the Monday email. The feed is for people who need the whole dataset in bulk, every week.</p>
 <h2>From our latest crawl ({DAY})</h2><ul><li>{len(U)} of the {len(RET)-_ncc} retailers and stores we could check publish a UCP profile.</li><li>We couldn't check {_ncc} of the {len(RET)} we track (blocked or unreachable), so they aren't counted.</li><li>A store with no UCP profile found isn't a store AI agents can't shop at; it's a store where we found no profile. <a href="methodology.html#meaning">How we measure</a>.</li></ul>{signup()}''',f'A planned weekly data feed of which online stores publish a UCP profile, the profile AI shopping agents read, what each declares and what changed. Join the waitlist; estimated pricing.')
 # ---- check + badge pages, lookup JSON, badge SVGs ----
-page('check.html',f'Check your store: what does it tell AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede" id="summary">{CHECK_SUMMARY}</p>
-{checkbox(title="Look up a store")}<p>No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>). Each store's page also lists its supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</p>
-<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li><li>Run a store? <a href="for-stores.html">See what your result means and watch your store</a>.</li></ul>
+page('check.html',f'How can I check if my online store is ready for AI shopping agents? | {NAME}',f'''<h1>How can I check if my online store is ready for AI shopping agents?</h1><p class="lede" id="summary">{CHECK_SUMMARY}</p>
+{checkbox(title="Look up a store")}<p>On this page, ready means the store publishes a UCP profile. Publishing one does not by itself prove that agents can check out. No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>). Each store's page also lists its supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</p>
+<h2>How to check</h2><ul><li>On the store's own domain, fetch <code>https://your-domain/.well-known/ucp</code>. A JSON document means the store publishes a UCP profile.</li><li>Or look the domain up on the <a href="stores.html">all-stores table</a>, or in the form on this page. The form reads the ShopBot Index crawl of {_day_long}. It does not fetch the store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li><li>Run a store? <a href="for-stores.html">See what your result means and watch your store</a>.</li><li><a href="which-stores-declare-ucp-checkout/">Which stores declare UCP checkout</a> and <a href="guides/what-is-a-ucp-profile/">what a /.well-known/ucp profile is</a>.</li></ul>
 {faq_box(CHECK_FAQ)}{signup()}''',f'In the crawl of {_day_long}, {_num(ALLS["ucp"])} of {_num(ALLS["checked"])} checkable stores publish a UCP profile. Look up a domain. A profile does not by itself prove that agents can check out.')
 page('badge.html',f'"UCP profile found" badge for your store | {NAME}',f'''<h1>A "UCP profile found" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page. The badge covers the UCP profile only. Supporting signals are listed on each store's page and don't affect the badge.</p>
 <p><img src="badge/{SLUG[U[0]["id"]] if U else ""}.svg" alt="UCP profile found · ShopBot Index" height="20"> <small class="muted">(example)</small></p>
@@ -870,11 +871,108 @@ BIZ_TITLE=next(v for k,v in _biz_blocks if k=='h1')
 BIZ_FAQ=_guide_faqs(_biz_blocks)
 _biz_path='guides/businesses-in-chatgpt/index.html'
 page(_biz_path,f'{BIZ_TITLE} | {NAME}',_guide_html(_biz_blocks,published=BIZ_DATE,modified=BIZ_DATE,summary=None,faq=None),BIZ_DESC,ogtype='article')
+WHAT_H1='What is a /.well-known/ucp profile for AI shopping agents?'
+WHAT_DESC='What a /.well-known/ucp profile is for AI shopping agents, and whether publishing one means an agent can check out.'
+_ad=_adoption()[:-1] if _adoption().endswith('.') else _adoption()
+WHAT_LEAD=(f'A /.well-known/ucp profile is a JSON file a store publishes at <code>/.well-known/ucp</code>, the machine-readable profile AI shopping agents read. '
+           f'{_ad}, and publishing one does not by itself prove that agents can check out.')
+WHAT_H2='Does a UCP profile mean AI agents can check out at a store?'
+_CO_CAP='dev.ucp.shopping.checkout'
+_CO=sorted((r for r in U if _CO_CAP in (r.get('capabilities') or [])), key=lambda r: (0 if r.get('segment')=='big' else 1, (r.get('name') or '').lower(), r.get('id') or ''))
+_NOCO=sorted((r for r in U if _CO_CAP not in (r.get('capabilities') or [])), key=lambda r: (r.get('name') or '').lower())
+def _join(xs):
+    if not xs: return ''
+    if len(xs)==1: return xs[0]
+    if len(xs)==2: return xs[0]+' and '+xs[1]
+    return ', '.join(xs[:-1])+' and '+xs[-1]
+def _store_a(r, pre): return f'<a href="{pre}store/{SLUG[r["id"]]}.html">{E(r["name"])}</a>'
+WHAT_NO=(f'No. A UCP profile is a published declaration. It does not by itself prove that AI agents can check out at a store. '
+         f'In the crawl of {_day_long}, {_num(len(_CO))} of the {_num(len(U))} stores that publish a UCP profile declare checkout (<code>{E(_CO_CAP)}</code>). '
+         f'That declaration is not a completed checkout, and ShopBot Index does not test purchases.')
+WHAT_FAQ=[(WHAT_H1, WHAT_LEAD),
+          (WHAT_H2, WHAT_NO),
+          ('How can I check if my online store publishes a UCP profile?',
+           f'Fetch <code>https://your-domain/.well-known/ucp</code> on the store domain, or look the domain up on <a href="../../check.html">Check your store</a> and the <a href="../../stores.html">all-stores table</a>. The lookup reads the crawl of {_day_long} and does not fetch the store live.')]
+page('guides/what-is-a-ucp-profile/index.html', f'{WHAT_H1} | {NAME}',
+     f'<p class="muted crumbs"><a href="../../">ShopBot Index</a> › <a href="../">Guides</a> › {E(WHAT_H1)}</p>'
+     f'<h1>{E(WHAT_H1)}</h1><p class="lede" id="answer">{WHAT_LEAD}</p><h2>{E(WHAT_H2)}</h2><p id="checkout-meaning">{WHAT_NO}</p>'
+     f'<p>To check a store, fetch <code>https://your-domain/.well-known/ucp</code> or look the domain up on <a href="../../check.html">Check your store</a> and the <a href="../../stores.html">all-stores table</a>. '
+     f'The lookup reads the crawl of {_day_long} and does not fetch the store live. '
+     f'<a href="../../which-stores-declare-ucp-checkout/">Which stores declare UCP checkout</a> names the stores whose profile declares checkout. '
+     f'The longer reading is <a href="../what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a>.</p>{faq_box(WHAT_FAQ)}{signup("../../")}',
+     WHAT_DESC)
+_big_co=[r for r in _CO if r.get('segment')=='big']
+_co_big=(f'Big retailers that declare it are {_join([_store_a(r, "../") for r in _big_co])}.' if _big_co else 'No big retailer declares checkout in this crawl.')
+CO_H1='Which stores declare UCP checkout?'
+CO_LEAD=(f'In the ShopBot Index crawl of {_day_long}, {_num(len(_CO))} of the {_num(len(U))} stores that publish a UCP profile declare checkout (<code>{E(_CO_CAP)}</code>). '
+         f'{_co_big} Declaring checkout is a line in that profile, not proof that an AI agent can complete a purchase.')
+_noco=_join([_store_a(r, "../") for r in _NOCO]) or 'none'
+CO_FAQ=[(CO_H1, CO_LEAD),
+        ('Which stores publish a UCP profile and do not declare checkout?',
+         f'{_num(len(_NOCO))} of the {_num(len(U))} stores that publish a UCP profile do not declare checkout: {_noco}.'),
+        ('Does declaring checkout mean AI agents can buy?',
+         'No. Declaring checkout is a line in the published profile, not proof that an AI agent can complete a purchase. ShopBot Index does not test purchases.')]
+page('which-stores-declare-ucp-checkout/index.html', f'{CO_H1} | {NAME}',
+     f'<p class="muted crumbs"><a href="../">ShopBot Index</a> › {E(CO_H1)}</p>'
+     f'<h1>{E(CO_H1)}</h1><p class="lede" id="answer">{CO_LEAD}</p>'
+     f'<p id="no-checkout">{_num(len(_NOCO))} of the {_num(len(U))} stores that publish a UCP profile do not declare checkout: {_noco}.</p>'
+     f'<h2>Named stores, big retailers first ({_num(len(_CO))})</h2><ul class="cols" id="checkout-stores">{"".join(f"<li>{_store_a(r, "../")}</li>" for r in _CO)}</ul>'
+     f'<p>The same capability is also listed on <a href="../capabilities/{slug(_CO_CAP)}.html">{E(capn(_CO_CAP))}</a>. ShopBot Index does not test purchases. <a href="../methodology.html#meaning">How we measure</a>. <a href="../guides/what-is-a-ucp-profile/">What a /.well-known/ucp profile is</a>.</p>'
+     f'{faq_box(CO_FAQ)}{signup("../")}',
+     f'In the crawl of {_day_long}, {_num(len(_CO))} of {_num(len(U))} stores that publish a UCP profile declare checkout. Declaring it is not proof an agent can buy.')
+def _ph_label(pid):
+    if pid=='dev.shopify.card': return 'the Shopify card handler'
+    return phn(pid)
+def _decl(n, label): return f'{_num(n)} {"declares" if n==1 else "declare"} {label}'
+_ph_none=sum(1 for r in U if not (r.get('payment_handlers') or []))
+_ph_any=len(U)-_ph_none
+_ph_parts=[_decl(n, _ph_label(pid))+f' (<code>{E(pid)}</code>)' for pid,n in PHC.most_common()]
+PH_H1='Which payment handlers do stores declare in their UCP profile?'
+PH_LEAD=(f'In the ShopBot Index crawl of {_day_long}, of the {_num(len(U))} stores that publish a UCP profile, {_join(_ph_parts)}. '
+         f'{_num(_ph_any)} declare at least one payment handler and {_num(_ph_none)} declare none. '
+         f'A declared handler is a line in the profile, not proof that an agent can pay.')
+_combos=collections.Counter(tuple(sorted(r.get('payment_handlers') or [])) for r in U)
+_combo_rows=''.join(f'<tr><td>{E("no payment handler" if not key else _join([_ph_label(p) for p in key]))}</td><td>{_num(n)}</td></tr>' for key,n in _combos.most_common())
+_ph_sections=[]
+for _pid,_n in PHC.most_common():
+    _bigs=sorted((r for r in U if r.get('segment')=='big' and _pid in (r.get('payment_handlers') or [])), key=lambda r: (r.get('name') or '').lower())
+    _names=_join([_store_a(r, "../") for r in _bigs]) if _bigs else 'none in this crawl'
+    _ph_sections.append(f'<h2>{E(phn(_pid))} ({_num(_n)})</h2><p id="handler-{E(slug(_pid))}">Big retailers: {_names}. The profile id is <code>{E(_pid)}</code>.</p>')
+_big_ph=sorted((r for r in U if r.get('segment')=='big' and (r.get('payment_handlers') or [])), key=lambda r: (r.get('name') or '').lower())
+PH_FAQ=[(PH_H1, PH_LEAD),
+        ('Does a declared payment handler mean an agent can pay?',
+         'No. A declared handler is a line in the published UCP profile. ShopBot Index does not test purchases.')]
+page('payment-handlers/index.html', f'{PH_H1} | {NAME}',
+     f'<p class="muted crumbs"><a href="../">ShopBot Index</a> › {E(PH_H1)}</p>'
+     f'<h1>{E(PH_H1)}</h1><p class="lede" id="answer">{PH_LEAD}</p>'
+     f'<h2>Combinations stores declare</h2><p>A store can declare more than one handler, so the handler counts above overlap.</p>'
+     f'<div class="tw nomax"><table><tr><th>Handlers in the profile</th><th>Stores</th></tr>{_combo_rows}</table></div>'
+     +''.join(_ph_sections)+
+     f'<p>Shop Pay and Google Pay are declarations in the profile, the same as any other handler. <a href="../which-stores-declare-ucp-checkout/">Which stores declare UCP checkout</a>. <a href="../methodology.html#meaning">How we measure</a>.</p>'
+     f'{faq_box(PH_FAQ)}{signup("../")}',
+     f'In the crawl of {_day_long}, payment handlers declared by the {_num(len(U))} stores that publish a UCP profile. A declared handler is not proof an agent can pay.')
+ANSWER_PAGES={
+ 'guides/what-is-a-ucp-profile/index.html':dict(h1=WHAT_H1, lead=WHAT_LEAD, desc=WHAT_DESC, faq=WHAT_FAQ,
+     trail=[(NAME,''),('Guides','guides/'),(WHAT_H1,'guides/what-is-a-ucp-profile/')], list_items=[], list_name='',
+     technique='HTTPS request for /.well-known/ucp on each website, after reading robots.txt'),
+ 'which-stores-declare-ucp-checkout/index.html':dict(h1=CO_H1, lead=CO_LEAD, desc=CO_LEAD, faq=CO_FAQ,
+     trail=[(NAME,''),(CO_H1,'which-stores-declare-ucp-checkout/')],
+     list_items=[dict(name=r['name'], path=f'store/{SLUG[r["id"]]}.html') for r in _CO],
+     list_name='Stores that declare UCP checkout',
+     technique='Capability dev.ucp.shopping.checkout read from a published UCP profile'),
+ 'payment-handlers/index.html':dict(h1=PH_H1, lead=PH_LEAD, desc=PH_LEAD, faq=PH_FAQ,
+     trail=[(NAME,''),(PH_H1,'payment-handlers/')],
+     list_items=[dict(name=r['name'], path=f'store/{SLUG[r["id"]]}.html', description=_join([_ph_label(p) for p in (r.get('payment_handlers') or [])])) for r in _big_ph],
+     list_name='Big retailers that declare a payment handler',
+     technique='payment_handlers array read from a published UCP profile'),
+}
 page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">Short readings on how to use ShopBot Index results without overstating them.</p>
 <ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li>
+<li><a href="what-is-a-ucp-profile/">{E(WHAT_H1)}</a><br><span class="muted">{E(WHAT_DESC)}</span></li>
 <li><a href="businesses-in-chatgpt/">{E(BIZ_TITLE)}</a><br><span class="muted">{E(BIZ_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
 GUIDE_PATH=_guide_path
-PAGE_LASTMOD={_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,'guides/index.html':GUIDE_DATE,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
+PAGE_LASTMOD={_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,'guides/index.html':PAGE_STAMP,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
+for _ap in ANSWER_PAGES: PAGE_LASTMOD[_ap]=PAGE_STAMP
 for _sp in STORE_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 for _sp in SIGNAL_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 GUIDE_PAGES={
@@ -883,7 +981,7 @@ GUIDE_PAGES={
  _biz_path:dict(type='Article',headline=BIZ_TITLE,description=BIZ_DESC,datePublished=BIZ_DATE,dateModified=BIZ_DATE,faq=BIZ_FAQ,
                 crumbs=[(NAME,''),('Guides','guides/'),(BIZ_TITLE,_biz_path.replace('index.html',''))]),
  'guides/index.html':dict(type='WebPage',headline='Guides',description='Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.',
-                          datePublished=GUIDE_DATE,dateModified=GUIDE_DATE,crumbs=[(NAME,''),('Guides','guides/')]),
+                          datePublished=GUIDE_DATE,dateModified=PAGE_STAMP,crumbs=[(NAME,''),('Guides','guides/')]),
 }
 # ---- methodology ----
 import importlib.util as _ilu
@@ -916,7 +1014,7 @@ CRAWLMETH=f'''<h2 id="crawler">5. How we fetch</h2><ul><li>User-Agent: <code>{E(
 SC=collections.Counter(s.get('status','error') for s in SITES)
 meth=f'''<h1>Methodology</h1><p class="lede">Exactly what we check, how we check it, and what it does and doesn't mean. UCP profiles are our headline measure; four supporting signals are listed per store. Crawl date: {DAY}.</p>
 <div class="box" id="meaning"><h2 style="margin-top:0">What this does and doesn't mean</h2><ul><li><b>UCP profile found</b>: the store publishes a Universal Commerce Protocol profile at <code>/.well-known/ucp</code>, the machine-readable profile AI shopping agents read, and lists what it supports (for example checkout). It doesn't guarantee that any particular assistant buys from it; that depends on the assistant.</li><li><b>No UCP profile found</b>: we found no UCP profile. It does <b>not</b> mean AI agents can't shop there. Agents can use a store through a normal web browser, and some agent shopping runs through channels we <a href="#cant-see">can't see from outside</a>, such as product feeds shared privately with AI assistants.</li><li><b>Couldn't check</b>: the site refused or failed our request, so we don't know either way.</li><li>UCP is our headline measure. We also list four supporting signals per store (<a href="#signals">section 1b</a>), but we don't test purchases, and we don't score or rank how well a store works with any assistant.</li></ul>
-<p>Read this in more detail: <a href="guides/what-a-ucp-profile-proves/">What a published UCP profile proves, and what it doesn't</a>.</p></div>
+<p>Read this in more detail: <a href="guides/what-a-ucp-profile-proves/">What a published UCP profile proves, and what it doesn't</a>. The short definition is <a href="guides/what-is-a-ucp-profile/">What is a /.well-known/ucp profile for AI shopping agents?</a>.</p></div>
 <h2>1. What we look for</h2><p>The UCP specification says platforms discover a business by fetching its business profile from <code>/.well-known/ucp</code> (<a href="{E(D["spec"])}">UCP specification overview</a>). The profile is JSON with a <code>ucp</code> object: protocol version, services, capabilities and payment handlers. We fetch that path on each website after reading <code>/robots.txt</code>. This is our headline measure. The other things we read are listed in <a href="#signals">section 1b</a> and <a href="#crawler">section 5</a>.</p>
 {SIGMETH}
 <h2>2. Who we track: three segments, side by side</h2><ul>{"".join(f"<li><b>{SEG[k]}</b> ({sum(1 for r in RET if r['segment']==k)}): {SEGDESC[k]}</li>" for k in SEG)}</ul>

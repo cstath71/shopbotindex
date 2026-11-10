@@ -10,7 +10,7 @@ R=lambda p: open(os.path.join(DIST,p),encoding='utf-8').read()
 def T(h): return re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>','',h))).strip()
 def lds(h): return [json.loads(m) for m in re.findall(r'<script type="application/ld\+json">(.*?)</script>',h,re.S)]
 def faq_of(h): return [x for o in lds(h) for x in o.get('@graph',[o]) if x.get('@type')=='FAQPage'][0]
-CONTENT_FLOOR='2026-11-10'
+CONTENT_FLOOR='2026-11-11'
 FILE_ORDER=('found','not_found','refused','error','robots_disallow','not_checked','missing')
 MCP_ORDER=('found','not_found','refused','error','robots_disallow','not_checked','none_declared','missing')
 PROD_ORDER=('full','partial','none','robots_disallow','not_checked','missing')
