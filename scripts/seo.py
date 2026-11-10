@@ -235,6 +235,7 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('Guides','guides/','Short guides on how to read ShopBot Index results.'),
            ('What a published UCP profile proves','guides/what-a-ucp-profile-proves/','What a published UCP profile tells you, why an unchecked store stays unknown, and how to read the index without overstating a result.'),
            ('Businesses in ChatGPT: what it means for online stores','guides/businesses-in-chatgpt/',"What OpenAI's Businesses in ChatGPT launch means for online stores, and what ShopBot Index can and cannot see in its 9 November 2026 crawl."),
+           ('AI shopping readiness: what agents check on a store','guides/ai-shopping-readiness/','What AI shopping agents can read on a store, beyond UCP: llms.txt, ACP, MCP, robots.txt AI rules, product markup and payment handlers. 9 November 2026 crawl.'),
            ('AI assistants','assistants.html','Which AI assistants name which retailers, from the companies\' own announcements, with links.'),
            ('About','about.html','Who runs the index and how to contact us.'),
            ('Terms of use','terms.html','All rights reserved. Link to pages and quote individual findings with credit and a link; bulk copying or republishing the data needs written permission.')]

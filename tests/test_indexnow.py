@@ -18,6 +18,7 @@ class IndexNow(unittest.TestCase):
                      'segments/', 'segments/big.html', 'segments/shopify.html', 'segments/other.html',
                      'stores.html', 'stores-2.html', 'stores-3.html',
                      'guides/', 'guides/what-is-a-ucp-profile/', 'guides/businesses-in-chatgpt/',
+                     'guides/ai-shopping-readiness/',
                      'which-stores-declare-ucp-checkout/', 'payment-handlers/', 'check.html'):
             self.assertIn(SITE+'/'+path, urls, path)
         self.assertGreater(sum(1 for u in urls if '/store/' in u), 2000)

@@ -806,25 +806,35 @@ GUIDE_DESC='Understand what a published UCP profile tells you, why unchecked sto
 def _esc_text(s): return s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 def _inline_md(s):
     out=[]; pos=0
-    for m in re.finditer(r'`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)',s):
+    for m in re.finditer(r'`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*',s):
         out.append(_esc_text(s[pos:m.start()]))
         if m.group(1) is not None: out.append('<code>'+_esc_text(m.group(1))+'</code>')
-        else: out.append('<a href="%s">%s</a>'%(html.escape(m.group(3),quote=True),_esc_text(m.group(2))))
+        elif m.group(2) is not None: out.append('<a href="%s">%s</a>'%(html.escape(m.group(3),quote=True),_esc_text(m.group(2))))
+        else: out.append('<strong>'+_esc_text(m.group(4))+'</strong>')
         pos=m.end()
     out.append(_esc_text(s[pos:])); return ''.join(out)
 def _guide_blocks(text):
-    blocks=[]; para=[]; lst=[]
+    blocks=[]; para=[]; lst=[]; kind=None
     def flush_para():
         nonlocal para
         if para: blocks.append(('p',' '.join(para))); para=[]
     def flush_list():
-        nonlocal lst
-        if lst: blocks.append(('ul',lst)); lst=[]
+        nonlocal lst, kind
+        if lst: blocks.append((kind or 'ul', lst)); lst=[]; kind=None
+    def add_item(k, item):
+        nonlocal kind
+        flush_para()
+        if kind not in (None, k): flush_list()
+        kind=k; lst.append(item)
+    ol_re=re.compile(r'^\d+\. (.+)$')
     for line in text.splitlines():
+        ol=ol_re.match(line)
         if line.startswith('### '): flush_para(); flush_list(); blocks.append(('h3',line[4:].strip()))
         elif line.startswith('## '): flush_para(); flush_list(); blocks.append(('h2',line[3:].strip()))
         elif line.startswith('# '): flush_para(); flush_list(); blocks.append(('h1',line[2:].strip()))
-        elif line.startswith('- '): flush_para(); lst.append(line[2:].strip())
+        elif line.startswith('- '): add_item('ul', line[2:].strip())
+        elif ol: add_item('ol', ol.group(1).strip())
+        elif line.strip()=='---': flush_para(); flush_list()
         elif not line.strip(): flush_para(); flush_list()
         else: flush_list(); para.append(line.strip())
     flush_para(); flush_list(); return blocks
@@ -858,7 +868,7 @@ def _guide_html(blocks, published=None, modified=None, summary=Ellipsis, faq=Ell
         elif kind=='h3': out.append(f'<h3>{_inline_md(val)}</h3>')
         elif kind=='p':
             out.append(f'<p{" class=\"lede\"" if first else ""}>{_inline_md(val)}</p>'); first=False
-        elif kind=='ul': out.append('<ul>'+''.join(f'<li>{_inline_md(i)}</li>' for i in val)+'</ul>')
+        elif kind in ('ul','ol'): out.append(f'<{kind}>'+''.join(f'<li>{_inline_md(i)}</li>' for i in val)+f'</{kind}>')
     out.append('</article>'); return ''.join(out)
 _guide_src=open(os.path.join(ROOT,'content','guides','what-a-ucp-profile-proves.md'),encoding='utf-8').read()
 _ucp_blocks=_guide_blocks(_guide_src)
@@ -873,6 +883,14 @@ BIZ_TITLE=next(v for k,v in _biz_blocks if k=='h1')
 BIZ_FAQ=_guide_faqs(_biz_blocks)
 _biz_path='guides/businesses-in-chatgpt/index.html'
 page(_biz_path,f'{BIZ_TITLE} | {NAME}',_guide_html(_biz_blocks,published=BIZ_DATE,modified=BIZ_DATE,summary=None,faq=None),BIZ_DESC,ogtype='article')
+AIR_DATE='2026-11-11'
+AIR_DESC='What AI shopping agents can read on a store, beyond UCP: llms.txt, ACP, MCP, robots.txt AI rules, product markup and payment handlers. 9 November 2026 crawl.'
+_air_src=open(os.path.join(ROOT,'content','guides','ai-shopping-readiness.md'),encoding='utf-8').read()
+_air_blocks=_guide_blocks(_air_src)
+AIR_TITLE=next(v for k,v in _air_blocks if k=='h1')
+AIR_FAQ=_guide_faqs(_air_blocks)
+_air_path='guides/ai-shopping-readiness/index.html'
+page(_air_path,f'{AIR_TITLE} | {NAME}',_guide_html(_air_blocks,published=AIR_DATE,modified=AIR_DATE,summary=None,faq=None),AIR_DESC,ogtype='article')
 WHAT_H1='What is a /.well-known/ucp profile for AI shopping agents?'
 WHAT_DESC='What a /.well-known/ucp profile is for AI shopping agents, and whether publishing one means an agent can check out.'
 _ad=_adoption()[:-1] if _adoption().endswith('.') else _adoption()
@@ -971,9 +989,10 @@ ANSWER_PAGES={
 page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">Short readings on how to use ShopBot Index results without overstating them.</p>
 <ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li>
 <li><a href="what-is-a-ucp-profile/">{E(WHAT_H1)}</a><br><span class="muted">{E(WHAT_DESC)}</span></li>
-<li><a href="businesses-in-chatgpt/">{E(BIZ_TITLE)}</a><br><span class="muted">{E(BIZ_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
+<li><a href="businesses-in-chatgpt/">{E(BIZ_TITLE)}</a><br><span class="muted">{E(BIZ_DESC)}</span></li>
+<li><a href="ai-shopping-readiness/">{E(AIR_TITLE)}</a><br><span class="muted">{E(AIR_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
 GUIDE_PATH=_guide_path
-PAGE_LASTMOD={'index.html':PAGE_STAMP,_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,'guides/index.html':PAGE_STAMP,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
+PAGE_LASTMOD={'index.html':PAGE_STAMP,_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,_air_path:AIR_DATE,'guides/index.html':PAGE_STAMP,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
 for _ap in ANSWER_PAGES: PAGE_LASTMOD[_ap]=PAGE_STAMP
 for _sp in STORE_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 for _sp in SIGNAL_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
@@ -982,6 +1001,8 @@ GUIDE_PAGES={
                   crumbs=[(NAME,''),('Guides','guides/'),(GUIDE_TITLE,_guide_path.replace('index.html',''))]),
  _biz_path:dict(type='Article',headline=BIZ_TITLE,description=BIZ_DESC,datePublished=BIZ_DATE,dateModified=BIZ_DATE,faq=BIZ_FAQ,
                 crumbs=[(NAME,''),('Guides','guides/'),(BIZ_TITLE,_biz_path.replace('index.html',''))]),
+ _air_path:dict(type='Article',headline=AIR_TITLE,description=AIR_DESC,datePublished=AIR_DATE,dateModified=AIR_DATE,faq=AIR_FAQ,
+                crumbs=[(NAME,''),('Guides','guides/'),(AIR_TITLE,_air_path.replace('index.html',''))]),
  'guides/index.html':dict(type='WebPage',headline='Guides',description='Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.',
                           datePublished=GUIDE_DATE,dateModified=PAGE_STAMP,crumbs=[(NAME,''),('Guides','guides/')]),
 }
