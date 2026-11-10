@@ -213,7 +213,7 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('llms.txt','signals/llms-txt/','How many stores publish an llms.txt file.'),
            ('AGENTS.md','signals/agents-md/','How many stores publish an AGENTS.md file.'),
            ('AI catalog','signals/ai-catalog/','How many stores publish an AI catalog.'),
-           ('MCP','signals/mcp/','How many stores return an MCP tools list, and how many name an MCP endpoint.'),
+           ('MCP','signals/mcp/','How many stores name an MCP endpoint in their UCP profile, and how many of those endpoints returned a tools list.'),
            ('AI bots in robots.txt','signals/ai-bots-robots/','How many stores name AI crawlers in robots.txt, disallow the whole site with a wildcard rule, or publish a Content-Signal line.'),
            ('Bot protection','signals/bot-protection/','How many stores were refused by bot protection.'),
            ('Product data','signals/product-data/','How many stores have schema.org Product markup on a product page we fetched.'),

@@ -98,8 +98,15 @@ def facts(ret, sites):
         def files(key):
             if not sigs: return 'missing'
             return _best([_file_state(s.get('signals') or {}, key) for s in sigs], FILE_ORDER)
-        mcp='missing'
-        if sigs: mcp=_best([_mcp_state(s.get('signals') or {}) for s in sigs], MCP_ORDER)
+        mcp, mcp_http='missing', None
+        if sigs:
+            pairs=[]
+            for s in sigs:
+                sig=s.get('signals') or {}
+                m=sig.get('mcp') if isinstance(sig.get('mcp'), dict) else {}
+                pairs.append((_mcp_state(sig), m.get('http')))
+            mcp=_best([p[0] for p in pairs], MCP_ORDER)
+            mcp_http=next((h for k,h in pairs if k==mcp), None)
         readable=ai=content=wild=False
         for s in sigs:
             rb=(s.get('signals') or {}).get('robots')
@@ -120,7 +127,7 @@ def facts(ret, sites):
             prod=_best([((s.get('signals') or {}).get('product') or {}).get('state') or 'missing' for s in sigs], PROD_ORDER)
             prod=prod if prod in PROD_ORDER else 'missing'
         rows.append(dict(r=r, acp=files('acp'), ai_catalog=files('ai_catalog'), llms_txt=files('llms_txt'), agents_md=files('agents_md'),
-                         mcp=mcp, robots=readable, robots_ai=ai, robots_content=content, robots_wild=wild,
+                         mcp=mcp, mcp_http=mcp_http, robots=readable, robots_ai=ai, robots_content=content, robots_wild=wild,
                          access=access, challenge=bool(access=='refused' and any(h.get('challenge') for h in homes)),
                          vendors=set().union(*[set(h.get('vendors') or []) for h in homes]) if access in ('answered','refused') and homes else set(),
                          product=prod, poppy=_af_bucket(af.get(r['id'], []), ('poppy',)),
@@ -196,8 +203,7 @@ class SignalAnswers(unittest.TestCase):
             'llms_txt':('publish an llms.txt file','publishes an llms.txt file', PAGES['llms_txt']),
             'agents_md':('publish an AGENTS.md file','publishes an AGENTS.md file', PAGES['agents_md']),
             'ai_catalog':('publish an AI catalog','publishes an AI catalog', PAGES['ai_catalog']),
-            'mcp_tools':('return a tools list from an MCP endpoint named in the UCP profile','returns a tools list from an MCP endpoint named in the UCP profile', PAGES['mcp']),
-            'mcp_declared':('name an MCP endpoint in a UCP profile','names an MCP endpoint in a UCP profile', PAGES['mcp']),
+            'mcp_declared':('name an MCP endpoint in their UCP profile','names an MCP endpoint in their UCP profile', PAGES['mcp']),
             'robots_ai':('have robots.txt rules that name an AI crawler','has robots.txt rules that name an AI crawler', PAGES['robots']),
             'robots_wild':('have a wildcard robots.txt rule that disallows the whole site','has a wildcard robots.txt rule that disallows the whole site', PAGES['robots']),
             'content_signal':('publish a Content-Signal line in robots.txt','publishes a Content-Signal line in robots.txt', PAGES['robots']),
@@ -221,6 +227,33 @@ class SignalAnswers(unittest.TestCase):
         self.assertIn('does not test purchases', T(home))
         self.assertIn('publish a UCP profile', T(home))
         self.assertNotRegex(T(re.search(r'id="agent-readiness">(.*?)</div>', home, re.S).group(1)), r'[—–]')
+
+    def test_mcp_lead_opens_with_the_declared_endpoint(self):
+        declared=self.sentence(self.counts['mcp_declared']['found'], self.counts['mcp_declared']['checked'],
+                               'name an MCP endpoint in their UCP profile', 'names an MCP endpoint in their UCP profile')
+        n=self.counts['mcp_tools']['found']
+        n422=sum(1 for row in self.rows if row['mcp']=='error' and row['mcp_http']==422)
+        nref=sum(1 for row in self.rows if row['mcp']=='refused')
+        follow=f'Only {n:,} endpoints returned a tools list when queried ({n422:,} returned HTTP 422, {nref:,} refused).'
+        old=f'{n:,} of {self.counts["mcp_tools"]["checked"]:,} stores we could check return a tools list'
+        home=T(re.search(r'id="agent-readiness">(.*?)</div>', R('index.html'), re.S).group(1))
+        signals=T(re.search(r'id="agent-readiness">(.*?)</div>', R('signals.html'), re.S).group(1))
+        lead=T(re.search(r'<p class="lede" id="answer">(.*?)</p>', R(PAGES['mcp']), re.S).group(1))
+        llms=R('llms.txt'); full=R('llms-full.txt')
+        ready=llms[llms.index('## AI agent readiness'):llms.index('## Key pages')]
+        ready_full=full[full.index('## AI agent readiness'):full.index('## Results by segment')]
+        for text in (home, signals, lead, ready, ready_full):
+            self.assertTrue(text.startswith(declared) or declared in text)
+            self.assertLess(text.index(declared), text.index(follow))
+            self.assertNotIn(old, text)
+            self.assertNotIn('8 of 8', text)
+        self.assertTrue(lead.startswith(declared))
+        page=R(PAGES['mcp'])
+        self.assertNotIn(old, page)
+        self.assertNotIn('8 of 8', page)
+        self.assertNotIn('(100.0%)', re.search(r'id="tools">.*$', page, re.S).group(0))
+        self.assertIn('id="tools"', page)
+        self.assertLess(page.index('id="answer"'), page.index('id="tools"'))
 
     def test_faq_jsonld_matches_the_visible_answer(self):
         sm=R('sitemap.xml')
