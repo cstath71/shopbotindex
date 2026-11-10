@@ -80,11 +80,11 @@ class Guide(unittest.TestCase):
         stamp=max('2026-11-11', day)
         self.assertIn(f'<loc>{URL}</loc><lastmod>{stamp}</lastmod>',sm)
         self.assertIn(f'<loc>https://shopbotindex.com/guides/</loc><lastmod>{stamp}</lastmod>',sm)
-        # Home lastmod is the crawl date build.py stamps from data/latest.json (not a fixed Monday).
+        # Homepage title and meta description changed on 2026-11-11, so its lastmod is that stamp.
         day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
         self.assertRegex(day,r'^\d{4}-\d{2}-\d{2}$')
         datetime.date.fromisoformat(day)
-        self.assertIn(f'<loc>https://shopbotindex.com/</loc><lastmod>{day}</lastmod>',sm)
+        self.assertIn(f'<loc>https://shopbotindex.com/</loc><lastmod>{stamp}</lastmod>',sm)
         self.assertNotIn('guides/what-a-ucp-profile-proves.html',sm)
         self.assertNotIn('guides/what-a-ucp-profile-proves/index.html',sm)
         self.assertIn(URL,R('llms.txt'))
