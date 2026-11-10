@@ -818,38 +818,70 @@ def _guide_blocks(text):
         nonlocal lst
         if lst: blocks.append(('ul',lst)); lst=[]
     for line in text.splitlines():
-        if line.startswith('# '): flush_para(); flush_list(); blocks.append(('h1',line[2:].strip()))
+        if line.startswith('### '): flush_para(); flush_list(); blocks.append(('h3',line[4:].strip()))
         elif line.startswith('## '): flush_para(); flush_list(); blocks.append(('h2',line[3:].strip()))
+        elif line.startswith('# '): flush_para(); flush_list(); blocks.append(('h1',line[2:].strip()))
         elif line.startswith('- '): flush_para(); lst.append(line[2:].strip())
         elif not line.strip(): flush_para(); flush_list()
         else: flush_list(); para.append(line.strip())
     flush_para(); flush_list(); return blocks
-def _guide_html(blocks):
+def _plain_md(s): return re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>','',_inline_md(s)))).strip()
+def _guide_faqs(blocks):
+    # Q&A under the approved "Frequently asked questions" heading. The answer text is the visible paragraph text.
+    faqs=[]; on=False; q=None; parts=[]
+    def flush():
+        nonlocal q, parts
+        if q is not None: faqs.append((_plain_md(q), _plain_md(' '.join(parts))))
+        q=None; parts=[]
+    for kind,val in blocks:
+        if kind=='h2':
+            flush(); on=val=='Frequently asked questions'
+        elif on and kind=='h3':
+            flush(); q=val
+        elif on and q is not None and kind=='p': parts.append(val)
+    flush(); return faqs
+def _guide_html(blocks, published=None, modified=None, summary=Ellipsis, faq=Ellipsis):
+    if published is None: published=GUIDE_DATE
+    if modified is None: modified=PAGE_STAMP
+    if summary is Ellipsis: summary=GUIDE_SUMMARY
+    if faq is Ellipsis: faq=GUIDE_FAQ
     out=['<article class="prose">']; first=True
     for kind,val in blocks:
         if kind=='h1':
-            out.append(f'<h1>{_inline_md(val)}</h1><p class="muted" id="published">Published <time datetime="{GUIDE_DATE}">8 November 2026</time>. Updated <time datetime="{PAGE_STAMP}" id="modified">{_long(PAGE_STAMP)}</time>.</p>')
-            out.append(f'<div class="answer" id="summary"><p>{GUIDE_SUMMARY}</p></div>')
-            out.append(faq_box(GUIDE_FAQ))
+            out.append(f'<h1>{_inline_md(val)}</h1><p class="muted" id="published">Published <time datetime="{published}">{_long(published)}</time>. Updated <time datetime="{modified}" id="modified">{_long(modified)}</time>.</p>')
+            if summary: out.append(f'<div class="answer" id="summary"><p>{summary}</p></div>')
+            if faq: out.append(faq_box(faq))
         elif kind=='h2': out.append(f'<h2>{_inline_md(val)}</h2>')
+        elif kind=='h3': out.append(f'<h3>{_inline_md(val)}</h3>')
         elif kind=='p':
             out.append(f'<p{" class=\"lede\"" if first else ""}>{_inline_md(val)}</p>'); first=False
         elif kind=='ul': out.append('<ul>'+''.join(f'<li>{_inline_md(i)}</li>' for i in val)+'</ul>')
     out.append('</article>'); return ''.join(out)
 _guide_src=open(os.path.join(ROOT,'content','guides','what-a-ucp-profile-proves.md'),encoding='utf-8').read()
-_guide_blocks=_guide_blocks(_guide_src)
-GUIDE_TITLE=next(v for k,v in _guide_blocks if k=='h1')
+_ucp_blocks=_guide_blocks(_guide_src)
+GUIDE_TITLE=next(v for k,v in _ucp_blocks if k=='h1')
 _guide_path='guides/what-a-ucp-profile-proves/index.html'
-page(_guide_path,f'{GUIDE_TITLE} | {NAME}',_guide_html(_guide_blocks),GUIDE_DESC,ogtype='article')
+page(_guide_path,f'{GUIDE_TITLE} | {NAME}',_guide_html(_ucp_blocks),GUIDE_DESC,ogtype='article')
+BIZ_DATE='2026-11-10'
+BIZ_DESC="What OpenAI's Businesses in ChatGPT launch means for online stores, and what ShopBot Index can and cannot see in its 9 November 2026 crawl."
+_biz_src=open(os.path.join(ROOT,'content','guides','businesses-in-chatgpt.md'),encoding='utf-8').read()
+_biz_blocks=_guide_blocks(_biz_src)
+BIZ_TITLE=next(v for k,v in _biz_blocks if k=='h1')
+BIZ_FAQ=_guide_faqs(_biz_blocks)
+_biz_path='guides/businesses-in-chatgpt/index.html'
+page(_biz_path,f'{BIZ_TITLE} | {NAME}',_guide_html(_biz_blocks,published=BIZ_DATE,modified=BIZ_DATE,summary=None,faq=None),BIZ_DESC,ogtype='article')
 page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">Short readings on how to use ShopBot Index results without overstating them.</p>
-<ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
+<ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li>
+<li><a href="businesses-in-chatgpt/">{E(BIZ_TITLE)}</a><br><span class="muted">{E(BIZ_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
 GUIDE_PATH=_guide_path
-PAGE_LASTMOD={_guide_path:PAGE_STAMP,'guides/index.html':GUIDE_DATE,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
+PAGE_LASTMOD={_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,'guides/index.html':GUIDE_DATE,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
 for _sp in STORE_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 for _sp in SIGNAL_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 GUIDE_PAGES={
  _guide_path:dict(type='Article',headline=GUIDE_TITLE,description=GUIDE_DESC,datePublished=GUIDE_DATE,dateModified=PAGE_STAMP,
                   crumbs=[(NAME,''),('Guides','guides/'),(GUIDE_TITLE,_guide_path.replace('index.html',''))]),
+ _biz_path:dict(type='Article',headline=BIZ_TITLE,description=BIZ_DESC,datePublished=BIZ_DATE,dateModified=BIZ_DATE,faq=BIZ_FAQ,
+                crumbs=[(NAME,''),('Guides','guides/'),(BIZ_TITLE,_biz_path.replace('index.html',''))]),
  'guides/index.html':dict(type='WebPage',headline='Guides',description='Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.',
                           datePublished=GUIDE_DATE,dateModified=GUIDE_DATE,crumbs=[(NAME,''),('Guides','guides/')]),
 }
