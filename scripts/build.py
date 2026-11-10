@@ -337,8 +337,15 @@ CONTENT_UPDATED='2026-11-10'  # answer-first copy shipped this day; page lastmod
 PAGE_STAMP=CONTENT_UPDATED if CONTENT_UPDATED>DAY else DAY
 _cc_note=(f'<p class="muted">Of those {_ccn} on {_day_long}: {_ccs["robots_disallow"]} robots.txt disallow, {_ccs["blocked"]} refused (401/403/429/451), {_ccs["error"]} timeout or connection error, {_ccs["mixed"]} mixed. '
           f'<a href="methodology.html#couldnt-check">How we split that</a>. That split is about why our crawler got no answer; it does not say what AI shopping agents see.</p>') if _ccn else ''
+import signal_answers
+_ALLS_EARLY=segstats(RET)
+SA=signal_answers.prepare(RET, SITES, lambda i: SLUG.get(i), DAY, _day_long, ('shopify','big','other'), SEG,
+                          dict(found=_ALLS_EARLY['ucp'], checked=_ALLS_EARLY['checked']), site=SITE)
+READINESS_HTML=SA['overview_html']; READINESS_FAQ=SA['faq']; READINESS_LLMS=SA['llms']; READINESS_SEGMENTS=SA['segments_llms']
+SIGNAL_PAGES={p['path']:p for p in SA['pages']}
 home=f'''<h1>What online stores tell AI shopping agents</h1>
 <p class="lede">Every week we check {len(RET)} retailers and stores ({nsites} websites) to see whether they publish the profile AI shopping agents read. It's called a <a href="https://ucp.dev/">UCP</a> profile. We also record four supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data. No profile doesn't mean AI agents can't shop there. Every figure comes from our own crawl on {DAY}. <a href="methodology.html#meaning">How we measure</a>.</p>
+{READINESS_HTML}
 {BEYOND_HOME}
 {segcards()}{joined_txt}
 {checkbox()}
@@ -624,8 +631,11 @@ if CHG:
 else:
     body=f'<h1>{CHGTITLE}</h1><p class="lede">Each week we compare the new crawl with the previous one: who joined (started publishing a UCP profile), who left, who we couldn\'t reach, and capability changes.</p><div class="box">Only one crawl in this format exists so far ({DAY}). The first "who joined this week" list appears after the next crawl.</div>{BEYOND_CHANGES}'
 page('changes.html',f'What changed: stores that started or stopped publishing a UCP profile | {NAME}',body+signup())
-page('signals.html',f'Beyond UCP: what else stores publish for AI agents | {NAME}',beyond_ucp.page_html(BEYOND)+signup(),
+page('signals.html',f'Beyond UCP: what else stores publish for AI agents | {NAME}',
+     beyond_ucp.page_html(BEYOND, deep_links=SA['deep'], overview_html=SA['overview_html'])+signup(),
      f'Beyond the UCP profile: public signals from the ShopBot Index crawl of {DAY}, each counted only among websites that answered for that file, with the stores that publish each one.')
+for _sp in SA['pages']:
+    page(_sp['path'], _sp['title'], _sp['body']+signup(), _sp['desc'])
 
 # ---- agent-readiness signals (phase 2 of the crawl) ----
 import datetime as _dt; _nd=_dt.date.fromisoformat(DAY)+_dt.timedelta(days=7-_dt.date.fromisoformat(DAY).weekday()); NEXTCRAWL=f'{_nd.day} {_nd.strftime("%B")} {_nd.year}'  # next Monday after the crawl
@@ -834,8 +844,9 @@ page(_guide_path,f'{GUIDE_TITLE} | {NAME}',_guide_html(_guide_blocks),GUIDE_DESC
 page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">Short readings on how to use ShopBot Index results without overstating them.</p>
 <ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
 GUIDE_PATH=_guide_path
-PAGE_LASTMOD={_guide_path:PAGE_STAMP,'guides/index.html':GUIDE_DATE,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP}
+PAGE_LASTMOD={_guide_path:PAGE_STAMP,'guides/index.html':GUIDE_DATE,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
 for _sp in STORE_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
+for _sp in SIGNAL_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 GUIDE_PAGES={
  _guide_path:dict(type='Article',headline=GUIDE_TITLE,description=GUIDE_DESC,datePublished=GUIDE_DATE,dateModified=PAGE_STAMP,
                   crumbs=[(NAME,''),('Guides','guides/'),(GUIDE_TITLE,_guide_path.replace('index.html',''))]),
@@ -848,6 +859,7 @@ _sp=_ilu.spec_from_file_location('sbi_crawl',os.path.join(ROOT,'scripts','crawl.
 CRAWL_UA=_cm.UA
 UA_NOTE='' if D.get('user_agent')==CRAWL_UA else f' <small class="muted">(The crawl of {DAY} still used the earlier User-Agent <code>{E(D.get("user_agent",""))}</code>, which read only <code>/robots.txt</code> and <code>/.well-known/ucp</code>.)</small>'
 SIGMETH=f'''<h2 id="signals">1b. Supporting signals (beyond UCP)</h2><p>UCP stays our headline measure and trend. Since October 2026 we also record other public signals of how a store presents itself to AI agents. Each store page lists them separately; we don't combine them into a score. Counts for the latest crawl, each with its own denominator, are on the <a href="signals.html">Beyond UCP</a> page. A refusal is not "no".</p>
+<p>Store-level answers for each signal, counting only stores we could check, are in the <a href="signals.html#agent-readiness">AI agent readiness</a> overview: ACP, llms.txt, AGENTS.md, the AI catalog, MCP tools and MCP endpoints, AI crawler rules in robots.txt, a wildcard robots.txt block, Content-Signal, bot protection, product data, Poppy and A2A agent cards. Each linked page names the stores, splits them by segment and platform where the crawl allows it, and states the path and the pass rule. A published file or profile is a declaration. ShopBot Index does not test purchases.</p>
 <div class="tw nomax"><table><tr><th>Signal</th><th>How we check</th><th>What it means</th><th>What it doesn't mean</th></tr>
 <tr><td><b>UCP profile</b></td><td><code>/.well-known/ucp</code> (see section 1)</td><td>The store publishes the machine-readable profile and lists what it supports.</td><td>That any particular assistant buys from it.</td></tr>
 <tr><td><b>Agent tools (MCP)</b></td><td>If the UCP profile names an MCP endpoint, we send one read-only JSON-RPC <code>tools/list</code> request, identifying ourselves with our <a href="ucp/agent-profile.json">agent profile</a>. We never call a tool.</td><td>The endpoint is live and lists tools (for example catalog search, cart, checkout) right now.</td><td>That a purchase completes without the buyer; checkouts may hand the buyer back to the store's own checkout page.</td></tr>
