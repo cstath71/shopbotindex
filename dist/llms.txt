@@ -54,6 +54,7 @@ How to read the results:
 - [Methodology](https://shopbotindex.com/methodology.html): Exactly what we fetch, how, and what the results do and don't mean.
 - [Guides](https://shopbotindex.com/guides/): Short guides on how to read ShopBot Index results.
 - [What a published UCP profile proves](https://shopbotindex.com/guides/what-a-ucp-profile-proves/): What a published UCP profile tells you, why an unchecked store stays unknown, and how to read the index without overstating a result.
+- [Businesses in ChatGPT: what it means for online stores](https://shopbotindex.com/guides/businesses-in-chatgpt/): What OpenAI's Businesses in ChatGPT launch means for online stores, and what ShopBot Index can and cannot see in its 9 November 2026 crawl.
 - [AI assistants](https://shopbotindex.com/assistants.html): Which AI assistants name which retailers, from the companies' own announcements, with links.
 - [About](https://shopbotindex.com/about.html): Who runs the index and how to contact us.
 - [Terms of use](https://shopbotindex.com/terms.html): All rights reserved. Link to pages and quote individual findings with credit and a link; bulk copying or republishing the data needs written permission.

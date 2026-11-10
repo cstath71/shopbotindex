@@ -126,6 +126,7 @@ def run(g):
                       "mainEntityOfPage":{"@type":"WebPage","@id":url},"url":url,
                       "image":[f"{SITE}/og.png?v={g['OGV']}"],"publisher":{"@id":SITE+"/#org"},"isPartOf":{"@id":SITE+"/#website"}},
                      ORG,crumbs_ld]
+                if meta.get('faq'): lds.append(faq_ld(meta['faq']))
             else:
                 lds=[{"@type":"WebPage","@id":url,"url":url,"name":meta['headline'],"description":meta['description'],
                       "datePublished":meta['datePublished'],"dateModified":meta['dateModified'],"inLanguage":"en",
@@ -222,6 +223,7 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('Methodology','methodology.html','Exactly what we fetch, how, and what the results do and don\'t mean.'),
            ('Guides','guides/','Short guides on how to read ShopBot Index results.'),
            ('What a published UCP profile proves','guides/what-a-ucp-profile-proves/','What a published UCP profile tells you, why an unchecked store stays unknown, and how to read the index without overstating a result.'),
+           ('Businesses in ChatGPT: what it means for online stores','guides/businesses-in-chatgpt/',"What OpenAI's Businesses in ChatGPT launch means for online stores, and what ShopBot Index can and cannot see in its 9 November 2026 crawl."),
            ('AI assistants','assistants.html','Which AI assistants name which retailers, from the companies\' own announcements, with links.'),
            ('About','about.html','Who runs the index and how to contact us.'),
            ('Terms of use','terms.html','All rights reserved. Link to pages and quote individual findings with credit and a link; bulk copying or republishing the data needs written permission.')]
