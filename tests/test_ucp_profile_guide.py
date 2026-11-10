@@ -77,9 +77,9 @@ class Guide(unittest.TestCase):
         sm=R('sitemap.xml')
         self.assertEqual(sm.count('what-a-ucp-profile-proves'),1)
         day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
-        stamp=max('2026-11-10', day)
+        stamp=max('2026-11-11', day)
         self.assertIn(f'<loc>{URL}</loc><lastmod>{stamp}</lastmod>',sm)
-        self.assertIn('<loc>https://shopbotindex.com/guides/</loc><lastmod>2026-11-08</lastmod>',sm)
+        self.assertIn(f'<loc>https://shopbotindex.com/guides/</loc><lastmod>{stamp}</lastmod>',sm)
         # Home lastmod is the crawl date build.py stamps from data/latest.json (not a fixed Monday).
         day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
         self.assertRegex(day,r'^\d{4}-\d{2}-\d{2}$')
@@ -112,7 +112,7 @@ class Guide(unittest.TestCase):
         self.assertEqual(art['headline'],"What a published UCP profile proves, and what it doesn't")
         self.assertEqual(art['description'],DESC)
         day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
-        stamp=max('2026-11-10', day)
+        stamp=max('2026-11-11', day)
         self.assertEqual(art['datePublished'],'2026-11-08')
         self.assertEqual(art['dateModified'],stamp)
         self.assertIn(f'<time datetime="{stamp}" id="modified">',h)

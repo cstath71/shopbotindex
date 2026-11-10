@@ -49,6 +49,34 @@ def human_join(xs):
     if len(xs)==1: return xs[0]
     if len(xs)==2: return xs[0]+' and '+xs[1]
     return ', '.join(xs[:-1])+' and '+xs[-1]
+ROBOT_RANK={'blocked':4,'mostly_blocked':3,'restricted':2,'allowed':1}
+WHOLE_SITE={'blocked','mostly_blocked'}
+BOT_PHRASE={'blocked':'asks it to stay out of the whole site','mostly_blocked':'disallows the whole site except some paths'}
+TOKEN_ORDER=('GPTBot','ChatGPT-User','OAI-SearchBot','ClaudeBot','Claude-User','Claude-SearchBot','PerplexityBot','Perplexity-User','Google-Extended','Google-Agent')
+def _robots_bots(sig_sites):
+    """Most restrictive recorded state for each named AI crawler, across the store's websites."""
+    spec={}
+    for s in sig_sites:
+        rb=(s.get('signals') or {}).get('robots')
+        if not isinstance(rb, dict) or not rb.get('present'): continue
+        sp=rb.get('specific') or {}
+        if not isinstance(sp, dict): continue
+        for t,st in sp.items():
+            if t not in spec or ROBOT_RANK.get(st,0)>ROBOT_RANK.get(spec[t],0):
+                spec[t]=st
+    return spec
+def _mcp_answered(sig_sites):
+    """Endpoints that returned a tools list, in the order the crawl recorded them."""
+    out=[]; seen=set()
+    for s in sig_sites:
+        m=(s.get('signals') or {}).get('mcp')
+        if not isinstance(m, dict) or m.get('state')!='answered': continue
+        ep=m.get('endpoint') or ''
+        if not ep or ep in seen: continue
+        seen.add(ep)
+        tools=m.get('tools') or []
+        out.append((ep, list(tools) if isinstance(tools, list) else []))
+    return out
 
 def _file_state(sig, key):
     v=sig.get(key)
@@ -129,7 +157,8 @@ def store_facts(retailer, sig_sites, af_sites):
         mcp=mcp_state, mcp_http=mcp_http, product=_product_store(sig_sites),
         robots_readable=readable, robots_ai=ai, robots_content=content, robots_wild=wild,
         access=access, challenge=bool(challenge) if access=='refused' else False, vendors=vendors if access in ('answered','refused') else set(),
-        poppy=_af_bucket(af_sites, ('poppy',)), a2a=_af_bucket(af_sites, ('a2a_card','a2a_card_legacy')))
+        poppy=_af_bucket(af_sites, ('poppy',)), a2a=_af_bucket(af_sites, ('a2a_card','a2a_card_legacy')),
+        robots_bots=_robots_bots(sig_sites), mcp_endpoints=_mcp_answered(sig_sites))
 def _mcp_state_store(sig_sites):
     if not sig_sites: return 'missing', None
     pairs=[]
@@ -267,7 +296,7 @@ def _section(title, eid, t, store_prefix, slug_for_id, labels, segs, anchor=''):
             +_seg_table(t, labels, segs)
             +f'<h3 id="by-platform-{eid}">By platform</h3>'+_plat_table(t), big)
 
-def _page(path, title, h1, name, desc, lead, parts, faq, big_hits, slug_for_id=None):
+def _page(path, title, h1, name, desc, lead, parts, faq, big_hits, slug_for_id=None, list_items=None, list_name=''):
     body=_crumbs(name)+f'<h1>{E(h1)}</h1><p class="lede" id="answer">{lead}</p>'+''.join(parts)+_faq_box(faq)
     big_items=[]
     for r in big_hits:
@@ -275,7 +304,23 @@ def _page(path, title, h1, name, desc, lead, parts, faq, big_hits, slug_for_id=N
         slug=slug_for_id(r['id']) if slug_for_id else None
         big_items.append(dict(name=r.get('name') or r['id'], path=(f'store/{slug}.html' if slug else '')))
     return dict(path=path, title=title, h1=h1, desc=desc, body=body, faq=faq, lead=lead,
-                big=[x['name'] for x in big_items], big_items=big_items)
+                big=[x['name'] for x in big_items], big_items=big_items,
+                list_items=list_items or [], list_name=list_name)
+def _store_link(r, pre, slug_for_id):
+    slug=slug_for_id(r['id']) if slug_for_id else None
+    name=E(r.get('name') or r['id'])
+    if slug: return f'<a href="{pre}store/{E(slug)}.html">{name}</a>'
+    return name
+def _list_items(hits, slug_for_id, desc_of=None):
+    items=[]
+    for r in hits:
+        slug=slug_for_id(r['id']) if slug_for_id else None
+        item=dict(name=r.get('name') or r['id'], path=(f'store/{slug}.html' if slug else ''))
+        if desc_of:
+            d=desc_of(r)
+            if d: item['description']=d
+        items.append(item)
+    return items
 
 def _item(key, label, href, absurl, sentence):
     return dict(key=key, label=label, href=href, url=absurl, sentence=sentence)
@@ -371,14 +416,88 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
                 f'Of those, {_nv(full, "includes price, currency and availability", "include price, currency and availability")} and {_nv(partial, "has Product markup without all three", "have Product markup without all three")}.')
     rob_left=(f'All three shares use the same {comma(rob["checked"])} stores whose robots.txt we could read. '
               f'Left out of the share: {comma(rob["couldnt"])} stores whose robots.txt we could not read. A refusal is not "no".')
+    facts={r['id']:f for r,f in rows}
+    acp_who=(('The store that publishes it is '+human_join([_store_link(r, pre, slug_for_id) for r in acp['hits']])+'.') if len(acp['hits'])==1
+             else (('The stores that publish it are '+human_join([_store_link(r, pre, slug_for_id) for r in acp['hits']])+'.') if acp['hits'] else 'No tracked store published one.'))
+    acp_note=('The file is the Agentic Commerce Protocol discovery document at <code>/.well-known/acp.json</code>. '
+              'OpenAI has written that merchants share catalogs through the Agentic Commerce Protocol for product discovery in ChatGPT '
+              '(<a href="https://openai.com/index/powering-product-discovery-in-chatgpt/">OpenAI, March 2026</a>). '
+              'Publishing the file is a declaration, not proof that OpenAI checkout works at the store.')
+    def _mcp_named():
+        bits=[]
+        for r in mcp_tools['hits']:
+            eps=facts[r['id']].get('mcp_endpoints') or []
+            name=_store_link(r, pre, slug_for_id)
+            if not eps:
+                bits.append(name); continue
+            shown=[]
+            for ep, tools in eps:
+                tool=', '.join(E(t) for t in tools)
+                shown.append(f'<a href="{E(ep)}">{E(ep)}</a>'+(f' (tools: {tool})' if tool else ''))
+            bits.append(name+' at '+human_join(shown))
+        if not bits: return 'No endpoint returned a tools list in this crawl.'
+        if len(bits)==1: return 'The endpoint that returned a tools list is '+bits[0]+'.'
+        return 'The endpoints that returned a tools list are '+human_join(bits)+'.'
+    s_mcp_names=_mcp_named()
+    def _whole(spec): return {t:st for t,st in (spec or {}).items() if st in WHOLE_SITE}
+    blockers=[]; gpt_block=[]
+    for r,f in rows:
+        if not f['robots_readable']: continue
+        spec=f.get('robots_bots') or {}
+        whole=_whole(spec)
+        if spec.get('GPTBot') in WHOLE_SITE: gpt_block.append(r)
+        if whole: blockers.append((r, whole))
+    blockers.sort(key=lambda pair: (0 if pair[0].get('segment')=='big' else 1, (pair[0].get('name') or '').lower(), pair[0].get('id') or ''))
+    by_name={r['name']:(r,f) for r,f in rows}
+    def _gpt_line(name):
+        hit=by_name.get(name)
+        if not hit: return ''
+        r,f=hit
+        if not f.get('robots_readable'): return ''
+        spec=f.get('robots_bots') or {}
+        st=spec.get('GPTBot')
+        if st=='blocked': return f"{E(name)}'s robots.txt asks GPTBot to stay out of the whole site."
+        if st=='mostly_blocked': return f"{E(name)}'s robots.txt disallows the whole site for GPTBot except some paths."
+        if st=='restricted': return f"{E(name)}'s robots.txt disallows some paths for GPTBot. That is not a whole-site disallow."
+        if st=='allowed': return f"{E(name)}'s robots.txt explicitly allows GPTBot."
+        if not spec: return f"{E(name)}'s robots.txt that we could read does not name GPTBot or the other AI crawler tokens we record."
+        return f"{E(name)}'s robots.txt that we could read does not name GPTBot."
+    s_gpt=(f'In the ShopBot Index crawl of {d}, {comma(len(gpt_block))} of {comma(rob["checked"])} stores whose robots.txt we could read disallow the whole site for GPTBot '
+           f'(the recorded state is blocked, or mostly blocked when some paths are allowed back).')
+    s_named=' '.join(x for x in (_gpt_line('Amazon'), _gpt_line('EBay'), _gpt_line('Walmart')) if x)
+    s_wish="A robots.txt disallow is the site's stated wish. It is not a technical block we tested."
+    def _bot_bits(whole, esc):
+        keys=[t for t in TOKEN_ORDER if t in whole]+sorted(t for t in whole if t not in TOKEN_ORDER)
+        return '; '.join(f'{esc(t)}, {BOT_PHRASE[whole[t]]}' for t in keys)
+    block_items=[]; block_list=[]
+    for r, whole in blockers:
+        block_items.append(f'<li>{_store_link(r, pre, slug_for_id)}: {_bot_bits(whole, E)}</li>')
+        slug=slug_for_id(r['id']) if slug_for_id else None
+        block_list.append(dict(name=r.get('name') or r['id'], path=(f'store/{slug}.html' if slug else ''), description=_bot_bits(whole, lambda t: t)))
+    block_html=(f'<h2 id="blocks">Stores whose robots.txt disallows the whole site for a named AI bot ({comma(len(blockers))})</h2>'
+                '<p>Blocked means the group disallows <code>/</code> and allows nothing back. Mostly blocked means it disallows <code>/</code> and allows some paths. '
+                'When a store has several websites, the state shown is the most restrictive one any checked website recorded for that bot. '
+                'A rule that only disallows some paths is not listed here.</p>'
+                f'<ul id="bot-blocks">{"".join(block_items)}</ul>')
+    mcp_ep_items=[]; mcp_list=[]
+    for r in mcp_tools['hits']:
+        eps=facts[r['id']].get('mcp_endpoints') or []
+        bits=[]; plain=[]
+        for ep, tools in eps:
+            tool=', '.join(tools)
+            bits.append(f'<a href="{E(ep)}">{E(ep)}</a>'+(f' (tools: {E(tool)})' if tool else ''))
+            plain.append(ep+(f' (tools: {tool})' if tool else ''))
+        mcp_ep_items.append(f'<li>{_store_link(r, pre, slug_for_id)}: {"; ".join(bits)}</li>')
+        slug=slug_for_id(r['id']) if slug_for_id else None
+        mcp_list.append(dict(name=r.get('name') or r['id'], path=(f'store/{slug}.html' if slug else ''), description='; '.join(plain)))
 
     leads=dict(
-        acp=' '.join(x for x in (s_acp, _left_file(acp), CAVEAT) if x),
+        acp=' '.join(x for x in (s_acp, acp_who, acp_note, _left_file(acp), CAVEAT) if x),
         ai_catalog=' '.join(x for x in (s_cat, _left_file(catalog), CAVEAT) if x),
         llms_txt=' '.join(x for x in (s_llms, _left_file(llms), CAVEAT) if x),
         agents_md=' '.join(x for x in (s_ag, _left_file(agents), CAVEAT) if x),
-        mcp=' '.join(x for x in (s_decl, s_tools, mcp_left(), CAVEAT) if x),
-        robots=' '.join(x for x in (s_ai, s_wild, s_cs, rob_left, CAVEAT) if x),
+        mcp=' '.join(x for x in (s_decl, s_tools, s_mcp_names, mcp_left(), CAVEAT) if x),
+        robots=' '.join(x for x in (s_gpt, s_named, s_wish, s_ai, s_wild, s_cs, rob_left, CAVEAT) if x),
         access=' '.join(x for x in (s_acc, access_extra(), _left_simple(access, 'the home page was not fetched, or it neither answered nor refused'), CAVEAT) if x),
         product=' '.join(x for x in (s_prod, prod_split, _left_simple(product, 'we could not reach a product page'), CAVEAT) if x),
         agent=' '.join(x for x in (
@@ -390,14 +509,18 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
 
     def one(key, path, title, h1, crumb, desc, lead, blocks, faq, bigs):
         return _page(path, f'{title} | ShopBot Index', h1, crumb, desc, lead, blocks, faq, bigs, slug_for_id)
-    def file_page(key, path, crumb, h1, verb_big, t, how, sentence):
+    def file_page(key, path, crumb, h1, verb_big, t, how, sentence, list_name=''):
         big=_big_sentence(t['hits'], pre, slug_for_id)
         lead=leads[key]
         faq=[(h1, lead),
              (f'Which big retailers {verb_big}?', big),
              ('How does ShopBot Index check this?', how),
              ('Does publishing this mean agents can buy?', CAVEAT)]
-        return one(key, path, h1, h1, crumb, sentence, lead, [_single_body(t, pre, slug_for_id, labels, segs, how, big)], faq, t['hits'])
+        pg=one(key, path, h1, h1, crumb, sentence, lead, [_single_body(t, pre, slug_for_id, labels, segs, how, big)], faq, t['hits'])
+        if list_name:
+            pg['list_items']=_list_items(t['hits'], slug_for_id)
+            pg['list_name']=list_name
+        return pg
     def _single_body(t, pre, slug_for_id, labels, segs, how, big):
         return (f'<p id="big-primary">{big}</p>'
                 f'<h2>Named examples, big retailers first ({comma(len(t["hits"]))})</h2>'
@@ -408,10 +531,12 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
                 +f'<h2 id="how">How we check</h2><p>{how}</p>')
 
     pages=[]
-    pages.append(file_page('acp','signals/acp/index.html','ACP','How many stores publish an ACP discovery file?',
-                           'publish an ACP discovery file', acp, HOW['acp'], s_acp))
-    pages.append(file_page('llms_txt','signals/llms-txt/index.html','llms.txt','How many stores publish an llms.txt file?',
-                           'publish an llms.txt file', llms, HOW['llms_txt'], s_llms))
+    pages.append(file_page('acp','signals/acp/index.html','ACP','Which stores publish an Agentic Commerce Protocol (ACP) discovery file?',
+                           'publish an ACP discovery file', acp, HOW['acp'], s_acp,
+                           list_name='Stores that publish an Agentic Commerce Protocol (ACP) discovery file'))
+    pages.append(file_page('llms_txt','signals/llms-txt/index.html','llms.txt','How many online stores have an llms.txt file in 2026?',
+                           'publish an llms.txt file', llms, HOW['llms_txt'], s_llms,
+                           list_name='Stores that publish an llms.txt file'))
     pages.append(file_page('agents_md','signals/agents-md/index.html','AGENTS.md','How many stores publish an AGENTS.md file?',
                            'publish an AGENTS.md file', agents, HOW['agents_md'], s_ag))
     pages.append(file_page('ai_catalog','signals/ai-catalog/index.html','AI catalog','How many stores publish an AI catalog?',
@@ -419,11 +544,11 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
     # MCP
     big_tools=_big_sentence(mcp_tools['hits'], pre, slug_for_id)
     big_decl=_big_sentence(mcp_decl['hits'], pre, slug_for_id)
-    mcp_h1='How many stores name an MCP endpoint in their UCP profile?'
+    mcp_h1='Which online stores publish an MCP server for AI agents?'
     mcp_faq=[(mcp_h1, leads['mcp']),
              ('Which big retailers name an MCP endpoint in their UCP profile?', big_decl),
              ('How many endpoints returned a tools list?', s_tools),
-             ('Which stores returned a tools list?', big_tools),
+             ('Which stores returned a tools list?', s_mcp_names),
              ('How does ShopBot Index check MCP?', HOW['mcp']),
              ('Does naming an MCP endpoint mean agents can buy?', CAVEAT)]
     def _found_line(t):
@@ -440,24 +565,29 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
         _seg_table(mcp_decl, labels, segs),
         '<h2 id="by-platform">Endpoint by platform</h2>', _plat_table(mcp_decl),
         f'<h2 id="tools">Tools list</h2><p>{s_tools}</p>',
+        f'<ul id="tools-endpoints">{"".join(mcp_ep_items)}</ul>',
         f'<p id="big-tools">{big_tools}</p>',
         f'<h3>Stores that returned a tools list, big retailers first ({comma(len(mcp_tools["hits"]))})</h3>',
         _examples(mcp_tools['hits'], pre, slug_for_id, 'examples-tools'),
         f'<p>Stores whose endpoint returned a tools list, by segment: {_found_line(mcp_tools)}. This is a count of responses, not a share of stores.</p>',
         f'<h2 id="how">How we check</h2><p>{HOW["mcp"]}</p>']
     pages.append(_page('signals/mcp/index.html', mcp_h1+' | ShopBot Index', mcp_h1,
-                       'MCP', s_decl, leads['mcp'], mcp_blocks, mcp_faq, mcp_decl['hits'], slug_for_id))
+                       'MCP', s_decl, leads['mcp'], mcp_blocks, mcp_faq, mcp_decl['hits'], slug_for_id,
+                       list_items=mcp_list, list_name='MCP endpoints that returned a tools list'))
     # robots
     big_ai=_big_sentence(rob['hits'], pre, slug_for_id)
     big_w=_big_sentence(wild['hits'], pre, slug_for_id)
     big_c=_big_sentence(content['hits'], pre, slug_for_id)
-    rob_faq=[('How many stores name AI crawlers in robots.txt?', leads['robots']),
+    rob_h1='Which retailers block AI bots like GPTBot in robots.txt?'
+    rob_faq=[(rob_h1, leads['robots']),
+             ('How many stores name AI crawlers in robots.txt?', s_ai+' '+rob_left),
              ('Which big retailers have robots.txt rules that name an AI crawler?', big_ai),
              ('Which big retailers have a wildcard robots.txt rule that disallows the whole site?', big_w),
              ('Which big retailers publish a Content-Signal line?', big_c),
              ('How does ShopBot Index check robots.txt?', HOW['robots']),
              ('Does a robots.txt rule mean agents can buy?', CAVEAT)]
     rob_blocks=[
+        block_html,
         f'<p id="big-primary">{big_ai}</p>',
         f'<h2>Stores with AI crawler rules, big retailers first ({comma(len(rob["hits"]))})</h2>',
         _examples(rob['hits'], pre, slug_for_id, 'examples'),
@@ -474,8 +604,9 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
         _examples(content['hits'], pre, slug_for_id, 'examples-content'),
         '<h3 id="by-segment-content">Content-Signal by segment</h3>', _seg_table(content, labels, segs),
         f'<h2 id="how">How we check</h2><p>{HOW["robots"]}</p>']
-    pages.append(_page('signals/ai-bots-robots/index.html','How many stores name AI crawlers in robots.txt? | ShopBot Index','How many stores name AI crawlers in robots.txt?',
-                       'AI crawler rules', s_ai, leads['robots'], rob_blocks, rob_faq, rob['hits'], slug_for_id))
+    pages.append(_page('signals/ai-bots-robots/index.html', rob_h1+' | ShopBot Index', rob_h1,
+                       'AI crawler rules', s_ai, leads['robots'], rob_blocks, rob_faq, rob['hits'], slug_for_id,
+                       list_items=block_list, list_name='Stores whose robots.txt disallows the whole site for a named AI bot'))
     # bot protection
     big_acc=_big_sentence(access['hits'], pre, slug_for_id)
     acc_faq=[('How many stores were refused by bot protection?', leads['access']),
