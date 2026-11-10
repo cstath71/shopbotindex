@@ -96,7 +96,7 @@ def run(g):
         if p in desc and f'content="{defd}"' in h: h=h.replace(f'content="{defd}"',f'content="{E(desc[p])}"')
         if p=='index.html':
             h=_insert_after_topform(h,sum_html(home_sum)); h=_insert_before_bottom_cta(h,faq_html(home_faq))
-            lds=[{"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":NAME,"description":g['DEFDESC'],"publisher":{"@id":SITE+"/#org"}},ORG,DATASET,faq_ld(home_faq)]
+            lds=[{"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":NAME,"description":g.get('HOME_DESC') or g['DEFDESC'],"publisher":{"@id":SITE+"/#org"}},ORG,DATASET,faq_ld(home_faq)]
         elif p=='methodology.html':
             h=_insert_after_topform(h,sum_html(meth_sum)); h=_insert_before_bottom_cta(h,faq_html(meth_faq))
             lds=[{"@type":"WebPage","@id":SITE+"/methodology.html","url":SITE+"/methodology.html","name":f"Methodology | {NAME}","dateModified":DAY,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}},

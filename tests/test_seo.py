@@ -56,6 +56,18 @@ class Seo(unittest.TestCase):
         self.assertIsNone(re.search(r'\b(official|PrimeLogic|Stathopoulos|Switzerland)\b',l+R('llms-full.txt'),re.I))
         import sys; sys.path.insert(0,os.path.join(ROOT,'scripts')); from seo import INDEXNOW_KEY as K
         self.assertEqual(R(f'{K}.txt'),K)
+    def test_homepage_title_and_meta_description_fit_bing(self):
+        # Bing Webmaster (10 Nov 2026): homepage title too long, meta description too long or too short.
+        h=R('index.html')
+        title=html.unescape(re.search(r'<title>(.*?)</title>',h).group(1))
+        desc=html.unescape(re.search(r'<meta name="description" content="(.*?)">',h).group(1))
+        self.assertLess(len(title),60,title)
+        self.assertGreaterEqual(len(desc),120,desc); self.assertLessEqual(len(desc),155,desc)
+        self.assertNotRegex(title+' '+desc,r'[—–]')
+        self.assertIn('publish a UCP profile',desc)
+        self.assertIsNone(re.search(r'\b(official|verified)\b',title+' '+desc,re.I))
+        g=[x for x in lds(h)[0]['@graph'] if x.get('@type')=='WebSite'][0]
+        self.assertEqual(g['description'],desc)
     def test_internal_links_use_clean_urls(self):
         # Google treats /index.html and / as two URLs; internal links must point at the canonical one.
         for p in ('index.html','methodology.html','segments/big.html','categories/electronics.html','store/ikea.html','unwatch.html'):

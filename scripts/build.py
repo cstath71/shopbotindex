@@ -9,6 +9,8 @@ CONTACT='hello@shopbotindex.com'
 MAILTO=f'<a href="mailto:{CONTACT}">{CONTACT}</a>'
 FORM_ACTION='https://uufmlmwgvoqhhtqgrclu.supabase.co/functions/v1/sbi-subscribe'
 DEFDESC='What online stores tell AI shopping agents: a weekly public crawl of Shopify stores, big retailers and other online stores for UCP profiles, the machine-readable profile AI shopping agents read, plus agent tools, AI rules in robots.txt, AI guidance files and product data.'
+HOME_TITLE='What stores tell AI shopping agents | ShopBot Index'  # Bing: title under 60 characters
+HOME_DESC='Weekly crawl of which online stores publish a UCP profile, the profile AI shopping agents read, plus tools, robots.txt rules and product data.'  # Bing: meta description 120-155 characters
 E=lambda s: html.escape(str(s if s is not None else ''))
 D=json.load(open(os.path.join(DATA,'latest.json'))); CH=json.load(open(os.path.join(DATA,'channels.json')))
 from nonshops import IDS as NON_SHOPS  # places, newspapers, restaurants etc. (config/non_shops.json) are not shops: no page, not counted
@@ -362,7 +364,7 @@ home=f'''<h1>What online stores tell AI shopping agents</h1>
 <h2>Which AI assistants name which retailers</h2><p>From public announcements and help pages only. <a href="assistants.html">Details →</a></p>
 <div class="tw nomax"><table><tr><th>Assistant</th><th>Retailers named</th><th>Source</th></tr>{"".join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"].split(" (")[-1].rstrip(")"))}</a>, {E(c["date"])}</td></tr>' for c in CH["channels"])}</table></div>
 {signup()}{aff()}'''
-page('index.html',f'What online stores tell AI shopping agents: weekly UCP index · {NAME}',home,DEFDESC)
+page('index.html',HOME_TITLE,home,HOME_DESC)
 # ---- answer-first copy (numbers only from this crawl; seo.py turns the same FAQ tuples into JSON-LD) ----
 def _num(n): return f'{n:,}'
 def _attr(s): return html.escape(str(s if s is not None else ''), quote=True)
@@ -971,7 +973,7 @@ page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">S
 <li><a href="what-is-a-ucp-profile/">{E(WHAT_H1)}</a><br><span class="muted">{E(WHAT_DESC)}</span></li>
 <li><a href="businesses-in-chatgpt/">{E(BIZ_TITLE)}</a><br><span class="muted">{E(BIZ_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
 GUIDE_PATH=_guide_path
-PAGE_LASTMOD={_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,'guides/index.html':PAGE_STAMP,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
+PAGE_LASTMOD={'index.html':PAGE_STAMP,_guide_path:PAGE_STAMP,_biz_path:BIZ_DATE,'guides/index.html':PAGE_STAMP,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP,'signals.html':PAGE_STAMP}
 for _ap in ANSWER_PAGES: PAGE_LASTMOD[_ap]=PAGE_STAMP
 for _sp in STORE_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 for _sp in SIGNAL_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
