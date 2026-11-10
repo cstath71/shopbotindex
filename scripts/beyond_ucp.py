@@ -371,13 +371,18 @@ def summary_html(rep, link_prefix='signals.html', page='home'):
     return (f'<section id="beyond-ucp" class="beyond"><h2>Beyond UCP</h2>{intro}{_table(rep, "" if page=="signals" else (link_prefix or "signals.html"))}'
             f'<ul class="sig-notes">{notes}</ul>{foot}</section>')
 
-def page_html(rep):
-    blocks=[f'<h1>Beyond UCP</h1>',
+def page_html(rep, deep_links=None, overview_html=''):
+    deep_links=deep_links or {}
+    blocks=[f'<h1>Beyond UCP</h1>']
+    if overview_html: blocks.append(overview_html)
+    blocks.append(
             f'<p class="lede sig-copy">Public signals other than the UCP profile, from the crawl of {E(dlong(rep["crawl_date"]))}. '
             f'UCP stays the headline on the home page: which stores publish a UCP profile. '
             f'Each share below uses only the websites that answered for that file. '
-            f'<b>Refused is not "no".</b> An error is not "no".</p>',
-            summary_html(rep, link_prefix='', page='signals')]
+            f'<b>Refused is not "no".</b> An error is not "no".</p>')
+    if overview_html:
+        blocks.append('<p class="sig-copy">The answer above counts stores. The table below counts websites. A store with several websites can raise the website count above the store count.</p>')
+    blocks.append(summary_html(rep, link_prefix='', page='signals'))
     for sig in rep['signals']:
         if sig['stores']:
             items=''.join(f'<li><a href="{E(s["path"])}">{E(s["name"])}</a></li>' if s.get('path') else f'<li>{E(s["name"])}</li>' for s in sig['stores'])
@@ -385,9 +390,13 @@ def page_html(rep):
         else:
             listing='<p class="sig-copy">No tracked store published this in this crawl.</p>'
         n=sig['store_count']
+        deeper=''
+        if sig['id'] in deep_links:
+            deeper=f'<p class="sig-copy"><a href="{E(deep_links[sig["id"]])}">Store-level answer, named examples and how we check</a>.</p>'
         blocks.append(
             f'<section><h2 id="{E(sig["id"])}">{E(sig["label"])}</h2>'
             f'<p class="sig-copy">{sig["sentence_html"]}</p>'
             f'<p class="sig-copy">{E(sig["prose"])}</p>'
+            f'{deeper}'
             f'<h3>Stores that publish it ({comma(n)})</h3>{listing}</section>')
     return ''.join(blocks)

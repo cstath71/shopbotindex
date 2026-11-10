@@ -43,6 +43,7 @@ def run(g):
     if rq: meth_faq.append(('How many requests does the crawler send?',f'Usually {rq.group(1)} to {rq.group(2)} per website per week, and never more than {rq.group(3)}, one at a time per website, with robots.txt respected for every URL. <a href="methodology.html#crawler">How we fetch</a>.'))
     meth_faq+=[('How can a website opt out?',f'Disallow <code>/</code> (or just the paths we read) for <code>ShopBotIndexBot</code> in robots.txt, or email <a href="mailto:{CONTACT}">{CONTACT}</a>.'),
      ('Does ShopBot Index test purchases?','No. We don\'t test purchases, and we don\'t score or rank how well a store works with any assistant.')]
+    if g.get('READINESS_FAQ'): home_faq=home_faq+list(g['READINESS_FAQ'])
     def faq_html(faq): return '<div class="box faq" id="faq"><h2>Frequently asked questions</h2>'+''.join(f'<h3>{E(q)}</h3><p>{a}</p>' for q,a in faq)+'</div>'
     def faq_ld(faq): return {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":_txt(a)}} for q,a in faq]}
     def sum_html(s): return f'<div class="answer" id="summary"><p><b>In short:</b> {s}</p></div>'
@@ -103,6 +104,16 @@ def run(g):
         elif p=='changes.html' and CHG:
             h=_insert_before_bottom_cta(h,faq_html(chg_faq))
             lds=[{"@type":"WebPage","@id":SITE+"/changes.html","url":SITE+"/changes.html","name":g['CHGTITLE'],"dateModified":DAY,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}},faq_ld(chg_faq)]
+        elif p=='signals.html' and g.get('READINESS_FAQ'):
+            h=_insert_before_bottom_cta(h,faq_html(g['READINESS_FAQ']))
+            url=SITE+'/signals.html'; stamp=g.get('PAGE_STAMP') or DAY
+            lead=_txt(g['READINESS_FAQ'][0][1])
+            lds=[{"@type":"WebPage","@id":url+"#webpage","url":url,"name":html.unescape(re.search(r'<title>(.*?)</title>',h).group(1)),"dateModified":stamp,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}},
+                 {"@type":"Dataset","name":"AI agent readiness, store-level crawl","description":lead,"url":url,"dateModified":stamp,
+                  "creator":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"license":SITE+"/terms.html","isBasedOn":{"@id":SITE+"/#dataset"},
+                  "measurementTechnique":"Public files and pages fetched after robots.txt, rolled up to one result per store",
+                  "variableMeasured":["UCP profile","ACP discovery file","llms.txt","AGENTS.md","AI catalog","MCP tools list","MCP endpoint","AI crawler rules in robots.txt","Wildcard robots.txt block","Content-Signal","Bot protection refusal","schema.org Product markup","Poppy file","A2A agent card"]},
+                 faq_ld(g['READINESS_FAQ'])]
         elif p in (g.get('GUIDE_PAGES') or {}):
             meta=g['GUIDE_PAGES'][p]; url=SITE+'/'+p.replace('index.html','')
             trail=meta['crumbs']
@@ -143,6 +154,21 @@ def run(g):
             lds.append(faq_ld(g['CHECK_FAQ']))
         elif p==g.get('GUIDE_PATH') and g.get('GUIDE_FAQ'):
             lds.append(faq_ld(g['GUIDE_FAQ']))
+        meta=(g.get('SIGNAL_PAGES') or {}).get(p)
+        if meta:
+            url=SITE+'/'+p.replace('index.html',''); stamp=g.get('PAGE_STAMP') or DAY
+            lead=_txt(meta['lead']); name=html.unescape(re.search(r'<title>(.*?)</title>',h).group(1))
+            lds.append({"@type":"WebPage","@id":url+"#webpage","url":url,"name":name,"dateModified":stamp,"description":_txt(meta['desc']),"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}})
+            lds.append({"@type":"Dataset","name":meta['h1'],"description":lead,"url":url,"dateModified":stamp,
+                        "creator":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"license":SITE+"/terms.html","isBasedOn":{"@id":SITE+"/#dataset"},
+                        "measurementTechnique":"Public file or page fetched after robots.txt, rolled up to one result per store"})
+            lds.append(faq_ld(meta['faq']))
+            trail=[(NAME,''),('Beyond UCP','signals.html'),(meta['h1'], p.replace('index.html',''))]
+            lds.append({"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+'/'+u} for i,(n,u) in enumerate(trail)]})
+            big=meta.get('big_items') or []
+            if big:
+                lds.append({"@type":"ItemList","name":"Big retailers in this count","numberOfItems":len(big),"description":_txt(meta['faq'][1][1]) if len(meta['faq'])>1 else lead,
+                            "itemListElement":[{"@type":"ListItem","position":i+1,"name":it['name'],**({"url":SITE+'/'+it['path']} if it.get('path') else {})} for i,it in enumerate(big)]})
         if lds: h=h.replace('</head>',_ld({"@context":"https://schema.org","@graph":lds})+'</head>',1)
         open(fp,'w').write(h)
     # ---- robots.txt, sitemap.xml, llms.txt, llms-full.txt, IndexNow key ----
@@ -182,7 +208,16 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
            ('Capabilities','capabilities/','What UCP profiles declare (checkout, cart, catalog search and more), with the stores declaring each.'),
            ('Categories','categories/','Results by store category.'),
            ('What changed','changes.html','This week compared with the previous crawl: who started or stopped publishing a UCP profile.'),
-           ('Beyond UCP','signals.html','Public signals other than the UCP profile, each counted only among websites that answered for that file, with the stores that publish each one.'),
+           ('Beyond UCP','signals.html','Public signals other than the UCP profile. The page opens with a store-level answer for every signal, then counts websites that answered for each file.'),
+           ('ACP','signals/acp/','How many stores publish an Agentic Commerce Protocol discovery file.'),
+           ('llms.txt','signals/llms-txt/','How many stores publish an llms.txt file.'),
+           ('AGENTS.md','signals/agents-md/','How many stores publish an AGENTS.md file.'),
+           ('AI catalog','signals/ai-catalog/','How many stores publish an AI catalog.'),
+           ('MCP','signals/mcp/','How many stores return an MCP tools list, and how many name an MCP endpoint.'),
+           ('AI bots in robots.txt','signals/ai-bots-robots/','How many stores name AI crawlers in robots.txt, disallow the whole site with a wildcard rule, or publish a Content-Signal line.'),
+           ('Bot protection','signals/bot-protection/','How many stores were refused by bot protection.'),
+           ('Product data','signals/product-data/','How many stores have schema.org Product markup on a product page we fetched.'),
+           ('Agent cards','signals/agent-cards/','How many stores publish a valid Poppy file or a valid A2A agent card.'),
            ('Check your store','check.html','Look up any domain in the latest crawl.'),
            ('Methodology','methodology.html','Exactly what we fetch, how, and what the results do and don\'t mean.'),
            ('Guides','guides/','Short guides on how to read ShopBot Index results.'),
@@ -196,6 +231,7 @@ def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
 
 Latest crawl: {DAY}. {_txt(home_sum)}
 
+{g.get('READINESS_LLMS') or ''}
 How to read the results:
 - "UCP profile found": the store publishes a Universal Commerce Protocol profile at /.well-known/ucp and lists what it supports. A UCP profile isn't proof that AI agents can shop at a store.
 - "No UCP profile found": we found no profile. It does not mean AI agents can't shop there.
@@ -235,4 +271,6 @@ def _llms_full(g,llms,ALL,SS):
     out+= [f'- {g["phn"](p)} (`{p}`): {v} of {len(U)}' for p,v in g['PHC'].most_common()]
     out.append(f'\n## All {len(U)} retailers and stores with a UCP profile (crawl of {DAY})\n')
     out+= [f'- [{r["name"]}]({SITE}/store/{g["SLUG"][r["id"]]}.html) ({SEG[r["segment"]]}; {len(r["capabilities"])} capabilities declared{", including checkout" if "dev.ucp.shopping.checkout" in r["capabilities"] else ""})' for r in sorted(U,key=lambda r:r['name'].lower())]
+    extra=g.get('READINESS_SEGMENTS') or ''
+    if extra: out.append(extra.rstrip('\n'))
     return '\n'.join(out)+'\n'

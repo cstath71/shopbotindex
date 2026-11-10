@@ -1,9 +1,10 @@
-"""Record-only check of public agent discovery files on each crawled website (not shown anywhere on the site yet).
+"""Check of public agent discovery files on each crawled website.
+Store-level Poppy and A2A counts are published on /signals/agent-cards/. These files never change a store's UCP result.
 Files: /.well-known/poppy.json (Personal Agent Protocol draft 0.1, https://personalagentprotocol.org/docs/spec section 3),
 /.well-known/agent-card.json (A2A agent card, https://a2a-protocol.org/latest/topics/agent-discovery/) and the pre-v0.3.0 path
 /.well-known/agent.json, and /.well-known/ai-catalog.json (MCP SEP-2127 AI catalog; skipped when phase 2 of the crawl already
 recorded it as sites[].signals.ai_catalog).
-Results go to sites[].agent_files in the crawl JSON only. build.py doesn't read them.
+Results go to sites[].agent_files in the crawl JSON. scripts/signal_answers.py reads them when it builds the store-level answers.
 Safety: it runs after the UCP pass, never edits any existing field, every exception is caught, and it stops at a time budget.
 Politeness: the crawl's own User-Agent identity (product token, link, contact) with a comment that names these files, the crawl's
 timeouts, pause and worker count, one request at a time per website, robots.txt honoured for every URL, and no further requests
