@@ -319,8 +319,7 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
     s_cat=figure(d, catalog['found'], catalog['checked'], 'publish an AI catalog', 'publishes an AI catalog')
     s_llms=figure(d, llms['found'], llms['checked'], 'publish an llms.txt file', 'publishes an llms.txt file')
     s_ag=figure(d, agents['found'], agents['checked'], 'publish an AGENTS.md file', 'publishes an AGENTS.md file')
-    s_tools=figure(d, mcp_tools['found'], mcp_tools['checked'], 'return a tools list from an MCP endpoint named in the UCP profile', 'returns a tools list from an MCP endpoint named in the UCP profile')
-    s_decl=figure(d, mcp_decl['found'], mcp_decl['checked'], 'name an MCP endpoint in a UCP profile', 'names an MCP endpoint in a UCP profile')
+    s_decl=figure(d, mcp_decl['found'], mcp_decl['checked'], 'name an MCP endpoint in their UCP profile', 'names an MCP endpoint in their UCP profile')
     s_ai=figure(d, rob['found'], rob['checked'], 'have robots.txt rules that name an AI crawler', 'has robots.txt rules that name an AI crawler')
     s_wild=figure(d, wild['found'], wild['checked'], 'have a wildcard robots.txt rule that disallows the whole site', 'has a wildcard robots.txt rule that disallows the whole site')
     s_cs=figure(d, content['found'], content['checked'], 'publish a Content-Signal line in robots.txt', 'publishes a Content-Signal line in robots.txt')
@@ -331,6 +330,18 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
     s_ucp=figure(d, ucp['found'], ucp['checked'], 'publish a UCP profile', 'publishes a UCP profile')
 
     err_http=Counter(f['mcp_http'] for r,f in rows if f['mcp']=='error')
+    def mcp_tools_sentence():
+        n=mcp_tools['found']; n422=err_http.get(422, 0); nref=mcp_tools['buckets']['refused']
+        head='Only 1 endpoint returned a tools list when queried' if n==1 else f'Only {comma(n)} endpoints returned a tools list when queried'
+        parts=[]
+        if n422==1: parts.append('1 returned HTTP 422')
+        elif n422: parts.append(f'{comma(n422)} returned HTTP 422')
+        if nref==1: parts.append('1 refused')
+        elif nref: parts.append(f'{comma(nref)} refused')
+        if len(parts)==2: return f'{head} ({parts[0]}, {parts[1]}).'
+        if len(parts)==1: return f'{head} ({parts[0]}).'
+        return head+'.'
+    s_tools=mcp_tools_sentence()
     def mcp_left():
         b=mcp_tools['buckets']
         bits=[]
@@ -366,7 +377,7 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
         ai_catalog=' '.join(x for x in (s_cat, _left_file(catalog), CAVEAT) if x),
         llms_txt=' '.join(x for x in (s_llms, _left_file(llms), CAVEAT) if x),
         agents_md=' '.join(x for x in (s_ag, _left_file(agents), CAVEAT) if x),
-        mcp=' '.join(x for x in (s_tools, s_decl, mcp_left(), CAVEAT) if x),
+        mcp=' '.join(x for x in (s_decl, s_tools, mcp_left(), CAVEAT) if x),
         robots=' '.join(x for x in (s_ai, s_wild, s_cs, rob_left, CAVEAT) if x),
         access=' '.join(x for x in (s_acc, access_extra(), _left_simple(access, 'the home page was not fetched, or it neither answered nor refused'), CAVEAT) if x),
         product=' '.join(x for x in (s_prod, prod_split, _left_simple(product, 'we could not reach a product page'), CAVEAT) if x),
@@ -408,26 +419,34 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
     # MCP
     big_tools=_big_sentence(mcp_tools['hits'], pre, slug_for_id)
     big_decl=_big_sentence(mcp_decl['hits'], pre, slug_for_id)
-    mcp_faq=[('How many stores return an MCP tools list?', leads['mcp']),
-             ('Which big retailers returned a tools list?', big_tools),
-             ('Which big retailers name an MCP endpoint?', big_decl),
+    mcp_h1='How many stores name an MCP endpoint in their UCP profile?'
+    mcp_faq=[(mcp_h1, leads['mcp']),
+             ('Which big retailers name an MCP endpoint in their UCP profile?', big_decl),
+             ('How many endpoints returned a tools list?', s_tools),
+             ('Which stores returned a tools list?', big_tools),
              ('How does ShopBot Index check MCP?', HOW['mcp']),
-             ('Does an MCP tools list mean agents can buy?', CAVEAT)]
+             ('Does naming an MCP endpoint mean agents can buy?', CAVEAT)]
+    def _found_line(t):
+        bits=[]
+        for k in segs:
+            s=t['seg'][k]
+            bits.append(f'{labels.get(k,k)} {comma(s["found"])}')
+        return ', '.join(bits)
     mcp_blocks=[
-        f'<p id="big-primary">{big_tools}</p>',
-        f'<h2>Stores that returned a tools list, big retailers first ({comma(len(mcp_tools["hits"]))})</h2>',
-        _examples(mcp_tools['hits'], pre, slug_for_id, 'examples'),
-        '<h2 id="by-segment">Tools list by segment</h2>', _seg_table(mcp_tools, labels, segs),
-        '<h2 id="by-platform">Tools list by platform</h2>', _plat_table(mcp_tools),
-        f'<h2 id="declared">MCP endpoint named in the UCP profile</h2><p>{s_decl}</p>',
-        f'<p id="big-declared">{big_decl}</p>',
-        f'<h3>Stores that name an endpoint, big retailers first ({comma(len(mcp_decl["hits"]))})</h3>',
-        _examples(mcp_decl['hits'], pre, slug_for_id, 'examples-declared'),
-        '<h3 id="by-segment-declared">Endpoint by segment</h3>', _seg_table(mcp_decl, labels, segs),
-        '<h3 id="by-platform-declared">Endpoint by platform</h3>', _plat_table(mcp_decl),
+        f'<p id="big-primary">{big_decl}</p>',
+        f'<h2 id="declared">Stores that name an MCP endpoint, big retailers first ({comma(len(mcp_decl["hits"]))})</h2>',
+        _examples(mcp_decl['hits'], pre, slug_for_id, 'examples'),
+        '<h2 id="by-segment">Endpoint by segment</h2><p>In this count means the stores in the headline figure. Couldn\'t check is left out of the share.</p>',
+        _seg_table(mcp_decl, labels, segs),
+        '<h2 id="by-platform">Endpoint by platform</h2>', _plat_table(mcp_decl),
+        f'<h2 id="tools">Tools list</h2><p>{s_tools}</p>',
+        f'<p id="big-tools">{big_tools}</p>',
+        f'<h3>Stores that returned a tools list, big retailers first ({comma(len(mcp_tools["hits"]))})</h3>',
+        _examples(mcp_tools['hits'], pre, slug_for_id, 'examples-tools'),
+        f'<p>Stores whose endpoint returned a tools list, by segment: {_found_line(mcp_tools)}. This is a count of responses, not a share of stores.</p>',
         f'<h2 id="how">How we check</h2><p>{HOW["mcp"]}</p>']
-    pages.append(_page('signals/mcp/index.html','How many stores return an MCP tools list? | ShopBot Index','How many stores return an MCP tools list?',
-                       'MCP', s_tools, leads['mcp'], mcp_blocks, mcp_faq, mcp_tools['hits'], slug_for_id))
+    pages.append(_page('signals/mcp/index.html', mcp_h1+' | ShopBot Index', mcp_h1,
+                       'MCP', s_decl, leads['mcp'], mcp_blocks, mcp_faq, mcp_decl['hits'], slug_for_id))
     # robots
     big_ai=_big_sentence(rob['hits'], pre, slug_for_id)
     big_w=_big_sentence(wild['hits'], pre, slug_for_id)
@@ -510,8 +529,8 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
         llms_txt=(site+'/signals/llms-txt/','signals/llms-txt/'),
         agents_md=(site+'/signals/agents-md/','signals/agents-md/'),
         ai_catalog=(site+'/signals/ai-catalog/','signals/ai-catalog/'),
-        mcp_tools=(site+'/signals/mcp/','signals/mcp/'),
-        mcp_declared=(site+'/signals/mcp/#declared','signals/mcp/#declared'),
+        mcp_tools=(site+'/signals/mcp/#tools','signals/mcp/#tools'),
+        mcp_declared=(site+'/signals/mcp/','signals/mcp/'),
         robots_ai=(site+'/signals/ai-bots-robots/','signals/ai-bots-robots/'),
         robots_wild=(site+'/signals/ai-bots-robots/#wildcard','signals/ai-bots-robots/#wildcard'),
         content_signal=(site+'/signals/ai-bots-robots/#content-signal','signals/ai-bots-robots/#content-signal'),
@@ -526,8 +545,8 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
         ('llms_txt','llms.txt', s_llms),
         ('agents_md','AGENTS.md', s_ag),
         ('ai_catalog','AI catalog', s_cat),
-        ('mcp_tools','MCP tools list', s_tools),
         ('mcp_declared','MCP endpoint', s_decl),
+        ('mcp_tools','MCP tools list', s_tools),
         ('robots_ai','AI crawler rules', s_ai),
         ('robots_wild','Wildcard robots.txt block', s_wild),
         ('content_signal','Content-Signal', s_cs),
@@ -554,18 +573,23 @@ def prepare(retailers, sites, slug_for_id, crawl_date, date_long, segments, seg_
     seg_lines=['','## AI agent readiness by segment (stores we could check)','',
                'Each line is the stores in that segment we could check for that signal. Could not check is left out.','']
     seg_stats=[
-        ('ACP', acp, urls['acp'][0]), ('llms.txt', llms, urls['llms_txt'][0]), ('AGENTS.md', agents, urls['agents_md'][0]),
-        ('AI catalog', catalog, urls['ai_catalog'][0]), ('MCP tools list', mcp_tools, urls['mcp_tools'][0]),
-        ('MCP endpoint', mcp_decl, urls['mcp_declared'][0]), ('AI crawler rules', rob, urls['robots_ai'][0]),
-        ('Wildcard robots.txt block', wild, urls['robots_wild'][0]), ('Content-Signal', content, urls['content_signal'][0]),
-        ('Bot protection refused our crawler', access, urls['access'][0]), ('Product data', product, urls['product'][0]),
-        ('Poppy', poppy, urls['poppy'][0]), ('A2A agent card', a2a, urls['a2a'][0])]
-    for lab,t,url in seg_stats:
+        ('ACP', acp, urls['acp'][0], 'share'), ('llms.txt', llms, urls['llms_txt'][0], 'share'), ('AGENTS.md', agents, urls['agents_md'][0], 'share'),
+        ('AI catalog', catalog, urls['ai_catalog'][0], 'share'),
+        ('MCP endpoint', mcp_decl, urls['mcp_declared'][0], 'share'),
+        ('MCP tools list', mcp_tools, urls['mcp_tools'][0], 'count'),
+        ('AI crawler rules', rob, urls['robots_ai'][0], 'share'),
+        ('Wildcard robots.txt block', wild, urls['robots_wild'][0], 'share'), ('Content-Signal', content, urls['content_signal'][0], 'share'),
+        ('Bot protection refused our crawler', access, urls['access'][0], 'share'), ('Product data', product, urls['product'][0], 'share'),
+        ('Poppy', poppy, urls['poppy'][0], 'share'), ('A2A agent card', a2a, urls['a2a'][0], 'share')]
+    for lab,t,url,kind in seg_stats:
         seg_lines.append(f'### {lab}')
         seg_lines.append('')
         for k in segs:
             s=t['seg'][k]
-            seg_lines.append(f'- {labels.get(k,k)}: {comma(s["found"])} of {comma(s["checked"])} ({share(s["found"], s["checked"])}). {url}')
+            if kind=='count':
+                seg_lines.append(f'- {labels.get(k,k)}: {comma(s["found"])} returned a tools list. {url}')
+            else:
+                seg_lines.append(f'- {labels.get(k,k)}: {comma(s["found"])} of {comma(s["checked"])} ({share(s["found"], s["checked"])}). {url}')
         seg_lines.append('')
     deep={
         'acp':'signals/acp/','ai-catalog':'signals/ai-catalog/','llms-txt':'signals/llms-txt/','agents-md':'signals/agents-md/',
