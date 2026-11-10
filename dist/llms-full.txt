@@ -13,7 +13,7 @@ How to read the results:
 ## Key pages
 
 - [Home](https://shopbotindex.com/): Headline numbers from the latest crawl, by segment, big retailers with a UCP profile, capabilities and payment handlers.
-- [All stores](https://shopbotindex.com/stores.html): Every one of the 2854 retailers and stores with its result (the table is drawn with JavaScript; each store also has its own page under /store/).
+- [All stores](https://shopbotindex.com/stores.html): Every one of the 2854 retailers and stores with its result in the HTML, split across stores.html, stores-2.html, stores-3.html so each page stays readable (sorting and filtering use JavaScript). Each store also has its own page under /store/.
 - [Segments](https://shopbotindex.com/segments/): Shopify stores, big retailers, other retailers & marketplaces, side by side.
 - [Shopify stores](https://shopbotindex.com/segments/shopify.html): 841 of 1042 checked publish a UCP profile (80.7%).
 - [Big retailers](https://shopbotindex.com/segments/big.html): 16 of 255 checked publish a UCP profile (6.3%).

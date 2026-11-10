@@ -330,7 +330,11 @@ if not _ccs:
         return out
     _ccs=_cc_split_home(RET, SITES_BY)
 import datetime as _dt_home
-_day_long=f'{_dt_home.date.fromisoformat(DAY).day} {_dt_home.date.fromisoformat(DAY).strftime("%B")} {_dt_home.date.fromisoformat(DAY).year}'
+def _long(d):
+    x=_dt_home.date.fromisoformat(d); return f'{x.day} {x.strftime("%B")} {x.year}'
+_day_long=_long(DAY)
+CONTENT_UPDATED='2026-11-10'  # answer-first copy shipped this day; page lastmod is the later of this and the crawl date
+PAGE_STAMP=CONTENT_UPDATED if CONTENT_UPDATED>DAY else DAY
 _cc_note=(f'<p class="muted">Of those {_ccn} on {_day_long}: {_ccs["robots_disallow"]} robots.txt disallow, {_ccs["blocked"]} refused (401/403/429/451), {_ccs["error"]} timeout or connection error, {_ccs["mixed"]} mixed. '
           f'<a href="methodology.html#couldnt-check">How we split that</a>. That split is about why our crawler got no answer; it does not say what AI shopping agents see.</p>') if _ccn else ''
 home=f'''<h1>What online stores tell AI shopping agents</h1>
@@ -352,31 +356,126 @@ home=f'''<h1>What online stores tell AI shopping agents</h1>
 <div class="tw nomax"><table><tr><th>Assistant</th><th>Retailers named</th><th>Source</th></tr>{"".join(f'<tr><td><b>{E(c["assistant"])}</b></td><td>{", ".join(E(x) for x in c["retailers_named"])}</td><td><a href="{E(c["source_url"])}" rel="noopener">{E(c["source_title"].split(" (")[-1].rstrip(")"))}</a>, {E(c["date"])}</td></tr>' for c in CH["channels"])}</table></div>
 {signup()}{aff()}'''
 page('index.html',f'What online stores tell AI shopping agents: weekly UCP index · {NAME}',home,DEFDESC)
-# ---- stores table ----
-rows=[]
-for r in sorted(RET,key=lambda r:(r['status']!='ucp',r['name'].lower())):
-    rows.append(dict(u=SLUG[r['id']],n=r['name'],g=r['segment'],c=r['category'],s=r['status'],co=r['country'][:40] if r['segment']!='shopify' else '',
-        caps=[capn(x) for x in r['capabilities']],ph=[phn(x) for x in r['payment_handlers']],p='/'.join(r['platforms']),
-        st=[dict(h=x.get('host') or x['domain'],s=x.get('status','error')) for x in SITES_BY[r['id']]]))
-stores=f'''<h1>All stores ({len(RET)})</h1><p class="lede">Every retailer and store we track, with the result of fetching <code>/.well-known/ucp</code> on each of its websites on {DAY}. Retailers with several country sites show them underneath. Click a column to sort.</p>
-<div class="filters"><input id="q" placeholder="Search name or domain" aria-label="Search">
+# ---- answer-first copy (numbers only from this crawl; seo.py turns the same FAQ tuples into JSON-LD) ----
+def _num(n): return f'{n:,}'
+def _attr(s): return html.escape(str(s if s is not None else ''), quote=True)
+ALLS=segstats(RET)
+SSMAP={k:segstats([r for r in RET if r['segment']==k]) for k in SEG}
+N_CHECKOUT=sum(1 for r in U if 'dev.ucp.shopping.checkout' in r['capabilities'])
+def _names_html(rs, pre):
+    parts=[f'<a href="{pre}store/{SLUG[r["id"]]}.html">{E(r["name"])}</a>' for r in rs]
+    if not parts: return ''
+    return parts[0] if len(parts)==1 else ', '.join(parts[:-1])+' and '+parts[-1]
+def faq_box(faq):
+    return '<div class="box faq" id="faq"><h2>Frequently asked questions</h2>'+''.join(f'<h3>{E(q)}</h3><p>{a}</p>' for q,a in faq)+'</div>'
+def _adoption():
+    a,sh,b=ALLS,SSMAP['shopify'],SSMAP['big']
+    return (f'In the ShopBot Index crawl of {_day_long}, {_num(a["ucp"])} of the {_num(a["checked"])} retailers and stores we could check publish a UCP profile ({a["rate"]}): '
+            f'{_num(sh["ucp"])} of the {_num(sh["checked"])} Shopify stores we could check, and {_num(b["ucp"])} of the {_num(b["checked"])} big retailers we could check.')
+_bs=SSMAP['big']
+BIG_ANSWER_HTML=(f'In the ShopBot Index crawl of {_day_long}, {_num(_bs["ucp"])} of the {_num(_bs["checked"])} big retailers we could check publish a UCP profile ({_bs["rate"]}): {_names_html(BIGU, "../")}.'
+                 if BIGU else f'In the ShopBot Index crawl of {_day_long}, none of the {_num(_bs["checked"])} big retailers we could check publish a UCP profile.')
+BIG_FAQ=[('Which big retailers publish a UCP profile?', BIG_ANSWER_HTML)]
+_what_a=('A Universal Commerce Protocol (UCP) profile is a JSON file a store publishes at <code>/.well-known/ucp</code>. '
+         'It is the machine-readable profile AI shopping agents read, and it lists the protocol version, services, capabilities and payment handlers the store declares.')
+_checkout_a=(f'No. A UCP profile is a published declaration. It does not by itself prove that agents can check out. '
+             f'In the crawl of {_day_long}, {_num(N_CHECKOUT)} of the {_num(len(U))} stores with a UCP profile declare a checkout capability. '
+             f'That declaration is not a completed checkout, and ShopBot Index does not test purchases.')
+_figs=(f'{_adoption()} We couldn\'t check {_num(ALLS["cc"])} of the {_num(ALLS["n"])} we track (blocked or unreachable), so they are not counted. '
+       f'These are shares of our list, not of all online stores.')
+def _how(where):
+    return (f'{where} The lookup reads the ShopBot Index crawl of {_day_long}, which tracks {_num(ALLS["n"])} retailers and stores. '
+            f'It does not fetch the store live. If the domain is not in the index yet, the result links you to ask us to add it.')
+CHECK_SUMMARY=(f'{_adoption()} A UCP profile is a JSON file a store publishes at <code>/.well-known/ucp</code>, and publishing one does not by itself prove that agents can check out. '
+               f'Type a domain below to look that store up in this crawl.')
+GUIDE_SUMMARY=(f'{_adoption()} A published UCP profile is a machine-readable declaration at <code>/.well-known/ucp</code>, and it does not by itself prove that agents can check out. '
+               f'To check one store, look up its domain on <a href="../../check.html">Check your store</a>, which reads this crawl and does not fetch the store live.')
+CHECK_FAQ=[('What is a UCP profile?', _what_a),
+           ('How do I check whether a store publishes a UCP profile?', _how('Type the store domain into the form on this page.')),
+           ('Does a UCP profile mean agents can check out?', _checkout_a),
+           ('How many stores publish a UCP profile?', _figs)]
+GUIDE_FAQ=[('What is a UCP profile?', _what_a),
+           ('How do I check whether a store publishes a UCP profile?', _how('Open <a href="../../check.html">Check your store</a> and type the domain.')),
+           ('Does a UCP profile mean agents can check out?', _checkout_a),
+           ('How many stores publish a UCP profile?', _figs)]
+def _site_pill(s):
+    if s=='ucp': cls,lbl='yes','Yes'
+    elif s=='no_ucp': cls,lbl='no','No'
+    else:
+        cls='warn' if s in ('couldnt_check','blocked','error','robots_disallow') else 'no'
+        lbl="Couldn't check" if s=='couldnt_check' else (SITEST.get(s,s).split(' (')[0].split(':')[0])
+    return f'<span class="pill {cls}">{E(lbl)}</span>'
+def _store_row(r):
+    sites=SITES_BY[r['id']]
+    hosts=[(x.get('host') or x.get('domain') or '') for x in sites]
+    caps=[capn(x) for x in r['capabilities']]
+    co=(r.get('country') or '')[:40] if r['segment']!='shopify' else ''
+    name=f'<a href="store/{SLUG[r["id"]]}.html"><b>{E(r["name"])}</b></a>'+(f'<br><small>{E(co)}</small>' if co else '')
+    pill='<span class="pill yes">Yes</span>' if r['status']=='ucp' else ('<span class="pill warn">Couldn&#39;t check</span>' if r['status']=='couldnt_check' else '<span class="pill no">No</span>')
+    cap=''
+    if caps:
+        cap=f'<span class="pill" title="{_attr(", ".join(caps))}">{len(caps)} declared</span>'+('<span class="pill yes">Checkout</span>' if 'Checkout' in caps else '')
+    if len(sites)<=1:
+        site=''
+        if hosts:
+            h=hosts[0]
+            site=f'<a href="https://{_attr(h)}/.well-known/ucp" rel="nofollow noopener" target="_blank">{E(h)}</a>'
+            if r['status']=='couldnt_check' and sites: site+=' '+_site_pill(sites[0].get('status','error'))
+    else:
+        bits=''.join(f'<div class="child"><a href="https://{_attr(h)}/.well-known/ucp" rel="nofollow noopener" target="_blank">{E(h)}</a> {_site_pill(x.get("status","error"))}</div>' for h,x in zip(hosts,sites))
+        site=f'<details><summary>{len(sites)} sites</summary>{bits}</details>'
+    return (f'<tr data-n="{_attr(r["name"])}" data-g="{_attr(r["segment"])}" data-s="{_attr(r["status"])}" data-p="{_attr("|".join(r["platforms"]))}" data-nc="{len(caps)}" data-ns="{len(sites)}">'
+            f'<td>{name}</td><td>{E(SEG[r["segment"]])}</td><td class="hide-sm">{E(r["category"])}</td><td>{pill}</td>'
+            f'<td class="hide-sm">{E("/".join(r["platforms"]))}</td><td>{cap}</td><td>{site}</td></tr>')
+# ---- stores table (rows are in the HTML; JavaScript only sorts and filters the page it is on) ----
+# One file with every row is about 1.8MB. Split into pages under ~800KB so a crawler can read each one, and keep /stores.html.
+_sorder={'ucp':0,'no_ucp':1,'couldnt_check':2}
+_STORE_CAP=800_000  # row HTML per page; a whole result group stays together unless it exceeds this
+_store_items=[(r['status'], _store_row(r)) for r in sorted(RET,key=lambda r:(_sorder.get(r['status'],9), r['name'].lower()))]
+_store_chunks=[]; _cur=[]; _cst=None; _csz=0
+for _st,_html in _store_items:
+    if _cur and (_st!=_cst or _csz+len(_html)>_STORE_CAP): _store_chunks.append(_cur); _cur=[]; _csz=0
+    _cur.append((_st,_html)); _cst=_st; _csz+=len(_html)
+if _cur: _store_chunks.append(_cur)
+def _chunk_label(chunk):
+    sts={st for st,_ in chunk}
+    word={'ucp':'UCP profile found','no_ucp':'No UCP profile found','couldnt_check':"Couldn't check"}
+    if len(sts)==1: return f'{word[next(iter(sts))]} ({_num(len(chunk))})'
+    return f'{_num(len(chunk))} stores'
+_STORE_META=[dict(path='stores.html' if i==0 else f'stores-{i+1}.html', label=_chunk_label(ch), n=len(ch)) for i,ch in enumerate(_store_chunks)]
+STORE_PAGES=[m['path'] for m in _STORE_META]
+STORE_JS='''<script>(function(){const tb=document.querySelector('#t tbody');if(!tb)return;const all=[].slice.call(tb.rows);let sk='s',sd=1;const $=function(i){return document.getElementById(i)};
+const rank={ucp:0,no_ucp:1,couldnt_check:2};
+function val(tr){if(sk==='n')return (tr.dataset.n||'').toLowerCase();if(sk==='g')return tr.cells[1].textContent.toLowerCase();if(sk==='c')return tr.cells[2].textContent.toLowerCase();if(sk==='s')return rank[tr.dataset.s];if(sk==='p')return tr.cells[4].textContent.toLowerCase();if(sk==='nc')return +tr.dataset.nc;return +tr.dataset.ns}
+function hay(tr){return (tr.cells[0].textContent+' '+tr.cells[6].textContent).toLowerCase()}
+function render(){const q=$('q').value.toLowerCase(),g=$('fg').value,s=$('fs').value,c=$('fc').value,p=$('fp').value,vis=[];
+all.forEach(function(tr){const ok=(!q||hay(tr).indexOf(q)>=0)&&(!g||tr.dataset.g===g)&&(!s||tr.dataset.s===s)&&(!c||tr.cells[2].textContent.trim()===c)&&(!p||(tr.dataset.p||'').split('|').indexOf(p)>=0);tr.hidden=!ok;if(ok)vis.push(tr)});
+vis.sort(function(a,b){const va=val(a),vb=val(b);return (va>vb?1:va<vb?-1:0)*sd});
+const frag=document.createDocumentFragment();vis.forEach(function(tr){frag.appendChild(tr)});all.forEach(function(tr){if(tr.hidden)frag.appendChild(tr)});tb.appendChild(frag);
+$('cnt').textContent=vis.length+' of '+all.length+' shown'}
+['q','fg','fs','fc','fp'].forEach(function(i){$(i).addEventListener('input',render)});
+document.querySelectorAll('#t th[data-k]').forEach(function(th){th.addEventListener('click',function(){const k=th.dataset.k;sd=sk===k?-sd:1;sk=k;render()})});
+$('cnt').textContent=all.length+' of '+all.length+' shown'})();</script>'''
+_filters=f'''<div class="filters"><input id="q" placeholder="Search name or domain" aria-label="Search">
 <select id="fg"><option value="">All segments</option>{"".join(f'<option value="{k}">{v}</option>' for k,v in SEG.items())}</select>
 <select id="fs"><option value="">All results</option>{"".join(f'<option value="{k}">{v}</option>' for k,v in STL.items())}</select>
 <select id="fc"><option value="">All categories</option>{"".join(f'<option>{E(c)}</option>' for c in CATS)}</select>
-<select id="fp"><option value="">Any platform</option>{"".join(f'<option>{E(p)}</option>' for p in PLATC)}</select></div>
-<p class="muted" id="cnt"></p><div class="tw"><table id="t"><thead><tr><th data-k="n">Store</th><th data-k="g">Segment</th><th data-k="c" class="hide-sm">Category</th><th data-k="s">UCP</th><th data-k="p" class="hide-sm">Platform</th><th data-k="nc">Capabilities</th><th data-k="ns">Sites checked</th></tr></thead><tbody></tbody></table></div>
-<script>const D={json.dumps(rows,ensure_ascii=False)};const SEG={json.dumps(SEG)},STL={json.dumps(STL)},SST={json.dumps(SITEST)};
-const tb=document.querySelector('#t tbody');let sk='s',sd=1;const $=i=>document.getElementById(i);
-function esc(s){{return String(s).replace(/[&<>"]/g,c=>({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}}[c]))}}
-function pill(s){{return '<span class="pill '+(s=='ucp'?'yes':s=='couldnt_check'||s=='blocked'||s=='error'||s=='robots_disallow'?'warn':'no')+'">'+(s=='ucp'?'Yes':s=='couldnt_check'?"Couldn't check":s=='no_ucp'?'No':esc((SST[s]||s).split(' (')[0].split(':')[0]))+'</span>'}}
-function render(){{const q=$('q').value.toLowerCase();
-let r=D.filter(x=>(!q||(x.n+' '+x.st.map(y=>y.h).join(' ')).toLowerCase().includes(q))&&(!$('fg').value||x.g==$('fg').value)&&(!$('fs').value||x.s==$('fs').value)&&(!$('fc').value||x.c==$('fc').value)&&(!$('fp').value||x.p.split('/').includes($('fp').value)));
-const v=x=>sk=='nc'?x.caps.length:sk=='ns'?x.st.length:sk=='s'?({{ucp:0,no_ucp:1,couldnt_check:2}})[x.s]:String(x[sk]).toLowerCase();
-r.sort((a,b)=>(v(a)>v(b)?1:v(a)<v(b)?-1:0)*sd);$('cnt').textContent=r.length+' of '+D.length+' shown';
-tb.innerHTML=r.slice(0,1500).map(x=>'<tr><td><a href="store/'+x.u+'.html"><b>'+esc(x.n)+'</b></a>'+(x.co?'<br><small>'+esc(x.co)+'</small>':'')+'</td><td>'+esc(SEG[x.g])+'</td><td class="hide-sm">'+esc(x.c)+'</td><td>'+pill(x.s)+'</td><td class="hide-sm">'+esc(x.p)+'</td><td>'+(x.caps.length?'<span class="pill" title="'+esc(x.caps.join(', '))+'">'+x.caps.length+' declared</span>'+(x.caps.includes('Checkout')?'<span class="pill yes">Checkout</span>':''):'')+'</td><td>'+(x.st.length==1?'<a href="https://'+esc(x.st[0].h)+'/.well-known/ucp" rel="nofollow noopener" target="_blank">'+esc(x.st[0].h)+'</a>'+(x.s=='couldnt_check'?' '+pill(x.st[0].s):''):'<details><summary>'+x.st.length+' sites</summary>'+x.st.map(y=>'<div class="child"><a href="https://'+esc(y.h)+'/.well-known/ucp" rel="nofollow noopener" target="_blank">'+esc(y.h)+'</a> '+pill(y.s)+'</div>').join('')+'</details>')+'</td></tr>').join('')}}
-['q','fg','fs','fc','fp'].forEach(i=>$(i).addEventListener('input',render));
-document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{{const k=th.dataset.k;sd=(sk==k)?-sd:1;sk=k;render()}}));render();</script>'''
-page('stores.html',f'All {len(RET)} stores checked for UCP | {NAME}',stores,'Sortable table of Shopify stores, big retailers and other online stores and whether they publish a UCP profile.')
+<select id="fp"><option value="">Any platform</option>{"".join(f'<option>{E(p)}</option>' for p in PLATC)}</select></div>'''
+for _i,_chunk in enumerate(_store_chunks):
+    _meta=_STORE_META[_i]
+    _here=_meta['path']
+    _pager='<p class="pager">Pages: '+' · '.join(f'<b>{E(m["label"])}</b>' if m['path']==_here else f'<a href="{m["path"]}">{E(m["label"])}</a>' for m in _STORE_META)+'</p>'
+    _split=f' All {_num(len(RET))} rows are in the HTML, across {len(_store_chunks)} pages so each page stays readable. This page: {_meta["label"]}.' if len(_store_chunks)>1 else f' All {_num(len(RET))} rows are in this table.'
+    _h1=f'All stores ({len(RET)})' if _i==0 else f'All stores ({len(RET)}), page {_i+1} of {len(_store_chunks)}'
+    _title=f'All {len(RET)} stores checked for UCP | {NAME}' if _i==0 else f'All stores, page {_i+1} of {len(_store_chunks)}: {_meta["label"]} | {NAME}'
+    _head=''
+    if _i: _head+=f'<link rel="prev" href="{_STORE_META[_i-1]["path"]}">'
+    if _i+1<len(_store_chunks): _head+=f'<link rel="next" href="{_STORE_META[_i+1]["path"]}">'
+    _body=f'''<h1>{_h1}</h1><p class="lede">Every retailer and store we track, with the result of fetching <code>/.well-known/ucp</code> on each of its websites in the crawl of {_day_long}.{_split} Click a column to sort this page. Search and the filters cover only the rows on this page.</p>
+{_pager}{_filters}
+<p class="muted" id="cnt">{_meta["n"]} of {_meta["n"]} shown</p><div class="tw"><table id="t"><thead><tr><th data-k="n">Store</th><th data-k="g">Segment</th><th data-k="c" class="hide-sm">Category</th><th data-k="s">UCP</th><th data-k="p" class="hide-sm">Platform</th><th data-k="nc">Capabilities</th><th data-k="ns">Sites checked</th></tr></thead><tbody>{''.join(h for _,h in _chunk)}</tbody></table></div>
+{_pager}'''+STORE_JS
+    page(_here,_title,_body,f'Stores checked for a UCP profile in the crawl of {_day_long}: {_meta["label"]}. Every row on this page is in the HTML.',head=_head)
 # ---- segment pages ----
 def rtable(rs,pre='../'):
     li=''.join(f'<tr><td><a href="{pre}store/{SLUG[r["id"]]}.html">{E(r["name"])}</a></td><td class="hide-sm">{E(r["category"])}</td><td>{"<span class=\"pill yes\">Yes</span>" if r["status"]=="ucp" else ("<span class=\"pill warn\">Couldn&#39;t check</span>" if r["status"]=="couldnt_check" else "No")}</td><td>{r["sites_with_ucp"]}/{r["sites_checked"]}</td><td class="hide-sm">{E("/".join(r["platforms"]))}</td></tr>' for r in sorted(rs,key=lambda r:({"ucp":0,"no_ucp":1,"couldnt_check":2}[r["status"]],r["name"].lower())))
@@ -386,7 +485,16 @@ for k in SEG:
     rs=[r for r in RET if r['segment']==k]; s=segstats(rs); cu=collections.Counter(c for r in rs if r['status']=='ucp' for c in r['capabilities'])
     cats=collections.Counter(r['category'] for r in rs)
     ct=''.join(f'<tr><td>{E(c)}</td><td>{n}</td><td>{sum(1 for r in rs if r["category"]==c and r["status"]=="ucp")}</td><td>{sum(1 for r in rs if r["category"]==c and r["status"]=="couldnt_check")}</td></tr>' for c,n in cats.most_common())
-    page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.{(" Of the "+str(len(rs))+" tracked, "+str(CHG["newly_tracked_by_segment"][k])+" are newly tracked this week.") if CHG and CHG["newly_tracked_by_segment"][k] else ""}</p><h2>By category</h2><div class="tw nomax"><table><tr><th>Category</th><th>Tracked</th><th>With UCP</th><th>Couldn\'t check</th></tr>{ct}</table></div>{"<h2>Capabilities declared</h2>"+bars(cu,s["ucp"],capn) if s["ucp"] else ""}<h2>All {len(rs)}</h2>{rtable(rs)}'+(aff() if k=='shopify' else ''))
+    newly=(f' Of the {len(rs)} tracked, {CHG["newly_tracked_by_segment"][k]} are newly tracked this week.') if CHG and CHG["newly_tracked_by_segment"][k] else ''
+    tail=(f'<h2>By category</h2><div class="tw nomax"><table><tr><th>Category</th><th>Tracked</th><th>With UCP</th><th>Couldn\'t check</th></tr>{ct}</table></div>'
+          f'{("<h2>Capabilities declared</h2>"+bars(cu,s["ucp"],capn)) if s["ucp"] else ""}<h2>All {len(rs)}</h2>{rtable(rs)}'+(aff() if k=='shopify' else ''))
+    if k=='big':
+        intro=(f'<h1>Which big retailers publish a UCP profile?</h1><p class="lede" id="big-answer">{BIG_ANSWER_HTML}</p>'
+               f'<p>{SEGDESC[k]} We track {s["n"]} big retailers. {s["cc"]} couldn\'t be checked, so they are not counted among the {s["checked"]}.{newly}</p>{faq_box(BIG_FAQ)}')
+        page(f'segments/{k}.html',f'Which big retailers publish a UCP profile? | {NAME}',intro+tail)
+    else:
+        intro=f'<h1>{SEG[k]}</h1><p class="lede">{SEGDESC[k]} {s["ucp"]} of {s["checked"]} we could check publish a UCP profile ({s["rate"]}); {s["cc"]} couldn\'t be checked.{newly}</p>'
+        page(f'segments/{k}.html',f'{SEG[k]}: UCP adoption | {NAME}',intro+tail)
 # ---- capabilities ----
 page('capabilities/index.html',f'UCP capabilities | {NAME}',f'<h1>UCP capabilities</h1><p class="lede">Capabilities declared in UCP profiles, counted per retailer/store ({len(U)} with a profile).</p><ul>{"".join(f"<li><a href=\"{slug(c)}.html\">{E(capn(c))}</a>: {v} <small>(<code>{E(c)}</code>)</small></li>" for c,v in CAPC.most_common())}</ul>')
 for c,v in CAPC.items():
@@ -668,8 +776,10 @@ page('data-feed.html',f'ShopBot Index data feed: join the waitlist | {NAME}',f''
 <h2>What stays free</h2><p>Every store's result stays free on this site: the <a href="stores.html">all-stores table</a>, each store's page, <a href="check.html">Check your store</a>, watch alerts and the Monday email. The feed is for people who need the whole dataset in bulk, every week.</p>
 <h2>From our latest crawl ({DAY})</h2><ul><li>{len(U)} of the {len(RET)-_ncc} retailers and stores we could check publish a UCP profile.</li><li>We couldn't check {_ncc} of the {len(RET)} we track (blocked or unreachable), so they aren't counted.</li><li>A store with no UCP profile found isn't a store AI agents can't shop at; it's a store where we found no profile. <a href="methodology.html#meaning">How we measure</a>.</li></ul>{signup()}''',f'A planned weekly data feed of which online stores publish a UCP profile, the profile AI shopping agents read, what each declares and what changed. Join the waitlist; estimated pricing.')
 # ---- check + badge pages, lookup JSON, badge SVGs ----
-page('check.html',f'Check your store: what does it tell AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede">Type a store's domain to see whether our latest weekly crawl ({DAY}) found a Universal Commerce Protocol (UCP) profile, the machine-readable profile AI shopping agents read. We track {len(RET)} retailers and stores. No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>). Each store's page also lists its supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</p>
-{checkbox(title="Look up a store")}<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li><li>Run a store? <a href="for-stores.html">See what your result means and watch your store</a>.</li></ul>{signup()}''',f'Look up any store in ShopBot Index: what does it tell AI shopping agents? Its UCP profile and supporting signals from our weekly crawl of {len(RET)} retailers and stores.')
+page('check.html',f'Check your store: what does it tell AI shopping agents? | {NAME}',f'''<h1>Check your store</h1><p class="lede" id="summary">{CHECK_SUMMARY}</p>
+{checkbox(title="Look up a store")}<p>No UCP profile found doesn't mean AI agents can't shop there (<a href="methodology.html#meaning">details</a>). Each store's page also lists its supporting signals: agent tools, AI rules in robots.txt, AI guidance files and product data.</p>
+<h2>How it works</h2><ul><li>This looks the domain up in our published results. It doesn't fetch anything from your store live.</li><li>Results are updated every Monday after the weekly crawl.</li><li>Not in the index? Use the link in the result to ask us to add it.</li><li>Have a UCP profile? Get a <a href="badge.html">badge for your site</a>.</li><li>Run a store? <a href="for-stores.html">See what your result means and watch your store</a>.</li></ul>
+{faq_box(CHECK_FAQ)}{signup()}''',f'In the crawl of {_day_long}, {_num(ALLS["ucp"])} of {_num(ALLS["checked"])} checkable stores publish a UCP profile. Look up a domain. A profile does not by itself prove that agents can check out.')
 page('badge.html',f'"UCP profile found" badge for your store | {NAME}',f'''<h1>A "UCP profile found" badge for your store</h1><p class="lede">Stores where our latest crawl found a UCP profile can show it with a small badge that links to their ShopBot Index page. The badge covers the UCP profile only. Supporting signals are listed on each store's page and don't affect the badge.</p>
 <p><img src="badge/{SLUG[U[0]["id"]] if U else ""}.svg" alt="UCP profile found · ShopBot Index" height="20"> <small class="muted">(example)</small></p>
 {checkbox(badge=True,title="Get your badge")}<h2>Rules</h2><ul><li>The badge is only offered for stores where our latest crawl found a profile at <code>/.well-known/ucp</code>.</li><li>Each badge is served from shopbotindex.com and is regenerated every week. If a later crawl no longer finds the profile, it turns into a neutral grey "ShopBot Index · view listing" badge.</li><li>No tracking: the badge is a plain SVG image, with no scripts or cookies.</li></ul>{signup()}''','Stores that publish a UCP profile can embed a free "UCP profile found · ShopBot Index" badge linking to their result page.')
@@ -708,7 +818,9 @@ def _guide_html(blocks):
     out=['<article class="prose">']; first=True
     for kind,val in blocks:
         if kind=='h1':
-            out.append(f'<h1>{_inline_md(val)}</h1><p class="muted" id="published">Published <time datetime="{GUIDE_DATE}">8 November 2026</time>.</p>')
+            out.append(f'<h1>{_inline_md(val)}</h1><p class="muted" id="published">Published <time datetime="{GUIDE_DATE}">8 November 2026</time>. Updated <time datetime="{PAGE_STAMP}" id="modified">{_long(PAGE_STAMP)}</time>.</p>')
+            out.append(f'<div class="answer" id="summary"><p>{GUIDE_SUMMARY}</p></div>')
+            out.append(faq_box(GUIDE_FAQ))
         elif kind=='h2': out.append(f'<h2>{_inline_md(val)}</h2>')
         elif kind=='p':
             out.append(f'<p{" class=\"lede\"" if first else ""}>{_inline_md(val)}</p>'); first=False
@@ -721,9 +833,11 @@ _guide_path='guides/what-a-ucp-profile-proves/index.html'
 page(_guide_path,f'{GUIDE_TITLE} | {NAME}',_guide_html(_guide_blocks),GUIDE_DESC,ogtype='article')
 page('guides/index.html',f'Guides | {NAME}',f'''<h1>Guides</h1><p class="lede">Short readings on how to use ShopBot Index results without overstating them.</p>
 <ul class="prose"><li><a href="what-a-ucp-profile-proves/">{E(GUIDE_TITLE)}</a><br><span class="muted">{E(GUIDE_DESC)}</span></li></ul>''','Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.')
-PAGE_LASTMOD={_guide_path:GUIDE_DATE,'guides/index.html':GUIDE_DATE}
+GUIDE_PATH=_guide_path
+PAGE_LASTMOD={_guide_path:PAGE_STAMP,'guides/index.html':GUIDE_DATE,'segments/big.html':PAGE_STAMP,'check.html':PAGE_STAMP}
+for _sp in STORE_PAGES: PAGE_LASTMOD[_sp]=PAGE_STAMP
 GUIDE_PAGES={
- _guide_path:dict(type='Article',headline=GUIDE_TITLE,description=GUIDE_DESC,datePublished=GUIDE_DATE,dateModified=GUIDE_DATE,
+ _guide_path:dict(type='Article',headline=GUIDE_TITLE,description=GUIDE_DESC,datePublished=GUIDE_DATE,dateModified=PAGE_STAMP,
                   crumbs=[(NAME,''),('Guides','guides/'),(GUIDE_TITLE,_guide_path.replace('index.html',''))]),
  'guides/index.html':dict(type='WebPage',headline='Guides',description='Guides on how to read ShopBot Index results, including what a published UCP profile does and does not prove.',
                           datePublished=GUIDE_DATE,dateModified=GUIDE_DATE,crumbs=[(NAME,''),('Guides','guides/')]),
