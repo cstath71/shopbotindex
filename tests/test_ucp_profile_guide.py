@@ -26,8 +26,10 @@ def _md_lines(md):
 
 def _article_lines(page):
     art=re.search(r'<article class="prose">(.*)</article>',page,re.S).group(1)
-    art=re.sub(r'<p class="muted crumbs">.*?</p>','',art,count=1)
-    art=re.sub(r'<p class="muted" id="published">.*?</p>','',art,count=1)
+    art=re.sub(r'<p class="muted crumbs">.*?</p>','',art,count=1,flags=re.S)
+    art=re.sub(r'<p class="muted" id="published">.*?</p>','',art,count=1,flags=re.S)
+    art=re.sub(r'<div class="answer" id="summary">.*?</div>','',art,count=1,flags=re.S)
+    art=re.sub(r'<div class="box faq" id="faq">.*?</div>','',art,count=1,flags=re.S)
     lines=[]
     for part in re.split(r'</(?:p|h1|h2|li)>',art):
         part=html.unescape(re.sub(r'<[^>]+>','',part)).strip()
@@ -74,7 +76,9 @@ class Guide(unittest.TestCase):
         self.assertIn('href="../../style.css"',h)
         sm=R('sitemap.xml')
         self.assertEqual(sm.count('what-a-ucp-profile-proves'),1)
-        self.assertIn(f'<loc>{URL}</loc><lastmod>2026-11-08</lastmod>',sm)
+        day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
+        stamp=max('2026-11-10', day)
+        self.assertIn(f'<loc>{URL}</loc><lastmod>{stamp}</lastmod>',sm)
         self.assertIn('<loc>https://shopbotindex.com/guides/</loc><lastmod>2026-11-08</lastmod>',sm)
         # Home lastmod is the crawl date build.py stamps from data/latest.json (not a fixed Monday).
         day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
@@ -107,8 +111,11 @@ class Guide(unittest.TestCase):
         art=[x for x in graph if x.get('@type')=='Article'][0]
         self.assertEqual(art['headline'],"What a published UCP profile proves, and what it doesn't")
         self.assertEqual(art['description'],DESC)
+        day=json.load(open(os.path.join(ROOT,'data','latest.json'),encoding='utf-8'))['crawl_date']
+        stamp=max('2026-11-10', day)
         self.assertEqual(art['datePublished'],'2026-11-08')
-        self.assertEqual(art['dateModified'],'2026-11-08')
+        self.assertEqual(art['dateModified'],stamp)
+        self.assertIn(f'<time datetime="{stamp}" id="modified">',h)
         self.assertEqual(art['mainEntityOfPage']['@id'],URL)
         self.assertNotIn('author',art)
         self.assertEqual(art['publisher']['@id'],'https://shopbotindex.com/#org')

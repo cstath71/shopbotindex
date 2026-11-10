@@ -62,6 +62,7 @@ def run(g):
           'capabilities/index.html':f'Capabilities declared in UCP profiles, counted per store, across the {len(U)} stores with a UCP profile in the crawl of {_date(DAY)}.',
           'categories/index.html':f'UCP profiles by store category and segment: how many stores in each category publish a UCP profile, crawl of {_date(DAY)}.'}
     for k in SEG: desc[f'segments/{k}.html']=f'{SEG[k]}: {SS[k]["ucp"]} of {SS[k]["checked"]} we could check publish a UCP profile ({SS[k]["rate"]}) in the crawl of {_date(DAY)}; {SS[k]["cc"]} couldn\'t be checked. By category, with every store listed.'
+    desc['segments/big.html']=f'Which big retailers publish a UCP profile: {SS["big"]["ucp"]} of {SS["big"]["checked"]} we could check ({SS["big"]["rate"]}) in the crawl of {_date(DAY)}, each one named.'
     for c in g['CATS']:
         s=segstats([r for r in RET if r['category']==c]); desc[f'categories/{slug(c)}.html']=f'{c}: {s["ucp"]} of {s["checked"]} stores we could check publish a UCP profile ({s["rate"]}) in the crawl of {_date(DAY)}; {s["cc"]} couldn\'t be checked.'
     for c,v in g['CAPC'].items(): desc[f'capabilities/{slug(c)}.html']=f'{capn(c)} ({c}): declared by {v} of the {len(U)} stores with a UCP profile ({pct(v,len(U))}) in the crawl of {_date(DAY)}, with the list of stores.'
@@ -124,6 +125,24 @@ def run(g):
                 vis='<p class="muted crumbs">'+' › '.join(f'<a href="{(pre+u) or "./"}">{E(n)}</a>' if i<len(cl)-1 else E(n) for i,(n,u) in enumerate(cl))+'</p>'
                 h=h.replace('<h1>',vis+'<h1>',1)
                 lds=[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+'/'+u} for i,(n,u) in enumerate(cl)]}]
+        stamp=g.get('PAGE_STAMP') or DAY
+        title=html.unescape(re.search(r'<title>(.*?)</title>',h).group(1))
+        url=SITE+'/'+p.replace('index.html','')
+        if p in ('segments/big.html','check.html') or p in (g.get('STORE_PAGES') or ('stores.html',)):
+            lds.append({"@type":"WebPage","@id":url+"#webpage","url":url,"name":title,"dateModified":stamp,"isPartOf":{"@id":SITE+"/#website"},"about":{"@id":SITE+"/#dataset"}})
+        if p=='segments/big.html':
+            answer=_txt(g['BIG_FAQ'][0][1]); big=g['BIGU']; SLUG=g['SLUG']
+            lds.append({"@type":"Dataset","name":"Big retailers: UCP profile crawl","description":answer,"url":url,"dateModified":stamp,
+                        "creator":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"license":SITE+"/terms.html","isBasedOn":{"@id":SITE+"/#dataset"},
+                        "measurementTechnique":"HTTPS request for /.well-known/ucp on each website, after reading robots.txt",
+                        "variableMeasured":["Whether the retailer publishes a UCP profile at /.well-known/ucp"]})
+            lds.append({"@type":"ItemList","name":"Big retailers that publish a UCP profile","numberOfItems":len(big),"description":answer,
+                        "itemListElement":[{"@type":"ListItem","position":i+1,"name":r['name'],"url":f"{SITE}/store/{SLUG[r['id']]}.html"} for i,r in enumerate(big)]})
+            lds.append(faq_ld(g['BIG_FAQ']))
+        elif p=='check.html':
+            lds.append(faq_ld(g['CHECK_FAQ']))
+        elif p==g.get('GUIDE_PATH') and g.get('GUIDE_FAQ'):
+            lds.append(faq_ld(g['GUIDE_FAQ']))
         if lds: h=h.replace('</head>',_ld({"@context":"https://schema.org","@graph":lds})+'</head>',1)
         open(fp,'w').write(h)
     # ---- robots.txt, sitemap.xml, llms.txt, llms-full.txt, IndexNow key ----
@@ -147,11 +166,18 @@ def _insert_before_bottom_cta(h,ins):
     return h[:i]+ins+h[i:]
 def _md(a): return re.sub(r'<a href="([^"]+)">(.*?)</a>',lambda m:f'[{m.group(2)}]({m.group(1)})',a).replace('<code>','`').replace('</code>','`')
 def _abs(s,SITE): return re.sub(r'\]\((?!https?:|mailto:)([^)#]*)(#[^)]*)?\)',lambda m:f']({SITE}/{m.group(1)}{m.group(2) or ""})',s)
+def _stores_blurb(g, ALL):
+    pages=g.get('STORE_PAGES') or ['stores.html']
+    if len(pages)==1:
+        where='in the HTML table on stores.html'
+    else:
+        where='in the HTML, split across '+', '.join(pages)+' so each page stays readable'
+    return f'Every one of the {ALL["n"]} retailers and stores with its result {where} (sorting and filtering use JavaScript). Each store also has its own page under /store/.'
 def _llms(g,ALL,SS,home_sum,home_faq,meth_faq,nsites):
     SITE,NAME,DAY,SEG=g['SITE'],g['NAME'],g['DAY'],g['SEG']
     faq=lambda f:'\n'.join(f'- **{q}** '+_abs(html.unescape(_md(a)),SITE) for q,a in f)
     pages=[('Home','',f'Headline numbers from the latest crawl, by segment, big retailers with a UCP profile, capabilities and payment handlers.'),
-           ('All stores','stores.html',f'Every one of the {ALL["n"]} retailers and stores with its result (the table is drawn with JavaScript; each store also has its own page under /store/).'),
+           ('All stores','stores.html',_stores_blurb(g, ALL)),
            ('Segments','segments/','Shopify stores, big retailers, other retailers & marketplaces, side by side.')]+[(SEG[k],f'segments/{k}.html',f'{SS[k]["ucp"]} of {SS[k]["checked"]} checked publish a UCP profile ({SS[k]["rate"]}).') for k in SEG]+[
            ('Capabilities','capabilities/','What UCP profiles declare (checkout, cart, catalog search and more), with the stores declaring each.'),
            ('Categories','categories/','Results by store category.'),
